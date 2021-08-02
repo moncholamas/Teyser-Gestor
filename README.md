@@ -1,17 +1,24 @@
 # Teyser-Gestor Backend
 Gestor y sistema de facturación para imprenta de Jujuy con sucursal en Tucumán.
+## Clonar e instalar
 
-## Correr en modo desarrollo
-Clonar el repositorio
-- ingresar al directorio nuevo teyser-gestor
+```sh  
+#Clonar el repositorio
+git clone https://github.com/moncholamas/Teyser-Gestor.git
+    
+#Instalar las dependencias 
+npm install
+```
+
+
+## Ejecutar en modo desarrollo
 - ingresar en la terminal
     ```sh  
     npm run dev
     ```
 
-## Generar el archivo de producción
-Clonar el repositorio
-- Ingresar al directorio nuevo teyser-gestor
+## Salir a producción
+Crear los archivos de producción
 - Ingresar en la terminal
     ```sh  
     npm run build
@@ -48,10 +55,13 @@ Para interactuar con la base de datos estan definidas las siguientes rutas y sus
           
 ```
 ## Ejemplo de uso
-Usando Postamn ingresamos dos nuevas Request
+Usando Postman o algun otro soft similar ingresamos nuevas Request:
 ```sh  
     #obtener todos los equipos
     [GET] http://localhost:3009/equipos
+    
+    #obtener el equipo con el Id 1
+    [GET] http://localhost:3009/equipos/1
     
     #cargar un nuevo equipo
     [POST] http://localhost:3009/equipos/nuevo
