@@ -1,0 +1,50 @@
+Martes:
+tabla ventas
+        TRIGGER actualizar stock [ok]
+        Trigger borrar detalles ventas [OK]
+
+tabla productos
+        trigger borrar los consumos antes de eliminar un producto [ok]
+
+tabla pagos
+        trigger actualizar stock [ok]
+        trigger actualizar monto total de la compra en cada insert detalle_compras [ok]
+
+tabla insumos
+        trigger borrar los insumos -> borrado logico(?)
+                tendria que borrar el producto que depende de este insumo?
+
+tabla compras
+        trigger borrar detalle_compras [ok]
+
+tabla parte_diario
+        actualizar la recaudacion del parte_diario con cada compra ingresada/actualizada
+        //bakend -> llamar una funcion de DB
+                DB FUNCTION actualizar parte diario [ok]
+
+
+AUDITORIAS
+
+
+
+Martes:
+tabla ventas
+        TRIGGER actualizar stock -> depende de productos [ok - a revisar]
+        Trigger borrar detalles ventas [ok- revisar]
+
+tabla productos
+        backend ingresar consumos con cada nuevo producto [ok]
+        trigger borrar los consumos antes de eliminar un producto
+
+tabla pagos
+        trigger actualizar stock [ok-a revisar]
+
+tabla insumos
+        nuevo insumo -> su stock a 0 [ok]
+
+AUDITORIAS
+
+
+POSIBLES MEJORAS PERMANENTES:
+-> NUEVA COLUMNA EN PRODUCTOS/ITEM -> DISPONIBLES O NO (BORRADO LOGICO)
+-> TIPOS DE COMPRA
