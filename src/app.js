@@ -15,12 +15,17 @@ import cors from 'cors';
 const app = express();
 
 //middlewares
-
 app.use(json());
 app.use(urlencoded({extended:false}));
-app.use(cors()); //hay que definir la whiteList
+app.use(cors()); //hay que definir la whiteList -> para que dominio esta abierto
+// seguridad 
+// logeo con OAUTH 2.0
+// checkeo de datos
+
 
 app.options('/',cors());
+
+
 //las rutas indices para los enrutadores
 app.use('/equipos', equiposRouter);
 app.use('/clientes', clientesRouter);

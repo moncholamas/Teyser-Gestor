@@ -9,7 +9,7 @@ export async function getClientes(req,res){
         const list_clientes = await clientes.findAll({
             attributes: ['id_cliente','nombre','apellido','telefono','correo']
         });
-        res.send({
+        res.json({
             data: list_clientes
         });
     } catch (error) {
@@ -26,7 +26,7 @@ export async function getClienteById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const cliente = await clientes.findByPk(id);
+        const cliente = await clientes.findByPk(id); 
         if (cliente == null){
             res.json({
                 msj: "no se encontró un cliente con la clave proporcionada"
