@@ -10,6 +10,18 @@ git clone https://github.com/moncholamas/Teyser-Gestor.git
 npm install
 ```
 
+## Generar la Base de datos
+En la carpeta /teyserdb se encuentra el Esquema Relacional, el SQL que genera toda la base de datos y el backup de ERStudio
+Una vez generada la base de datos en Postgres hay que agregar los datos para la conexión
+```sh  
+#dentro de src/config.js
+#cambiar los datos por los locales
+    dataBase:'teyserdb',
+    userName: 'manuel',
+    password: '',
+    host: 'localhost'    
+```
+
 
 ## Ejecutar en modo desarrollo
 - ingresar en la terminal
