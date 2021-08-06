@@ -56,6 +56,7 @@ export async function nuevoOperador(req,res ){
             nombre,
             apellido,
             correo,
+            clave: "clave",
             tipo_operador
             },{
     

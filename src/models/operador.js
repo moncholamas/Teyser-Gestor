@@ -20,11 +20,15 @@ export default class operador extends Model {
     },
     apellido: {
       type: DataTypes.CHAR(10),
-      allowNull: true
+      allowNull: false
     },
     correo: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: false
+    },
+    clave: {
+      type: DataTypes.TEXT,
+      allowNull: false
     },
     tipo_operador: {
       type: DataTypes.ENUM("operario","admin","tecnico"),

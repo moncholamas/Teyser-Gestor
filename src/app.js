@@ -9,6 +9,9 @@ import operadorRouter from './routes/operador.router';
 import parteDiarioRouter from './routes/parteDiario.router';
 import productosRouter from './routes/productos.router';
 import pagosRouter from './routes/pagos.router';
+import loginRouter from './routes/login.router';
+
+//cors
 import cors from 'cors';
 
 //inicialización
@@ -27,6 +30,7 @@ app.options('/',cors());
 
 
 //las rutas indices para los enrutadores
+app.use('/ingresar', loginRouter)
 app.use('/equipos', equiposRouter);
 app.use('/clientes', clientesRouter);
 app.use('/ventas', ventasRouter);

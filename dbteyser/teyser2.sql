@@ -158,8 +158,9 @@ CREATE TABLE operador(
     id_operador      SERIAL           NOT NULL,
     cuenta    estado_cuenta       NOT NULL,
     nombre           varchar(50)    NOT NULL,
-    apellido         char(10),
-    correo           varchar(50),
+    apellido         char(10)   NOT NULL,
+    correo           varchar(50)    NOT NULL,
+    clave            text   NOT NULL,
     tipo_operador              rol,
     CONSTRAINT "PK3" PRIMARY KEY (id_operador)
 )

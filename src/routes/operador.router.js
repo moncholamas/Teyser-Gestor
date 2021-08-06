@@ -13,7 +13,8 @@ const router = Router();
 //rutas
 router.get('/',getOperadores);
 router.get('/:id',getOperadorById);
-router.post('/nuevo', nuevoOperador);
+//cada operador crea su cuenta
+//router.post('/nuevo', nuevoOperador);
 router.delete('/eliminar/:id',deleteOperador);
 router.put('/actualizar/:id',updateOperador);
 
