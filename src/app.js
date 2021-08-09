@@ -20,13 +20,19 @@ const app = express();
 //middlewares
 app.use(json());
 app.use(urlencoded({extended:false}));
+
+// SEGURIDAD 
+// dominios autorizados
 app.use(cors()); //hay que definir la whiteList -> para que dominio esta abierto
-// seguridad 
-// logeo con OAUTH 2.0
-// checkeo de datos
-
-
 app.options('/',cors());
+
+// chekeo del token
+// app.use();
+// es admin
+// esta logueado
+// esta activada la cuenta
+
+
 
 
 //las rutas indices para los enrutadores

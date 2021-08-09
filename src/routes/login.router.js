@@ -8,9 +8,7 @@ import {
 const router = Router();
 
 //rutas
-router.post('/ingreso',login);
+router.post('/',login);
 router.post('/nuevo',logup);
-router.delete('/eliminar/:id');
-router.put('/actualizar/:id');
 
 export default router;
