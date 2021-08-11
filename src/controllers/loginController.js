@@ -16,9 +16,14 @@ export async function login(req,res){
             const usuarioEncontrado = await operador.findByPk(idEncontrado);
             const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
             if(validacion){
-                const token = jsonwebtoken.sign({id:idEncontrado},SECRET,{
-                    expiresIn: 86400
-                });
+                const token = jsonwebtoken.sign({
+                                // el token tiene el id, el rol y el estado de la cuenta
+                                                    id:idEncontrado,
+                                                    rol: usuarioEncontrado.tipo_operador,
+                                                    cuenta: usuarioEncontrado.cuenta
+                                                },SECRET,{
+                                                    expiresIn: 86400
+                                                });
                 res.json({
                     msg: "Sesion iniciada",
                     data: token
@@ -59,9 +64,12 @@ export async function logup(req,res){
                 clave: await encriptar(clave) //encripta la clave antes de ingresar en la db
             },{});
     
-            const token = jsonwebtoken.sign({id:operadorNuevo.id_operador},SECRET,{
-                expiresIn: 86400
-            });
+            const token = jsonwebtoken.sign({id:operadorNuevo.id_operador,
+                                            rol:operadorNuevo.tipo_operador,
+                                            cuenta:operadorNuevo.cuenta
+                                            },SECRET,{
+                                                expiresIn: 86400
+                                            });
             res.json({
                 msg: `Nueva cuenta ingresada: ${operadorNuevo.nombre} ${operadorNuevo.apellido}`,
                 data: token
