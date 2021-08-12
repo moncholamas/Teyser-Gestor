@@ -6,15 +6,24 @@ import {
     deleteParteDiario,
     updateParteDiario
 } from '../controllers/parteDiarioController'
+import { isAdmin, isAdminOrOperator, isOperator } from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();
 
 //rutas
-router.get('/',getPartesDiarios);
-router.get('/:id',getParteDiarioById);
-router.post('/nuevo', nuevoParteDiario);
-router.delete('/eliminar/:id',deleteParteDiario);
-router.put('/actualizar/:id',updateParteDiario);
+router.get('/',
+                isAdmin,getPartesDiarios);
+router.get('/:id',
+                isAdminOrOperator,getParteDiarioById);
+
+router.post('/nuevo',
+                isAdminOrOperator, nuevoParteDiario);
+
+router.delete('/eliminar/:id',
+                isAdmin,deleteParteDiario);
+
+router.put('/actualizar/:id',
+                isAdminOrOperator,updateParteDiario);
 
 export default router;

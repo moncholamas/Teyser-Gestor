@@ -1,4 +1,5 @@
 import express, {json, urlencoded} from 'express';
+import {configCors} from './config'
 //routers
 import equiposRouter from './routes/equipos.router';
 import clientesRouter from './routes/clientes.router';
@@ -27,8 +28,7 @@ app.use(urlencoded({extended:false}));
 
 // SEGURIDAD 
 // dominios autorizados
-app.use(cors()); //hay que definir la whiteList -> para qué dominio está abierto
-app.options('/',cors());
+app.use(cors(configCors));
 
 //solo para el inicio de sesion no requiere una verificacion
 app.use('/ingresar', loginRouter)

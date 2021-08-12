@@ -6,15 +6,24 @@ import {
     deletePago,
     updatePago
 } from '../controllers/pagosController'
+import { isAdmin } from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();
 
 //rutas
-router.get('/',getPagos);
-router.get('/:id',getPagoById);
-router.post('/nuevo',nuevoPago); //generar trigger -> actualizar total -> stock
-router.delete('/eliminar/:id',deletePago); //generar trigger -> borrar previamente los detalle_Pago
-router.put('/actualizar/:id',updatePago); //definir que se puede actualizar de la compra
+router.get('/',
+                isAdmin,getPagos);
+
+router.get('/:id',
+                isAdmin,getPagoById);
+router.post('/nuevo',
+                isAdmin, nuevoPago); 
+                
+router.delete('/eliminar/:id',
+                isAdmin,deletePago);
+                 
+router.put('/actualizar/:id',
+                isAdmin,updatePago); 
 
 export default router;

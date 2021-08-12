@@ -5,15 +5,25 @@ import {nuevaVenta,
         deleteVenta,
         updateVenta    
     } from '../controllers/ventasController'
+import { isAdminOrOperator } from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();
 
 //rutas
-router.get('/',getVentas);
-router.get('/:id',getVentaById);
-router.post('/nuevo',nuevaVenta); //generar trigger -> actualizar stock
-router.delete('/eliminar/:id',deleteVenta); //generar trigger -> borrar previamente los detalle_venta
-router.put('/actualizar/:id',updateVenta); //definir que se puede actualizar de la venta
+router.get('/',
+                isAdminOrOperator,getVentas);
+
+router.get('/:id',
+                isAdminOrOperator,getVentaById);
+
+router.post('/nuevo',
+                isAdminOrOperator,nuevaVenta); 
+
+router.delete('/eliminar/:id',
+                isAdminOrOperator,deleteVenta); 
+
+router.put('/actualizar/:id',
+                isAdminOrOperator,updateVenta); 
 
 export default router;

@@ -3,19 +3,26 @@ import {
     getOperadores,
     getOperadorById,
     deleteOperador,
-    nuevoOperador,
     updateOperador
-} from '../controllers/operadoresController'
+} from '../controllers/operadoresController';
+import { 
+    isAdmin, isAdminOrOperator
+} from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();
 
 //rutas
-router.get('/',getOperadores);
-router.get('/:id',getOperadorById);
-//cada operador crea su cuenta
-//router.post('/nuevo', nuevoOperador);
-router.delete('/eliminar/:id',deleteOperador);
-router.put('/actualizar/:id',updateOperador);
+router.get('/',
+                isAdmin,getOperadores);
+
+router.get('/:id',
+                isAdminOrOperator,getOperadorById);
+                
+router.delete('/eliminar/:id',
+                isAdmin,deleteOperador);
+
+router.put('/actualizar/:id',
+                isAdmin,updateOperador);
 
 export default router;

@@ -5,15 +5,28 @@ import {
     deleteNovedad,
     nuevaNovedad,
     updateNovedad
-} from '../controllers/novedadesController'
+} from '../controllers/novedadesController';
+import {
+    isAdminOrOperator
+} from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();
 
 //rutas
-router.get('/',getNovedades);
-router.get('/:id',getNovedadById);
-router.post('/nuevo', nuevaNovedad);
-router.delete('/eliminar/:id',deleteNovedad);
-router.put('/actualizar/:id',updateNovedad);
+router.get('/',
+                isAdminOrOperator,getNovedades);
+
+router.get('/:id',
+                isAdminOrOperator,getNovedadById);
+
+router.post('/nuevo',
+                isAdminOrOperator, nuevaNovedad);
+
+router.delete('/eliminar/:id',
+                isAdminOrOperator,deleteNovedad);
+
+router.put('/actualizar/:id',
+                isAdminOrOperator,updateNovedad);
+
 export default router;
