@@ -18,9 +18,9 @@ export async function login(req,res){
             if(validacion){
                 const token = jsonwebtoken.sign({
                                 // el token tiene el id, el rol y el estado de la cuenta
-                                                    id:idEncontrado,
-                                                    rol: usuarioEncontrado.tipo_operador,
-                                                    cuenta: usuarioEncontrado.cuenta
+                                                id:idEncontrado,
+                                                rol: usuarioEncontrado.tipo_operador,
+                                                cuenta: usuarioEncontrado.cuenta
                                                 },SECRET,{
                                                     expiresIn: 86400
                                                 });

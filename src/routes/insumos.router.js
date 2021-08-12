@@ -6,16 +6,28 @@ import {
     deleteInsumo,
     updateInsumo
 } from '../controllers/insumosController'
-
+import {
+    isAdminOrOperator, 
+    isAdmin
+} from '../middlewares/authmiddleware';
 //inicilizacion
 const router = Router();
 
 //rutas
 //rutas
-router.get('/',getInsumos);
-router.get('/:id',getInsumoById);
-router.post('/nuevo',nuevoInsumo);
-router.delete('/eliminar/:id',deleteInsumo);
-router.put('/actualizar/:id',updateInsumo);
+router.get('/',
+                isAdmin,getInsumos);
+
+router.get('/:id',
+                isAdmin,getInsumoById);
+
+router.post('/nuevo',
+                isAdmin,nuevoInsumo);
+
+router.delete('/eliminar/:id',
+                isAdmin,deleteInsumo);
+
+router.put('/actualizar/:id',
+                isAdmin,updateInsumo);
 
 export default router;

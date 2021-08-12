@@ -11,6 +11,10 @@ import productosRouter from './routes/productos.router';
 import pagosRouter from './routes/pagos.router';
 import loginRouter from './routes/login.router';
 
+//middlewares
+//// solo algunas rutas necesitan verificar que sea una usuario registrado
+import {verifyToken} from './middlewares/authmiddleware'
+
 //cors
 import cors from 'cors';
 
@@ -23,20 +27,14 @@ app.use(urlencoded({extended:false}));
 
 // SEGURIDAD 
 // dominios autorizados
-app.use(cors()); //hay que definir la whiteList -> para que dominio esta abierto
+app.use(cors()); //hay que definir la whiteList -> para qué dominio está abierto
 app.options('/',cors());
 
-// chekeo del token
-// app.use();
-// es admin
-// esta logueado
-// esta activada la cuenta
-
-
-
-
-//las rutas indices para los enrutadores
+//solo para el inicio de sesion no requiere una verificacion
 app.use('/ingresar', loginRouter)
+
+//necesitan una cuenta verificada
+app.use(verifyToken);
 app.use('/equipos', equiposRouter);
 app.use('/clientes', clientesRouter);
 app.use('/ventas', ventasRouter);
