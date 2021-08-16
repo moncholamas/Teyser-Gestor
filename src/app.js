@@ -34,16 +34,16 @@ app.use(cors(configCors));
 app.use('/ingresar', loginRouter)
 
 //necesitan una cuenta verificada
-app.use(verifyToken);
-app.use('/equipos', equiposRouter);
-app.use('/clientes', clientesRouter);
-app.use('/ventas', ventasRouter);
-app.use('/insumos', insumosRouter);
-app.use('/productos', productosRouter);
-app.use('/pagos', pagosRouter);
-app.use('/novedades', novedadesRouter);
-app.use('/operador', operadorRouter);
-app.use('/parte_diario', parteDiarioRouter);
+//app.use();
+app.use('/equipos', verifyToken,equiposRouter);
+app.use('/clientes', verifyToken , clientesRouter);
+app.use('/ventas', verifyToken, ventasRouter);
+app.use('/insumos', verifyToken ,insumosRouter);
+app.use('/productos', verifyToken ,productosRouter);
+app.use('/pagos', verifyToken ,pagosRouter);
+app.use('/novedades', verifyToken ,novedadesRouter);
+app.use('/operador', verifyToken ,operadorRouter);
+app.use('/parte_diario', verifyToken, parteDiarioRouter);
 
 //resolver logica de estadisticas
 
