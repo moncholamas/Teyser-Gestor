@@ -140,6 +140,7 @@ export async function updateNovedad(req,res){
         });
         if(novedadesActualizado > 0){
             res.json({
+                msj: "novedad actualizada correctamente",
                 data: novedadesActualizado
             });
         }

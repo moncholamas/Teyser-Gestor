@@ -117,6 +117,7 @@ export async function updateOperador(req,res){
         });
         if(operadoresActualizado > 0){
             res.json({
+                msj: "operador actualizado correctamente",
                 data: operadoresActualizado
             });
         }

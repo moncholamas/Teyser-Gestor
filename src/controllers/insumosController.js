@@ -111,6 +111,7 @@ export async function updateInsumo(req,res){
         });
         if(insumosActualizado > 0){
             res.json({
+                msj: "insumo actualizado correctamente",
                 data: insumosActualizado
             });
         }

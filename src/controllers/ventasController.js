@@ -4,7 +4,7 @@ import producto from '../models/producto'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 
-//trae todos las ventas
+//trae todas las ventas
 export async function getVentas(req,res){
     initModels(sequelize);
     try {
@@ -57,7 +57,7 @@ export async function nuevaVenta(req,res ){
                 //genero la compra con el total en 0
             const ventaNueva = await venta.create({
                 observacion,
-                total,
+                total:0,
                 estado,
                 id_parte_diario,
                 id_cliente
@@ -133,34 +133,4 @@ export async function deleteVenta(req,res){
 }
 
 
-//actualiza una venta
-export async function updateVenta(req,res){
-    initModels(sequelize);
-    const id = req.params.id;
-    const {observacion,total,estado,id_cliente}  = req.body
-    try {
-        const ventasActualizado = await venta.update({
-            observacion,
-            total,
-            estado,
-            id_cliente
-        },{
-            where: {id_venta:id}
-        });
-        if(ventasActualizado > 0){
-            res.json({
-                data: ventasActualizado
-            });
-        }
-        else{
-            res.json({
-                msj: "no se actualizó ninguna venta"
-            });
-        }
-    } catch (error) {
-        res.send({
-            msj: "error al actualizar la venta"
-        });
-        console.error(error);
-    }   
-}
+//LAS VENTAS Y COMPRAS NO SE ACTUALIZAN -> SOLO SE BORRAN Y SE REINGRESAN

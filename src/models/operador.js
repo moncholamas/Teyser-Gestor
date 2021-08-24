@@ -10,8 +10,8 @@ export default class operador extends Model {
       allowNull: false,
       primaryKey: true
     },
-    cuenta: {
-      type: DataTypes.ENUM("activo","inactivo"),
+    activo: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
     nombre: {

@@ -143,12 +143,13 @@ export async function updateParteDiario(req,res){
         });
         if(parte_diarioActualizado > 0){
             res.json({
+                msj: "parte diario actualizado correctamente",
                 data: parte_diarioActualizado
             });
         }
         else{
             res.json({
-                msj: "no se actualizó ningun cliente"
+                msj: "no se actualizó ningun parte diario"
             });
         }
     } catch (error) {

@@ -112,6 +112,7 @@ export async function updateEquipo(req,res){
         });
         if(equiposActualizado > 0){
             res.json({
+                msj: "equipo actualizado correctamente",
                 data: equiposActualizado
             });
         }

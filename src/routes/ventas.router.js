@@ -23,7 +23,6 @@ router.post('/nuevo',
 router.delete('/eliminar/:id',
                 isAdminOrOperator,deleteVenta); 
 
-router.put('/actualizar/:id',
-                isAdminOrOperator,updateVenta); 
+
 
 export default router;

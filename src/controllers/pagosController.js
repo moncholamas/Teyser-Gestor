@@ -75,10 +75,9 @@ export async function nuevoPago(req,res ){
                     const insumoNuevo = await insumos.findByPk(detalle.id_insumo);
                     if (insumoNuevo == null){
                         console.error("no puede ingresar este insumo");
-                        res.send({
+                        return res.send({
                             msj: "error al ingresar un insumo"
                         });
-                        return;
                     }
                     else{
                         
@@ -106,6 +105,7 @@ export async function nuevoPago(req,res ){
                     })
                 }
             }
+            //terminada la transaccion envio los datos al front
             t.afterCommit(async ()=>{
                 const pagoConfirmado = await pagos.findByPk(pagoNuevo.id_compra);
                 res.json({
@@ -153,43 +153,4 @@ export async function deletePago(req,res){
 }
 
 
-//actualiza una venta
-export async function updatePago(req,res){
-    initModels(sequelize);
-    const id = req.params.id;
-    const {
-            tipo,
-            fecha,
-            observacion,
-            total,
-            id_operador,
-            detalles_pago
-    }  = req.body
-    try {
-        const pagosActualizado = await pagos.update({
-            tipo,
-            fecha,
-            observacion,
-            total,
-            id_operador,
-            detalles_pago
-        },{
-            where: {id_pago:id}
-        });
-        if(pagosActualizado > 0){
-            res.json({
-                data: pagosActualizado
-            });
-        }
-        else{
-            res.json({
-                msj: "no se actualizó ningun pago"
-            });
-        }
-    } catch (error) {
-        res.send({
-            msj: "error al actualizar el pago o compra"
-        });
-        console.error(error);
-    }   
-}
+//LAS VENTAS Y COMPRAS NO SE ACTUALIZAN -> SOLO SE BORRAN Y SE REINGRESAN

@@ -66,10 +66,9 @@ export async function nuevoProducto(req,res ){
             for(const insumo of detalle_insumos){
                 const nuevoInsumo = await insumos.findByPk(insumo.id_insumo);
                 if(nuevoInsumo == null){
-                    res.json({
+                    return res.json({
                         msj:"no se encontró ningun insumo con la clave ingresada"
                     });
-                    return;
                 }else{
                     //actualizo la tabla consumos
                     try {
@@ -129,8 +128,8 @@ export async function deleteProducto(req,res){
     }
 }
 
-
-//actualiza un equipo
+//AUDITAR LOS CAMBIOS DE PRODUCTO
+//actualiza un producto -> si un producto tiene que cambiar sus insumos se debe eliminar
 export async function updateProducto(req,res){
     initModels(sequelize);
     const id = req.params.id;
@@ -146,6 +145,7 @@ export async function updateProducto(req,res){
         });
         if(productosActualizado > 0){
             res.json({
+                msj: "no se actualizado correctamente",
                 data: productosActualizado
             });
         }

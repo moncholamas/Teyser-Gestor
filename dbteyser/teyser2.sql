@@ -28,10 +28,6 @@ CREATE TYPE estado_venta AS ENUM
 CREATE TYPE estado_novedades AS ENUM
     ('nuevo', 'arreglado', 'trabajando');
 
---T: operador
-CREATE TYPE estado_cuenta AS ENUM
-    ('activo', 'inactivo');
-
 --T: producto
 CREATE TYPE categorias_producto AS ENUM
     ('impresion', 'fotocopia', 'articulo de libreria', 'servicio', 'servicio digital', 'otro');
@@ -156,7 +152,7 @@ CREATE TABLE novedades(
 
 CREATE TABLE operador(
     id_operador      SERIAL           NOT NULL,
-    cuenta    estado_cuenta       NOT NULL,
+    activo    BOOLEAN       NOT NULL,
     nombre           varchar(50)    NOT NULL,
     apellido         char(10)   NOT NULL,
     correo           varchar(50)    NOT NULL,

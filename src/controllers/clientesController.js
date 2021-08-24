@@ -16,7 +16,7 @@ export async function getClientes(req,res){
         res.json({
             msj: "error al obtener los clientes"
         });
-        console.error(error)
+        console.error(error);
     }
     
 }
@@ -112,6 +112,7 @@ export async function updateCliente(req,res){
         });
         if(clientesActualizado > 0){
             res.json({
+                msj: "cliente actualizado correctamente",
                 data: clientesActualizado
             });
         }

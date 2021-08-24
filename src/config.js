@@ -1,5 +1,5 @@
 export const dataBase ={
-    dataBase:'teyserdb2',
+    dataBase:'teyserdb',
     userName: 'manuel',
     password: '',
     host: 'localhost'

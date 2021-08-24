@@ -21,7 +21,7 @@ export async function login(req,res){
                 // el token tiene el id, el rol y el estado de la cuenta
                                 id: idEncontrado,
                                 rol: usuarioEncontrado.tipo_operador,
-                                cuenta: usuarioEncontrado.cuenta
+                                activo: usuarioEncontrado.activo
                                 },SECRET,{
                                     expiresIn: 86400
                                 });
@@ -30,6 +30,9 @@ export async function login(req,res){
                 data: token
                 });
     } catch (error) {
+        res.json({
+            msg: "error al iniciar sesión"
+        });
         console.log(error);
     }
     
@@ -42,11 +45,11 @@ export async function logup(req,res){
         const idEncontrado = await correoExistente(correo);
         
         //verifico si el correo ya existe
-        if(idEncontrado){return res.json({msg: "error, el correo ya existe"});}
+        if(idEncontrado){return res.json({msg: "el correo ya existe"});}
 
         const operadorNuevo = await operador.create({
             tipo_operador: 'operario', 
-            cuenta: 'inactivo',
+            activo: false,
             nombre,
             apellido,
             correo,
@@ -55,7 +58,7 @@ export async function logup(req,res){
 
         const token = jsonwebtoken.sign({id:operadorNuevo.id_operador,
                                         rol:operadorNuevo.tipo_operador,
-                                        cuenta:operadorNuevo.cuenta
+                                        activo:operadorNuevo.activo
                                         },SECRET,{
                                             expiresIn: 86400
                                         });
@@ -64,6 +67,9 @@ export async function logup(req,res){
             data: token
         });
     } catch (error) {
+        res.json({
+            msg: "error al iniciar sesión"
+        });
         console.log(error);
     }
 
