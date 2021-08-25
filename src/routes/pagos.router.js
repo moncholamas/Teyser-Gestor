@@ -4,7 +4,6 @@ import {
     getPagoById,
     nuevoPago,
     deletePago,
-    updatePago
 } from '../controllers/pagosController'
 import { isAdmin } from '../middlewares/authmiddleware';
 

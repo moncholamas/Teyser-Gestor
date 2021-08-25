@@ -6,7 +6,7 @@ import {
     deleteParteDiario,
     updateParteDiario
 } from '../controllers/parteDiarioController'
-import { isAdmin, isAdminOrOperator, isOperator } from '../middlewares/authmiddleware';
+import { isAdmin, isAdminOrOperator } from '../middlewares/authmiddleware';
 
 //inicilizacion
 const router = Router();

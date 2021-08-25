@@ -2,8 +2,7 @@ import {Router} from 'express';
 import {nuevaVenta,
         getVentas,
         getVentaById,
-        deleteVenta,
-        updateVenta    
+        deleteVenta,    
     } from '../controllers/ventasController'
 import { isAdminOrOperator } from '../middlewares/authmiddleware';
 
