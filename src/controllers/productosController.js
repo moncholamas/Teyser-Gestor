@@ -71,20 +71,11 @@ export async function nuevoProducto(req,res ){
                     });
                 }else{
                     //actualizo la tabla consumos
-                    try {
                         const nuevoConsumo = await consumos.create({
                             id_producto: productoNuevo.id_producto,
                             id_insumo: insumo.id_insumo,
                             cantidad: insumo.cantidad
-                        },{transaction:t});
-                    } catch (error) {
-                        res.send({
-                            msj: "error al ingresar el consumo del producto"
-                        });
-                        console.error(error);
-                        return;
-                    }
-                    
+                        },{transaction:t});  
                 }
             }
             t.afterCommit(()=>{

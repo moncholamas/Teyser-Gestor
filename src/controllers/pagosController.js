@@ -58,7 +58,7 @@ export async function nuevoPago(req,res ){
             detalles_pago
     } = req.body;
     try {
-        const resultado = sequelize.transaction(async(t)=>{
+        sequelize.transaction(async(t)=>{
             const pagoNuevo = await pagos.create({
                 tipo,
                 fecha,
@@ -71,7 +71,6 @@ export async function nuevoPago(req,res ){
             const detalles=[];
             for(const detalle of detalles_pago) {
                 //busco los productos
-                try {
                     const insumoNuevo = await insumos.findByPk(detalle.id_insumo);
                     if (insumoNuevo == null){
                         console.error("no puede ingresar este insumo");
@@ -80,8 +79,6 @@ export async function nuevoPago(req,res ){
                         });
                     }
                     else{
-                        
-                        try {
                             const detalleNuevo = await detalle_compras.create({
                                 id_compra: pagoNuevo.id_compra,
                                 id_insumo: insumoNuevo.id_insumo,
@@ -90,20 +87,7 @@ export async function nuevoPago(req,res ){
                                 //trigger actualiza el monto de la compra efectuada
                             },{transaction:t});
                             detalles.push(detalleNuevo);
-                        } catch (error) {
-                            res.send({
-                                msj: "error al generar un detalle de la compra"
-                            });
-                            console.error(error);
-                            return;
-                        }
                     }
-                } catch (error) {
-                    console.error(error);
-                    res.json({
-                        msj: "error al generar el pago"
-                    })
-                }
             }
             //terminada la transaccion envio los datos al front
             t.afterCommit(async ()=>{

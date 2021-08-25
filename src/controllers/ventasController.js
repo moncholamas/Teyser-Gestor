@@ -54,7 +54,7 @@ export async function nuevaVenta(req,res ){
     try {
         //todos los ingresos se tienen que dar correctamente -> transaction
         const resultado = await sequelize.transaction(async (t)=>{
-                //genero la compra con el total en 0
+            //genero la compra con el total en 0
             const ventaNueva = await venta.create({
                 observacion,
                 total:0,
@@ -69,27 +69,21 @@ export async function nuevaVenta(req,res ){
                     const productoNuevo = await producto.findByPk(detalle.id_producto);
                         //calculo el subtotal
                         const subtotal = productoNuevo.dataValues.precio * detalle.cantidad;
-                        try {
-                            const detalleNuevo = await detalle_ventas.create({
+                        
+                        const detalleNuevo = await detalle_ventas.create({
                                 id_producto: detalle.id_producto,
                                 id_venta: ventaNueva.id_venta,
                                 cantidad:detalle.cantidad,
                                 total: subtotal
-                            },{transaction:t});
-                            //actualizo el monto de la venta en cada insert (trigger)
-                            detalles.push(detalleNuevo);
-                        } catch (error) {
-                            res.send({
-                                msj: "error al generar el detalle de la venta"
-                            });
-                            console.error(error);
-                            return;
-                        }
+                        },{transaction:t});
+                        //actualizo el monto de la venta en cada insert (desde trigger)
+                        detalles.push(detalleNuevo);
+                        
             }
             // llamar al commit -> actualizar recaudacion del parte diario
             t.afterCommit(async ()=>{
                 const ventaConfirmada = venta.findByPk(ventaNueva.id_venta);
-                res.json({
+                return res.json({
                     msj: "nueva venta ingresada correctamente",
                     data: {
                         operacion: ventaConfirmada,
@@ -100,12 +94,12 @@ export async function nuevaVenta(req,res ){
            
             });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al ingresar la nueva venta"
         });
-        console.error(error);
+        
     }
-    return;
 }
 
 //borra una venta por Id
