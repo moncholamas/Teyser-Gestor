@@ -1,14 +1,23 @@
 import  operador from '../models/operador';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { Op } from 'sequelize';
 
 //trae todos los equipos
 export async function getOperadores(req,res){
     initModels(sequelize);
     try {
+        const idOperadorRequest = req.operadorEncontrado.dataValues.id_operador;
         const list_operador = await operador.findAll({
-            attributes: ['id_operador','cuenta','nombre','apellido','correo','tipo_operador']
-        });
+                attributes: ['id_operador','activo','nombre','apellido'],
+                where:{
+                    //traigo todos los operadores menos el que hizo el request
+                    id_operador:{
+                        [Op.ne]: idOperadorRequest
+                    }
+                }      
+            }
+        );
         res.send({
             data: list_operador
         });
@@ -48,11 +57,11 @@ export async function getOperadorById(req,res){
 //ingresa un nuevo equipo
 export async function nuevoOperador(req,res ){
     initModels(sequelize);
-    const {cuenta,nombre,apellido,correo,tipo_operador} = req.body;
+    const {activo,nombre,apellido,correo,tipo_operador} = req.body;
     try {
         const operadorNuevo = await operador.create(
             {
-            cuenta,
+            activo,
             nombre,
             apellido,
             correo,
@@ -104,10 +113,10 @@ export async function deleteOperador(req,res){
 export async function updateOperador(req,res){
     initModels(sequelize);
     const id = req.params.id;
-    const {cuenta,nombre,apellido,correo,tipo_operador}  = req.body
+    const {activo,nombre,apellido,correo,tipo_operador}  = req.body
     try {
         const operadoresActualizado = await operador.update({
-            cuenta,
+            activo,
             nombre,
             apellido,
             correo,
