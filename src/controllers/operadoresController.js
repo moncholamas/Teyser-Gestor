@@ -117,13 +117,10 @@ export async function deleteOperador(req,res){
 export async function updateOperador(req,res){
     initModels(sequelize);
     const id = req.params.id;
-    const {activo,nombre,apellido,correo,tipo_operador}  = req.body
+    const {activo,tipo_operador}  = req.body
     try {
         const operadoresActualizado = await operador.update({
             activo,
-            nombre,
-            apellido,
-            correo,
             tipo_operador
         },{
             where: {id_operador:id}
