@@ -30,7 +30,7 @@ export default class equipos extends Model {
     sequelize,
     tableName: 'equipos',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK7",

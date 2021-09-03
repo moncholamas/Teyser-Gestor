@@ -6,8 +6,8 @@ async function main(){
      try {
         const port = process.env.PORT || 3009;
         app.listen(port);
-        await sequelize.authenticate();
-        console.log(`andando en el puerto ${port}`);
+        await sequelize.sync({alter:true});
+        console.log(`servidor corriendo en el puerto: ${port}`);
      }catch(e){
          console.log(e);
      }

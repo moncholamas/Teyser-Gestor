@@ -38,7 +38,7 @@ export default class operador extends Model {
     sequelize,
     tableName: 'operador',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK3",

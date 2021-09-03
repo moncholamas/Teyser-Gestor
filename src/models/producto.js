@@ -31,7 +31,7 @@ export default class producto extends Model {
     tableName: 'producto',
     schema: 'public',
     hasTrigger: true,
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK4",

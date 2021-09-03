@@ -27,7 +27,7 @@ export default class insumos extends Model {
     tableName: 'insumos',
     schema: 'public',
     hasTrigger: true,
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK9",

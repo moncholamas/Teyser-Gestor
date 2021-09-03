@@ -35,7 +35,11 @@ export async function getOperadorById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const operadorSeleccionado = await operador.findByPk(id);
+        const operadorSeleccionado = await operador.findByPk(id,{
+            attributes:{
+                exclude: ['clave']
+            }
+        });
         if (operadorSeleccionado == null){
             res.json({
                 msj: "no se encontró un operador con la clave proporcionada"
