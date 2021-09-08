@@ -106,6 +106,8 @@ CREATE TABLE equipos(
     nombre_tecnico     varchar(50),
     nombre_fantasia    varchar(50),
     categoria          categoria_equipo,
+    "createdAt" timestamp,
+    "udatedAt" timestamp,
     CONSTRAINT "PK7" PRIMARY KEY (id_equipo)
 )
 ;
@@ -121,6 +123,8 @@ CREATE TABLE insumos(
     unidades        decimal(10, 2),
     nombre          varchar(50),
     presentacion    varchar(100),
+    "createdAt" timestamp,
+    "udatedAt" timestamp,
     CONSTRAINT "PK9" PRIMARY KEY (id_insumo)
 )
 ;
@@ -158,6 +162,8 @@ CREATE TABLE operador(
     correo           varchar(50)    NOT NULL,
     clave            text   NOT NULL,
     tipo_operador              rol,
+    "createdAt" timestamp,
+    "udatedAt" timestamp,
     CONSTRAINT "PK3" PRIMARY KEY (id_operador)
 )
 ;
@@ -210,6 +216,8 @@ CREATE TABLE producto(
     descripcion    varchar(100)      NOT NULL,
     precio         decimal(5, 2)    NOT NULL,
     categoria      categorias_producto,
+    "createdAt" timestamp,
+    "udatedAt" timestamp,
     CONSTRAINT "PK4" PRIMARY KEY (id_producto)
 )
 ;
