@@ -9,16 +9,15 @@ export async function getInsumos(req,res){
         const list_insumos = await insumos.findAll({
             attributes: ['id_insumo','unidades','nombre','presentacion']
         });
-        res.send({
+        return res.send({
             data: list_insumos
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar los insumos"
         });
-        console.error(error)
     }
-    
 }
 
 //trae un equipo por ID
@@ -27,21 +26,19 @@ export async function getInsumoById(req,res){
     const id= req.params.id;
     try {
         const insumo = await insumos.findByPk(id);
-        if (insumo == null){
+        return insumo === null?
             res.json({
                 msj: "no se encontró un insumo con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: insumo
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar el insumo"
         });
-        console.error(error);
     }
 }
 
@@ -58,15 +55,15 @@ export async function nuevoInsumo(req,res ){
     
             }
         );
-        res.json({
+        return res.json({
             msj: "nuevo insumo ingresado correctamente",
             data: insumoNuevo
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al ingresar nuevo insumo"
         });
-        console.error(error);
     }
     
 }
@@ -77,7 +74,7 @@ export async function deleteInsumo(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await insumos.destroy({where:{id_sumo:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -88,10 +85,10 @@ export async function deleteInsumo(req,res){
         })
         ;
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al eliminar el insumo"
         });
-        console.error(error);
     }
 }
 
@@ -109,21 +106,19 @@ export async function updateInsumo(req,res){
         },{
             where: {id_insumo:id}
         });
-        if(insumosActualizado > 0){
+        return insumosActualizado > 0 ?
             res.json({
                 msj: "insumo actualizado correctamente",
                 data: insumosActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ningún insumo"
             });
-        }
     } catch (error) {
+        console.error(error);
         res.send({
             msj: "error al actualizar el insumo"
         });
-        console.error(error);
     }   
 }

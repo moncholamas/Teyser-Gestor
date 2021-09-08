@@ -17,14 +17,14 @@ export async function getPartesDiarios(req,res){
                 'recaudacion',
                 'observacion']
         });
-        res.send({
+        return res.send({
             data: list_parte_diario
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar los partes diarios"
         });
-        console.error(error);
     }
     
 }
@@ -35,21 +35,19 @@ export async function getParteDiarioById(req,res){
     const id= req.params.id;
     try {
         const parte_diario_encontrado = await parte_diario.findByPk(id);
-        if (parte_diario_encontrado == null){
+        return parte_diario_encontrado == null?
             res.json({
                 msj: "no se encontró un parte diario con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                         data: parte_diario_encontrado
                         });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar el parte diario"
         });
-        console.error(error);
     }
 }
 
@@ -78,13 +76,13 @@ export async function nuevoParteDiario(req,res ){
     
             }
         );
-        res.json({
+        return res.json({
             msj: "nuevo parte diario ingresado correctamente",
             data: parte_diarioNuevo
         });
     } catch (error) {
         console.error(error);
-        res.send({
+        return res.send({
             msj: "error al ingresar el nuevo parte diario"
         });
     }
@@ -97,7 +95,7 @@ export async function deleteParteDiario(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await parte_diario.destroy({where:{id_parte_diario:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -105,13 +103,12 @@ export async function deleteParteDiario(req,res){
         :
         res.json({
             msj:"no se encontraron coincidencias",
-        })
-        ;
+        });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al borrar el parte diario"
         });
-        console.error(error);
     }
 }
 
@@ -141,21 +138,19 @@ export async function updateParteDiario(req,res){
         },{
             where: {id_parte_diario:id}
         });
-        if(parte_diarioActualizado > 0){
+        return parte_diarioActualizado > 0?
             res.json({
                 msj: "parte diario actualizado correctamente",
                 data: parte_diarioActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ningun parte diario"
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al borrar al actualizar el parte diario"
         });
-        console.error(error);
     }   
 }

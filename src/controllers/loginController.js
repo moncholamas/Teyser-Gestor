@@ -11,12 +11,18 @@ export async function login(req,res){
     try {
         const {correo,clave} = req.body;
         const idEncontrado = await correoExistente(correo);
+
+        //verifica si la cuenta de correo existe, caso negativo termina la consulta
         if(!idEncontrado){return res.json({msg: "No existe una cuenta con el correo ingresado"})}
         
+        //trae el usuario de la DB
         const usuarioEncontrado = await operador.findByPk(idEncontrado);
+        //compara las clave encriptada
         const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
+        //si no son iguales corta la consulta
         if(!validacion){return res.json({msg: "Contraseña incorrecta"}) }
-        
+
+        //envío el token con los datos del usuario
         const token = jsonwebtoken.sign({
                 // el token tiene el id, el rol y el estado de la cuenta
                                 id: idEncontrado,
@@ -25,15 +31,15 @@ export async function login(req,res){
                                 },SECRET,{
                                     expiresIn: 86400
                                 });
-        res.json({
+        return res.json({
                 msg: "Sesion iniciada",
                 data: token
                 });
     } catch (error) {
-        res.json({
+        console.log(error);
+        return res.json({
             msg: "error al iniciar sesión"
         });
-        console.log(error);
     }
     
 }
@@ -44,10 +50,11 @@ export async function logup(req,res){
         initModels(sequelize);
         const idEncontrado = await correoExistente(correo);
         
-        //verifico si el correo ya existe
+        //verifico si el correo ya existe, si existe termino la consulta
         if(idEncontrado){return res.json({msg: "el correo ya existe"});}
 
         const operadorNuevo = await operador.create({
+            //por defecto todo operador es operario e inactivo
             tipo_operador: 'operario', 
             activo: false,
             nombre,
@@ -62,15 +69,15 @@ export async function logup(req,res){
                                         },SECRET,{
                                             expiresIn: 86400
                                         });
-        res.json({
+        return res.json({
             msg: `Nueva cuenta ingresada: ${operadorNuevo.nombre} ${operadorNuevo.apellido}`,
             data: token
         });
     } catch (error) {
-        res.json({
+        console.log(error);
+        return res.json({
             msg: "error al iniciar sesión"
         });
-        console.log(error);
     }
 
 }

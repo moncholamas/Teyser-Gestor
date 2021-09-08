@@ -2,46 +2,44 @@ import  clientes from '../models/clientes';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 
-//trae todos los equipos
+//trae todos los clientes
 export async function getClientes(req,res){
     initModels(sequelize);
     try {
         const list_clientes = await clientes.findAll({
             attributes: ['id_cliente','nombre','apellido','telefono','correo']
         });
-        res.json({
+        return res.json({
             data: list_clientes
         });
     } catch (error) {
-        res.json({
+        console.error(error);
+        return res.json({
             msj: "error al obtener los clientes"
         });
-        console.error(error);
     }
     
 }
 
-//trae un equipo por ID
+//trae un cliente por ID
 export async function getClienteById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
         const cliente = await clientes.findByPk(id); 
-        if (cliente == null){
-            res.json({
-                msj: "no se encontró un cliente con la clave proporcionada"
-            });
-        }
-        else{
+        return cliente === null?
+             res.json({
+                msj: "no se encontró cliente con la clave proporcionada"
+            })
+            :
             res.json({
                 data: cliente
             });
-        }
     } catch (error) {
-        res.json({
+        console.error(error)
+        return res.json({
             msj: "error al intentar buscar el cliente"
         });
-        console.error(error)
     }
 }
 
@@ -54,17 +52,16 @@ export async function nuevoCliente(req,res ){
             {nombre,
             apellido,
             telefono,
-            correo},{
-    
-            }
+            correo},
+            {} //no necesita modificadores
         );
-        res.json({
+        return res.json({
             msj: "nuevo cliente ingresado correctamente",
             data: clienteNuevo
         });
     } catch (error) {
         console.error(error);
-        res.json({
+        return res.json({
             msj: "no se pudo ingresar el nuevo cliente"
         });
     }
@@ -77,7 +74,7 @@ export async function deleteCliente(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await clientes.destroy({where:{id_cliente:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -88,10 +85,10 @@ export async function deleteCliente(req,res){
         })
         ;
     } catch (error) {
-        res.json({
+        console.error(error);
+        return res.json({
             msj:"error al borrar el cliente",
         });
-        console.error(error)
     }
 }
 
@@ -110,21 +107,19 @@ export async function updateCliente(req,res){
         },{
             where: {id_cliente:id}
         });
-        if(clientesActualizado > 0){
+        return clientesActualizado > 0?
             res.json({
                 msj: "cliente actualizado correctamente",
                 data: clientesActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ningun cliente"
             });
-        }
     } catch (error) {
-        res.json({
+        console.error(error);
+        return res.json({
             msj: "error al actualizar el cliente"
         });
-        console.error(error);
     }   
 }

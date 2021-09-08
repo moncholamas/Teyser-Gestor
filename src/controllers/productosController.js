@@ -11,16 +11,15 @@ export async function getProductos(req,res){
         const list_productos = await producto.findAll({
             attributes: ['id_producto','nombre','descripcion','precio','categoria']
         });
-        res.send({
+        return res.send({
             data: list_productos
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar los productos"
         });
-        console.error(error);
     }
-    
 }
 
 //trae un equipo por ID
@@ -29,19 +28,17 @@ export async function getProductoById(req,res){
     const id= req.params.id;
     try {
         const productoEncontrado = await producto.findByPk(id);
-        if (productoEncontrado == null){
+        return productoEncontrado == null?
             res.json({
                 msj: "no se encontró un producto con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: productoEncontrado
             });
-        }
     } catch (error) {
         console.error(error);
-        res.send({
+        return res.send({
             msj: "error al buscar el producto"
         });
     }
@@ -62,16 +59,16 @@ export async function nuevoProducto(req,res ){
                 categoria},
                 {transaction:t}
             );
-            
+
             for(const insumo of detalle_insumos){
                 const nuevoInsumo = await insumos.findByPk(insumo.id_insumo);
                 if(nuevoInsumo == null){
                     return res.json({
-                        msj:"no se encontró ningun insumo con la clave ingresada"
+                        msj:"no se encontró ningun insumo con la clave ingresada, carga de producto terminada"
                     });
                 }else{
-                    //actualizo la tabla consumos
-                        const nuevoConsumo = await consumos.create({
+                    //actualiza la tabla consumos
+                        await consumos.create({
                             id_producto: productoNuevo.id_producto,
                             id_insumo: insumo.id_insumo,
                             cantidad: insumo.cantidad
@@ -79,7 +76,8 @@ export async function nuevoProducto(req,res ){
                 }
             }
             t.afterCommit(()=>{
-                res.json({
+                //terminada la transaccion confirma el ingreso
+                return res.json({
                     msj: "nuevo producto ingresado correctamente",
                     data: productoNuevo
                 });
@@ -87,12 +85,11 @@ export async function nuevoProducto(req,res ){
         });
         
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al ingresar el nuevo producto"
         });
-        console.error(error);
     }
-    
 }
 
 //borra un equipo por Id
@@ -101,7 +98,7 @@ export async function deleteProducto(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await producto.destroy({where:{id_producto:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -112,10 +109,10 @@ export async function deleteProducto(req,res){
         })
         ;
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al borrar el producto"
         });
-        console.error(error);
     }
 }
 
@@ -134,20 +131,18 @@ export async function updateProducto(req,res){
         },{
             where: {id_producto:id}
         });
-        if(productosActualizado > 0){
+        return productosActualizado > 0?
             res.json({
                 msj: "no se actualizado correctamente",
                 data: productosActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ningún producto"
             });
-        }
     } catch (error) {
         console.error(error);
-        res.send({
+        return res.send({
             msj: "error al actualizar el producto"
         });
     }   

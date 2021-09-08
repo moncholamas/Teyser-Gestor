@@ -11,21 +11,21 @@ export async function getNovedades(req,res){
             'id_novedad',    
             'fecha_actualizacion',
             'categoria',
-            'estado','novedad'
+            'estado',
+            'novedad'
             ,'observacion',
             'id_parte_diario',
             'id_equipo']
         });
-        res.send({
+        return res.send({
             data: list_novedades
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar las novedades"
         });
-        console.error(error);
     }
-    
 }
 
 //trae un equipo por ID
@@ -34,21 +34,19 @@ export async function getNovedadById(req,res){
     const id= req.params.id;
     try {
         const novedad = await novedades.findByPk(id);
-        if (novedad == null){
+        return novedad === null?
             res.json({
                 msj: "no se encontró una novedad con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: novedad
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar la novedad"
         });
-        console.error(error);
     }
 }
 
@@ -75,15 +73,15 @@ export async function nuevaNovedad(req,res ){
     
             }
         );
-        res.json({
+        return res.json({
             msj: "nueva novedad ingresada correctamente",
             data: novedadNuevo
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al ingresar la novedad"
         });
-        console.error(error);
     }
     
 }
@@ -94,7 +92,7 @@ export async function deleteNovedad(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await novedades.destroy({where:{id_novedad:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -106,7 +104,7 @@ export async function deleteNovedad(req,res){
         ;
     } catch (error) {
         console.error(error);
-        res.send({
+        return res.send({
             msj: "error al eliminar la novedad"
         });
     }
@@ -138,21 +136,19 @@ export async function updateNovedad(req,res){
         },{
             where: {id_novedad:id}
         });
-        if(novedadesActualizado > 0){
+        return novedadesActualizado > 0?
             res.json({
                 msj: "novedad actualizada correctamente",
                 data: novedadesActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ninguna novedad"
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al actualizar la novedad"
         });
-        console.error(error);
     }   
 }

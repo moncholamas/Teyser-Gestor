@@ -11,16 +11,15 @@ export async function getPagos(req,res){
         const list_pagos = await pagos.findAll({
             attributes: ['id_compra','tipo','fecha','observacion','total','id_operador']
         });
-        res.send({
+        return res.send({
             data: list_pagos
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar los pagos"
         });
-        console.error(error);
     }
-    
 }
 
 //trae una venta por ID
@@ -29,21 +28,19 @@ export async function getPagoById(req,res){
     const id= req.params.id;
     try {
         const pagoSeleccionada = await pagos.findByPk(id);
-        if (pagoSeleccionada == null){
+        return pagoSeleccionada === null?
             res.json({
                 msj: "no se encontró un pago con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: pagoSeleccionada
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar el pago o compra"
         });
-        console.error(error);
     }
 }
 
@@ -58,6 +55,7 @@ export async function nuevoPago(req,res ){
             detalles_pago
     } = req.body;
     try {
+        //los pagos traen una lista de detalles_pago
         sequelize.transaction(async(t)=>{
             const pagoNuevo = await pagos.create({
                 tipo,
@@ -67,15 +65,16 @@ export async function nuevoPago(req,res ){
                 id_operador,
             },{transaction:t});
             
-            //itero sobre la lista de los detalles para generar los nuevo detalle_compra
-            const detalles=[];
+            //una nueva lista de los detalles ingresados en la DB
+            const detalleFinal=[];
             for(const detalle of detalles_pago) {
+            //itero sobre la lista de los detalles para generar los nuevo detalle_compra
                 //busco los productos
                     const insumoNuevo = await insumos.findByPk(detalle.id_insumo);
                     if (insumoNuevo == null){
                         console.error("no puede ingresar este insumo");
                         return res.send({
-                            msj: "error al ingresar un insumo"
+                            msj: "error al ingresar un insumo, compra cancelada"
                         });
                     }
                     else{
@@ -86,17 +85,17 @@ export async function nuevoPago(req,res ){
                                 cantidad: detalle.cantidad
                                 //trigger actualiza el monto de la compra efectuada
                             },{transaction:t});
-                            detalles.push(detalleNuevo);
+                            detalleFinal.push(detalleNuevo);
                     }
             }
             //terminada la transaccion envio los datos al front
             t.afterCommit(async ()=>{
                 const pagoConfirmado = await pagos.findByPk(pagoNuevo.id_compra);
-                res.json({
+                return res.json({
                     msj: "nuevo pago ingresado correctamente",
                     data: {
                         operacion:pagoConfirmado,
-                        detalle: detalles_pago
+                        detalle: detalleFinal
                     }
                 });
             });
@@ -104,12 +103,12 @@ export async function nuevoPago(req,res ){
         //genero el pago con el total en 0
         
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al ingresar el nuevo pago"
         });
-        console.error(error);
+        
     }
-    return;
 }
 
 //borra una venta por Id
@@ -118,7 +117,7 @@ export async function deletePago(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await pagos.destroy({where:{id_pago:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -129,10 +128,10 @@ export async function deletePago(req,res){
         })
         ;
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al eliminar el pago o compra"
         });
-        console.error(error);
     }
 }
 

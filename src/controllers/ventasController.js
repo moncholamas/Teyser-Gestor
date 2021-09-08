@@ -11,16 +11,15 @@ export async function getVentas(req,res){
         const list_venta = await venta.findAll({
             attributes: ['id_venta','observacion','total','estado','id_parte_diario','id_cliente']
         });
-        res.send({
+        return res.send({
             data: list_venta
         });
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar las ventas"
         });
-        console.error(error);
-    }
-    
+    }   
 }
 
 //trae una venta por ID
@@ -29,32 +28,31 @@ export async function getVentaById(req,res){
     const id= req.params.id;
     try {
         const ventaSeleccionada = await venta.findByPk(id);
-        if (ventaSeleccionada == null){
+        return ventaSeleccionada === null?
             res.json({
                 msj: "no se encontró una venta con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: ventaSeleccionada
             });
-        }
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al buscar la venta"
         });
-        console.error(error);
     }
 }
 
 //ingresa ua nueva venta
 export async function nuevaVenta(req,res ){
     initModels(sequelize);
-    const {observacion,total,estado,id_parte_diario,id_cliente,detalles_venta} = req.body;
+    const {observacion,estado,id_parte_diario,id_cliente,detalles_venta} = req.body;
     try {
         //todos los ingresos se tienen que dar correctamente -> transaction
         const resultado = await sequelize.transaction(async (t)=>{
-            //genero la compra con el total en 0
+            //genero la compra con el total en 0 por seguridad
+            //calculo el total en funcion de la DB
             const ventaNueva = await venta.create({
                 observacion,
                 total:0,
@@ -62,7 +60,9 @@ export async function nuevaVenta(req,res ){
                 id_parte_diario,
                 id_cliente
             },{transaction:t});
-            const detalles = [];
+
+            //creo una lista de detalles ingresados en la DB
+            const detalleFinal = [];
             //itero sobre la lista de los detalles para generar los detalles
             for (const detalle of detalles_venta){
                 //busco el producto
@@ -76,8 +76,9 @@ export async function nuevaVenta(req,res ){
                                 cantidad:detalle.cantidad,
                                 total: subtotal
                         },{transaction:t});
+
                         //actualizo el monto de la venta en cada insert (desde trigger)
-                        detalles.push(detalleNuevo);
+                        detalleFinal.push(detalleNuevo);
                         
             }
             // llamar al commit -> actualizar recaudacion del parte diario
@@ -87,7 +88,7 @@ export async function nuevaVenta(req,res ){
                     msj: "nueva venta ingresada correctamente",
                     data: {
                         operacion: ventaConfirmada,
-                        detalle: detalles
+                        detalle: detalleFinal
                     }
                 });
             });
@@ -98,7 +99,6 @@ export async function nuevaVenta(req,res ){
         return res.send({
             msj: "error al ingresar la nueva venta"
         });
-        
     }
 }
 
@@ -108,7 +108,7 @@ export async function deleteVenta(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await venta.destroy({where:{id_venta:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
             data: cantidadBorrada
@@ -119,10 +119,10 @@ export async function deleteVenta(req,res){
         })
         ;
     } catch (error) {
-        res.send({
+        console.error(error);
+        return res.send({
             msj: "error al eliminar la venta"
         });
-        console.error(error);
     }
 }
 

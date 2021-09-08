@@ -9,14 +9,14 @@ export async function getEquipos(req,res){
         const list_equipos = await equipos.findAll({
             attributes: ['id_equipo','estado','nombre_tecnico','nombre_fantasia','categoria']
         });
-        res.send({
+        return res.send({
             data: list_equipos
         });
     } catch (error) {
-        res.send({
+        console.log(error);
+        return res.send({
             msj: "error al buscar los equipos"
         });
-        console.log(error);
     }
     
 }
@@ -27,16 +27,14 @@ export async function getEquipoById(req,res){
     const id= req.params.id;
     try {
         const equipo = await equipos.findByPk(id);
-        if (equipo == null){
+        return equipo === null?
             res.json({
                 msj: "no se encontró un equipo con la clave proporcionada"
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 data: equipo
             });
-        }
     } catch (error) {
         res.send({
             msj: "error al buscar el equipo"
