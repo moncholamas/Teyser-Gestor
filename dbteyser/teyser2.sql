@@ -1,6 +1,6 @@
---
--- CREAR TIPOS DE DATOS NUEVOS
---
+-----------------------------------------------
+--              Nuevos tipos de datos definidos
+-----------------------------------------------
 
 --Tabla: Parte_diario
 CREATE TYPE turnos AS ENUM
@@ -36,10 +36,15 @@ CREATE TYPE categorias_producto AS ENUM
 CREATE TYPE categoria_novedades AS ENUM
     ('emergencia', 'mantenimiento', 'informativa');
 
+
+------------------------------------------------------
+--                         Tablas
+------------------------------------------------------
+
+
 -- 
 -- TABLE: clientes 
 --
-
 CREATE TABLE clientes(
     id_cliente    SERIAL           NOT NULL,
     nombre        varchar(50)    NOT NULL,
@@ -50,12 +55,9 @@ CREATE TABLE clientes(
 )
 ;
 
-
-
 -- 
 -- TABLE: consumos 
 --
-
 CREATE TABLE consumos(
     id_producto    int2        NOT NULL,
     id_insumo      int2        NOT NULL,
@@ -64,12 +66,9 @@ CREATE TABLE consumos(
 )
 ;
 
-
-
 -- 
 -- TABLE: detalle_compras 
 --
-
 CREATE TABLE detalle_compras(
     id_compra    int4             NOT NULL,
     id_insumo    int2             NOT NULL,
@@ -79,12 +78,9 @@ CREATE TABLE detalle_compras(
 )
 ;
 
-
-
 -- 
 -- TABLE: detalle_ventas 
 --
-
 CREATE TABLE detalle_ventas(
     id_producto    int2             NOT NULL,
     id_venta       int4             NOT NULL,
@@ -94,12 +90,9 @@ CREATE TABLE detalle_ventas(
 )
 ;
 
-
-
 -- 
 -- TABLE: equipos 
 --
-
 CREATE TABLE equipos(
     id_equipo          SERIAL           NOT NULL,
     estado             estado_equipos,
@@ -112,12 +105,9 @@ CREATE TABLE equipos(
 )
 ;
 
-
-
 -- 
 -- TABLE: insumos 
 --
-
 CREATE TABLE insumos(
     id_insumo       SERIAL              NOT NULL,
     unidades        decimal(10, 2),
@@ -129,12 +119,9 @@ CREATE TABLE insumos(
 )
 ;
 
-
-
 -- 
 -- TABLE: novedades 
 --
-
 CREATE TABLE novedades(
     id_novedad             SERIAL           NOT NULL,
     fecha_actualizacion    date,
@@ -148,12 +135,9 @@ CREATE TABLE novedades(
 )
 ;
 
-
-
 -- 
 -- TABLE: operador 
 --
-
 CREATE TABLE operador(
     id_operador      SERIAL           NOT NULL,
     activo    BOOLEAN       NOT NULL,
@@ -168,12 +152,9 @@ CREATE TABLE operador(
 )
 ;
 
-
-
 -- 
 -- TABLE: pagos 
 --
-
 CREATE TABLE pagos(
     id_compra      SERIAL             NOT NULL,
     tipo           tipo_pago,
@@ -185,12 +166,9 @@ CREATE TABLE pagos(
 )
 ;
 
-
-
 -- 
 -- TABLE: parte_diario 
 --
-
 CREATE TABLE parte_diario(
     id_parte_diario    SERIAL              NOT NULL,
     id_operador        int2              NOT NULL,
@@ -204,12 +182,9 @@ CREATE TABLE parte_diario(
 )
 ;
 
-
-
 -- 
 -- TABLE: producto 
 --
-
 CREATE TABLE producto(
     id_producto    SERIAL             NOT NULL,
     nombre         varchar(100)     NOT NULL,
@@ -222,12 +197,9 @@ CREATE TABLE producto(
 )
 ;
 
-
-
 -- 
 -- TABLE: stock 
 --
-
 CREATE TABLE stock(
     id_insumo    SERIAL              NOT NULL,
     cantidad     decimal(10, 2)    NOT NULL,
@@ -235,12 +207,9 @@ CREATE TABLE stock(
 )
 ;
 
-
-
 -- 
 -- TABLE: venta 
 --
-
 CREATE TABLE venta(
     id_venta           BIGSERIAL             NOT NULL,
     observacion        varchar(200),
@@ -252,12 +221,9 @@ CREATE TABLE venta(
 )
 ;
 
-
-
 -- 
 -- TABLE: consumos 
 --
-
 ALTER TABLE consumos ADD CONSTRAINT "Refproducto22" 
     FOREIGN KEY (id_producto)
     REFERENCES producto(id_producto)
@@ -268,11 +234,9 @@ ALTER TABLE consumos ADD CONSTRAINT "Refinsumos23"
     REFERENCES insumos(id_insumo)
 ;
 
-
 -- 
 -- TABLE: detalle_compras 
 --
-
 ALTER TABLE detalle_compras ADD CONSTRAINT "Refpagos13" 
     FOREIGN KEY (id_compra)
     REFERENCES pagos(id_compra)
@@ -283,11 +247,9 @@ ALTER TABLE detalle_compras ADD CONSTRAINT "Refinsumos14"
     REFERENCES insumos(id_insumo)
 ;
 
-
 -- 
 -- TABLE: detalle_ventas 
 --
-
 ALTER TABLE detalle_ventas ADD CONSTRAINT "Refproducto1" 
     FOREIGN KEY (id_producto)
     REFERENCES producto(id_producto)
@@ -302,7 +264,6 @@ ALTER TABLE detalle_ventas ADD CONSTRAINT "Refventa2"
 -- 
 -- TABLE: novedades 
 --
-
 ALTER TABLE novedades ADD CONSTRAINT "Refparte_diario11" 
     FOREIGN KEY (id_parte_diario)
     REFERENCES parte_diario(id_parte_diario)
@@ -317,7 +278,6 @@ ALTER TABLE novedades ADD CONSTRAINT "Refequipos17"
 -- 
 -- TABLE: pagos 
 --
-
 ALTER TABLE pagos ADD CONSTRAINT "Refoperador15" 
     FOREIGN KEY (id_operador)
     REFERENCES operador(id_operador)
@@ -327,7 +287,6 @@ ALTER TABLE pagos ADD CONSTRAINT "Refoperador15"
 -- 
 -- TABLE: parte_diario 
 --
-
 ALTER TABLE parte_diario ADD CONSTRAINT "Refoperador6" 
     FOREIGN KEY (id_operador)
     REFERENCES operador(id_operador)
@@ -337,7 +296,6 @@ ALTER TABLE parte_diario ADD CONSTRAINT "Refoperador6"
 -- 
 -- TABLE: stock 
 --
-
 ALTER TABLE stock ADD CONSTRAINT "Refinsumos12" 
     FOREIGN KEY (id_insumo)
     REFERENCES insumos(id_insumo)
@@ -347,7 +305,6 @@ ALTER TABLE stock ADD CONSTRAINT "Refinsumos12"
 -- 
 -- TABLE: venta 
 --
-
 ALTER TABLE venta ADD CONSTRAINT "Refparte_diario19" 
     FOREIGN KEY (id_parte_diario)
     REFERENCES parte_diario(id_parte_diario)
@@ -358,7 +315,10 @@ ALTER TABLE venta ADD CONSTRAINT "Refclientes20"
     REFERENCES clientes(id_cliente)
 ;
 
--- FUNCIONES
+
+-------------------------------------------------
+--                                      FUNCIONES
+-------------------------------------------------
 
 -- MUESTRA EL MONTO PARCIAL DE la recaudacion del dia (para cada vez que se ingresa una venta);
 CREATE OR REPLACE FUNCTION recaudacion_parte_diario() RETURNS decimal 
@@ -373,10 +333,13 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 
+------------------------------------------------
+--                                      TRIGGERS
+------------------------------------------------
 
---TRIGGERS
-
+-------------------------------------------------------------------
 -- Actualiza el monto de la venta cuando se iserta un nuevo detalle
+-------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION actualiza_venta()RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
@@ -389,7 +352,9 @@ CREATE TRIGGER actualizar_venta
 AFTER INSERT ON detalle_ventas
 FOR EACH ROW EXECUTE PROCEDURE actualiza_venta();
 
+----------------------------------------------------------------------------
 -- Actualiza el monto de la compra cuando se iserta un nuevo detalle_compras
+-----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION actualiza_compra()RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
@@ -402,10 +367,9 @@ CREATE TRIGGER actualizar_compra
 AFTER INSERT ON detalle_compras
 FOR EACH ROW EXECUTE PROCEDURE actualiza_compra();
 
---Actualiza el monto de la compra cuando se inserta un detalle_compra
-
-
+---------------------------------------------
 --Borra los detalles_venta antes que la venta
+---------------------------------------------
 CREATE OR REPLACE FUNCTION borrar_detalles()RETURNS TRIGGER
 AS $$
 DECLARE
@@ -419,7 +383,9 @@ CREATE TRIGGER borrar_venta
 BEFORE DELETE ON venta
 FOR EACH ROW EXECUTE PROCEDURE borrar_detalles();
 
+-----------------------------------------------
 --Borra los detalles_compra antes que la compra
+-----------------------------------------------
 CREATE OR REPLACE FUNCTION borrar_detalles_compra()RETURNS TRIGGER
 AS $$
 DECLARE
@@ -433,7 +399,9 @@ CREATE TRIGGER borrar_compra
 BEFORE DELETE ON pagos
 FOR EACH ROW EXECUTE PROCEDURE borrar_detalles_compra();
 
+------------------------------------------------------
 --Borra los consumos de un producto antes que el mismo
+------------------------------------------------------
 CREATE OR REPLACE FUNCTION borrar_consumos()RETURNS TRIGGER
 AS $$
 DECLARE
@@ -447,24 +415,9 @@ CREATE TRIGGER borrar_producto
 BEFORE DELETE ON producto
 FOR EACH ROW EXECUTE PROCEDURE borrar_consumos();
 
---Borra los consumos de un producto antes que el insumo
-/*
-CREATE OR REPLACE FUNCTION borrar_consumos()RETURNS TRIGGER
-AS $$
-DECLARE
-BEGIN
-	DELETE FROM consumos WHERE id_producto = OLD.id_producto;
-END;
-$$ LANGUAGE 'plpgsql';
-
-
-CREATE TRIGGER borrar_producto
-BEFORE DELETE ON producto
-FOR EACH ROW EXECUTE PROCEDURE borrar_consumos();
-*/
-
-
--- ACTUALIZAR LOS MONTOS DE STOCK
+------------------------------------
+-- Aactualiza el monto de cada stock
+------------------------------------
 CREATE OR REPLACE FUNCTION actualizar_stock()RETURNS TRIGGER
 AS $$
 DECLARE
@@ -522,8 +475,9 @@ create trigger actualizar_stock_compras
 AFTER INSERT OR DELETE ON detalle_compras
 FOR EACH ROW EXECUTE PROCEDURE actualizar_stock();
 
-
--- DAR UN VALOR INICIAL AL STOCK en 0 y BORRAR EL STOCK CUANDO SE ELIMINA UN INSUMO
+-----------------------------------------------------------------------------------------
+-- Inicia el stock de un producto nuevo en 0 y borra el stock cuando se elimina un insumo
+-----------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION setear_stock() RETURNS TRIGGER
 AS $$
 DECLARE 
@@ -547,7 +501,69 @@ BEFORE DELETE ON insumos
 FOR EACH ROW EXECUTE PROCEDURE setear_stock();
 
 
---Auditorias
---Ventas borradas
---Compras borradas
+------------------------------------------------------------------
+-----------------                 ||| AUDITORIAS |||
+------------------------------------------------------------------
 
+
+--
+-- Auditoria ventas borradas
+-- Auditoria pagos borrados
+-- 
+
+--tabla
+CREATE TABLE auditorias_compras_ventas(
+id_auditoria SERIAL,
+fecha TIMESTAMP WITHOUT TIME ZONE,
+operador VARCHAR,
+tabla VARCHAR,
+operacion VARCHAR,
+monto DECIMAL
+);
+
+--funcion
+CREATE OR REPLACE FUNCTION ingreso_auditoria() RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+	INSERT INTO auditorias_compras_ventas VALUES(default,CURRENT_TIMESTAMP,'',TG_TABLE_NAME,TG_OP,OLD.total);
+END;
+$$ LANGUAGE 'plpgsql';
+
+--triggers
+CREATE TRIGGER audita_ventas
+BEFORE DELETE ON venta
+FOR EACH ROW EXECUTE PROCEDURE ingreso_auditoria();
+
+CREATE TRIGGER audita_pagos
+BEFORE DELETE ON pagos
+FOR EACH ROW EXECUTE PROCEDURE ingreso_auditoria();
+
+
+--
+-- Actualiza la auditoria con los datos del usuario
+--
+
+--funcion para llamas en la misma transaccion del DELETE UPDATE (destroy y update en Sequelize)
+CREATE OR REPLACE FUNCTION actualiza_auditoria(usuario varchar, auditoria varchar) RETURNS boolean AS $$
+DECLARE
+nombre_tabla_auditoria text := quote_ident('auditoria');
+ultima_aud record;
+BEGIN
+-- segun que tabla se modifique actualizo alguna de las 2 tablas de auditoria
+        --traigo la ultima auditoria hecha en cualquiera de las 2 tablas
+        EXECUTE 'SELECT * FROM ' || nombre_tabla_auditoria || ' ORDER BY id_auditoria DESC LIMIT 1' INTO ultima_aud;
+		IF NOT FOUND THEN
+			RAISE EXCEPTION 'No existe la auditoria';
+		ELSE
+			EXECUTE 'UPDATE ' || nombre_tabla_auditoria || ' set operador = $1 where id_auditoria =$2'
+            USING usuario, ultima_aud.id_auditoria;
+			
+            -- si la operacion es UPDATE tambien actualizo el campo usuario de la fila anterior
+			IF ultima_aud.operacion = 'UPDATE' THEN
+                EXECUTE 'UPDATE ' || nombre_tabla_auditoria || ' set operador = $1 where id_auditoria =$2'
+                USING usuario, ultima_aud.id_auditoria -1 ;
+		    END IF;
+		RETURN true;
+	END IF;
+END;
+$$ LANGUAGE 'plpgsql';
