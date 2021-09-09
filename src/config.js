@@ -1,7 +1,7 @@
 export const dataBase ={
     dataBase:'teyserdb_backup',
     userName: 'manuel',
-    password: 'Peques09',
+    password: '',
     host: 'localhost'
 };
 
