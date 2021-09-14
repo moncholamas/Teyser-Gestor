@@ -1,12 +1,13 @@
+require('dotenv').config();
+
 export const dataBase ={
-    dataBase:'teyserdb_backup',
-    userName: 'manuel',
-    password: '',
-    host: 'localhost'
+    dataBase: process.env.DATA_BASE,
+    userName: process.env.USER_NAME,
+    password: process.env.PASSWORD,
+    host: process.env.HOST
 };
 
-// usar DOTENV
-export const SECRET = 'supay';
+export const SECRET = process.env.SECRET;
 
 //lista de dominios permitidos para consumir la api
 export const configCors = {
