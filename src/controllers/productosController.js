@@ -3,6 +3,7 @@ import  insumos from '../models/insumos';
 import  consumos from '../models/consumos';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getProductos(req,res){
@@ -15,7 +16,7 @@ export async function getProductos(req,res){
             data: list_productos
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar los productos"
         });
@@ -37,7 +38,7 @@ export async function getProductoById(req,res){
                 data: productoEncontrado
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar el producto"
         });
@@ -85,7 +86,7 @@ export async function nuevoProducto(req,res ){
         });
         
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar el nuevo producto"
         });
@@ -109,7 +110,7 @@ export async function deleteProducto(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al borrar el producto"
         });
@@ -141,7 +142,7 @@ export async function updateProducto(req,res){
                 msj: "no se actualizó ningún producto"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al actualizar el producto"
         });

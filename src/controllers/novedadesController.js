@@ -1,6 +1,7 @@
 import  novedades from '../models/novedades';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getNovedades(req,res){
@@ -21,7 +22,7 @@ export async function getNovedades(req,res){
             data: list_novedades
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar las novedades"
         });
@@ -43,7 +44,7 @@ export async function getNovedadById(req,res){
                 data: novedad
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar la novedad"
         });
@@ -78,7 +79,7 @@ export async function nuevaNovedad(req,res ){
             data: novedadNuevo
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar la novedad"
         });
@@ -103,7 +104,7 @@ export async function deleteNovedad(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al eliminar la novedad"
         });
@@ -146,7 +147,7 @@ export async function updateNovedad(req,res){
                 msj: "no se actualizó ninguna novedad"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al actualizar la novedad"
         });

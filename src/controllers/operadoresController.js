@@ -2,6 +2,7 @@ import  operador from '../models/operador';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { Op } from 'sequelize';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getOperadores(req,res){
@@ -22,7 +23,7 @@ export async function getOperadores(req,res){
             data: list_operador
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar los operadores"
         });
@@ -50,7 +51,7 @@ export async function getOperadorById(req,res){
                 data: operadorSeleccionado
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         res.send({
             msj: "error al buscar el operador"
         });
@@ -75,7 +76,7 @@ export async function deleteOperador(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al eliminar el operador"
         });
@@ -105,7 +106,7 @@ export async function updateOperador(req,res){
                 msj: "no se actualizó ningún operador"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al actualizar el operador"
         });

@@ -1,6 +1,7 @@
 import  parte_diario from '../models/parte_diario';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getPartesDiarios(req,res){
@@ -21,7 +22,7 @@ export async function getPartesDiarios(req,res){
             data: list_parte_diario
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar los partes diarios"
         });
@@ -44,7 +45,7 @@ export async function getParteDiarioById(req,res){
                         data: parte_diario_encontrado
                         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar el parte diario"
         });
@@ -81,7 +82,7 @@ export async function nuevoParteDiario(req,res ){
             data: parte_diarioNuevo
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar el nuevo parte diario"
         });
@@ -105,7 +106,7 @@ export async function deleteParteDiario(req,res){
             msj:"no se encontraron coincidencias",
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al borrar el parte diario"
         });
@@ -148,7 +149,7 @@ export async function updateParteDiario(req,res){
                 msj: "no se actualizó ningun parte diario"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al borrar al actualizar el parte diario"
         });

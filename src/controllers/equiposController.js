@@ -1,6 +1,7 @@
 import  equipos from '../models/equipos';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getEquipos(req,res){
@@ -13,7 +14,7 @@ export async function getEquipos(req,res){
             data: list_equipos
         });
     } catch (error) {
-        console.log(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar los equipos"
         });
@@ -36,10 +37,10 @@ export async function getEquipoById(req,res){
                 data: equipo
             });
     } catch (error) {
-        res.send({
+        handlerException(error);
+        return res.send({
             msj: "error al buscar el equipo"
         });
-        console.error(error);
     }
 }
 
@@ -56,15 +57,15 @@ export async function nuevoEquipo(req,res ){
     
             }
         );
-        res.json({
+        return res.json({
             msj: "nuevo equipo ingresado correctamente",
             data: equipoNuevo
         });
     } catch (error) {
-        res.send({
+        handlerException(error);
+        return res.send({
             msj: "error al ingresar el nuevo equipo"
         });
-        console.error(error)
     }
     
 }
@@ -75,7 +76,7 @@ export async function deleteEquipo(req,res){
     const id = req.params.id  
     try {
         const cantidadBorrada = await equipos.destroy({where:{id_equipo:id}});
-        cantidadBorrada >0?
+        return cantidadBorrada >0?
         res.json({
             msj:"se borro exitosamente",
             data: cantidadBorrada
@@ -86,10 +87,10 @@ export async function deleteEquipo(req,res){
         })
         ;
     } catch (error) {
-        res.send({
+        handlerException(error);
+        return res.send({
             msj: "error al borrar el equipo"
         });
-        console.error(error);
     }
 }
 
@@ -108,21 +109,19 @@ export async function updateEquipo(req,res){
         },{
             where: {id_equipo:id}
         });
-        if(equiposActualizado > 0){
+        return equiposActualizado > 0?
             res.json({
                 msj: "equipo actualizado correctamente",
                 data: equiposActualizado
-            });
-        }
-        else{
+            })
+            :
             res.json({
                 msj: "no se actualizó ningun equipo"
             });
-        }
     } catch (error) {
-        res.send({
+        handlerException(error);
+        return res.send({
             msj: "error al actualizar el equipo"
         });
-        console.error(error);
     }   
 }

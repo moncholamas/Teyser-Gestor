@@ -5,6 +5,7 @@ import {encriptar,compararEncryp} from '../helpers/encrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import {SECRET} from '../config'
 import { correoExistente } from '../helpers/validator';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //
 export async function login(req,res){
@@ -36,7 +37,7 @@ export async function login(req,res){
                 data: token
                 });
     } catch (error) {
-        console.log(error);
+        handlerException(error);
         return res.json({
             msg: "error al iniciar sesión"
         });
@@ -74,7 +75,7 @@ export async function logup(req,res){
             data: token
         });
     } catch (error) {
-        console.log(error);
+        handlerException(error);
         return res.json({
             msg: "error al iniciar sesión"
         });

@@ -3,6 +3,7 @@ import detalle_ventas from '../models/detalle_ventas'
 import producto from '../models/producto'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todas las ventas
 export async function getVentas(req,res){
@@ -15,7 +16,7 @@ export async function getVentas(req,res){
             data: list_venta
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar las ventas"
         });
@@ -37,7 +38,7 @@ export async function getVentaById(req,res){
                 data: ventaSeleccionada
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar la venta"
         });
@@ -95,7 +96,7 @@ export async function nuevaVenta(req,res ){
            
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar la nueva venta"
         });
@@ -119,7 +120,7 @@ export async function deleteVenta(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al eliminar la venta"
         });

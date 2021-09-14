@@ -3,6 +3,7 @@ import detalle_compras from '../models/detalle_compras'
 import insumos from '../models/insumos'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos las ventas
 export async function getPagos(req,res){
@@ -103,7 +104,7 @@ export async function nuevoPago(req,res ){
         //genero el pago con el total en 0
         
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar el nuevo pago"
         });
@@ -128,7 +129,7 @@ export async function deletePago(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al eliminar el pago o compra"
         });

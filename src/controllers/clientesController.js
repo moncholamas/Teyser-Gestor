@@ -1,6 +1,7 @@
 import  clientes from '../models/clientes';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los clientes
 export async function getClientes(req,res){
@@ -13,7 +14,7 @@ export async function getClientes(req,res){
             data: list_clientes
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.json({
             msj: "error al obtener los clientes"
         });
@@ -36,7 +37,7 @@ export async function getClienteById(req,res){
                 data: cliente
             });
     } catch (error) {
-        console.error(error)
+        handlerException(error);
         return res.json({
             msj: "error al intentar buscar el cliente"
         });
@@ -60,7 +61,7 @@ export async function nuevoCliente(req,res ){
             data: clienteNuevo
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.json({
             msj: "no se pudo ingresar el nuevo cliente"
         });
@@ -85,7 +86,7 @@ export async function deleteCliente(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.json({
             msj:"error al borrar el cliente",
         });
@@ -117,7 +118,7 @@ export async function updateCliente(req,res){
                 msj: "no se actualizó ningun cliente"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.json({
             msj: "error al actualizar el cliente"
         });

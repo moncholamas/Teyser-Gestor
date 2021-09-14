@@ -1,6 +1,7 @@
 import  insumos from '../models/insumos';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
+import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
 export async function getInsumos(req,res){
@@ -13,7 +14,7 @@ export async function getInsumos(req,res){
             data: list_insumos
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar los insumos"
         });
@@ -35,7 +36,7 @@ export async function getInsumoById(req,res){
                 data: insumo
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al buscar el insumo"
         });
@@ -60,7 +61,7 @@ export async function nuevoInsumo(req,res ){
             data: insumoNuevo
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al ingresar nuevo insumo"
         });
@@ -85,7 +86,7 @@ export async function deleteInsumo(req,res){
         })
         ;
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
             msj: "error al eliminar el insumo"
         });
@@ -116,7 +117,7 @@ export async function updateInsumo(req,res){
                 msj: "no se actualizó ningún insumo"
             });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         res.send({
             msj: "error al actualizar el insumo"
         });

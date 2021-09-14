@@ -5,6 +5,7 @@ import {sequelize} from '../db/db';
 
 export async function correoExistente(correo){
     //verifica si existe el correo
+    //Devuelve el ID del operador o null si no existe
     initModels(sequelize);
     try {
         const usuarioEncontrado = await operador.findOne({
@@ -12,11 +13,10 @@ export async function correoExistente(correo){
                 correo
             }
         });
-        return usuarioEncontrado===null? null : usuarioEncontrado.id_operador ;
+        return usuarioEncontrado? usuarioEncontrado.id_operador : null;
         
     } catch (error) {
-        console.log(error);
-        return null;
+        return console.log(error);
     }
     
 }

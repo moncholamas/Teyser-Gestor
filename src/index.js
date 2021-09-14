@@ -1,6 +1,6 @@
-require('dotenv').config();
 import app from './app.js';
-import {sequelize} from './db/db.js';
+import { sequelize } from './db/db.js';
+import { handlerException } from './helpers/handlerExceptions'
 
 
 async function main(){
@@ -10,8 +10,8 @@ async function main(){
         await sequelize.authenticate();
         console.log(`servidor corriendo en el puerto: ${port}`);
      }catch(e){
-         console.log(e);
+         handlerException(e);
      }
-    
 }
+
 main();
