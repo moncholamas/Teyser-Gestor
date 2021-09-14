@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
+    "nodemailer": "^6.6.3",
     "pg": "^8.6.0",
     "pg-core": "^0.1.15",
     "pg-hstore": "^2.3.4",
