@@ -2,21 +2,17 @@
 --              Nuevos tipos de datos definidos
 -----------------------------------------------
 
---Tabla: Parte_diario
-CREATE TYPE turnos AS ENUM
-    ('maniana', 'tarde', 'noche');
-
 --T: equipos
 CREATE TYPE estado_equipos AS ENUM
     ('operativo', 'en mantenimiento', 'inoperable');
 CREATE TYPE categoria_equipo AS ENUM
     ('impresora', 'fotocopiadora', 'libreria','red','otro');
 
---T: Pagos
+--T: pagos
 CREATE TYPE tipo_pago AS ENUM
     ('compra de insumo', 'luz', 'internet', 'rentas', 'afip', 'municipio', 'otro');
 
---T: Operador
+--T: operadores
 CREATE TYPE rol AS ENUM
     ('operario', 'admin', 'tecnico');
 
@@ -28,9 +24,11 @@ CREATE TYPE estado_venta AS ENUM
 CREATE TYPE estado_novedades AS ENUM
     ('nuevo', 'arreglado', 'trabajando');
 
---T: producto
+--T: productos
 CREATE TYPE categorias_producto AS ENUM
     ('impresion', 'fotocopia', 'articulo de libreria', 'servicio', 'servicio digital', 'otro');
+CREATE TYPE estado_producto AS ENUM
+    ('activo', 'inactivo');
 
 --T: novedades
 CREATE TYPE categoria_novedades AS ENUM
@@ -82,10 +80,10 @@ CREATE TABLE detalle_compras(
 -- TABLE: detalle_ventas 
 --
 CREATE TABLE detalle_ventas(
-    id_producto    int2             NOT NULL,
-    id_venta       int4             NOT NULL,
-    cantidad       int2             NOT NULL,
-    total          decimal(10, 2)    NOT NULL,
+    id_version_producto    int4             NOT NULL,
+    id_venta               int4             NOT NULL,
+    cantidad               int2             NOT NULL,
+    total                  decimal(10, 2)    NOT NULL,
     CONSTRAINT "PK13" PRIMARY KEY (id_producto, id_venta)
 )
 ;
@@ -129,16 +127,16 @@ CREATE TABLE novedades(
     estado                 estado_novedades,
     novedad                varchar(150)    NOT NULL,
     observacion            text,
-    id_parte_diario        int4           NOT NULL,
+    id_operador        int4           NOT NULL,
     id_equipo              int2,
     CONSTRAINT "PK15" PRIMARY KEY (id_novedad)
 )
 ;
 
 -- 
--- TABLE: operador 
+-- TABLE: operadores
 --
-CREATE TABLE operador(
+CREATE TABLE operadores(
     id_operador      SERIAL           NOT NULL,
     activo    BOOLEAN       NOT NULL,
     nombre           varchar(50)    NOT NULL,
@@ -167,33 +165,29 @@ CREATE TABLE pagos(
 ;
 
 -- 
--- TABLE: parte_diario 
+-- TABLE: productos 
 --
-CREATE TABLE parte_diario(
-    id_parte_diario    SERIAL              NOT NULL,
-    id_operador        int2              NOT NULL,
-    fecha              date              NOT NULL,
-    hora_inicio        TIME WITHOUT TIME ZONE,
-    hora_cierre        TIME WITHOUT TIME ZONE,
-    turno           turnos        NOT NULL,
-    recaudacion        decimal(10, 2)    NOT NULL,
-    observacion        varchar(300),
-    CONSTRAINT "PK2" PRIMARY KEY (id_parte_diario)
-)
-;
-
--- 
--- TABLE: producto 
---
-CREATE TABLE producto(
+CREATE TABLE productos(
     id_producto    SERIAL             NOT NULL,
     nombre         varchar(100)     NOT NULL,
     descripcion    varchar(100)      NOT NULL,
-    precio         decimal(5, 2)    NOT NULL,
     categoria      categorias_producto,
+    estado         estado_producto,
     "createdAt" timestamp,
-    "udatedAt" timestamp,
     CONSTRAINT "PK4" PRIMARY KEY (id_producto)
+)
+;
+
+--
+-- TABLE: versiones_productos
+--
+
+CREATE TABLE versiones_productos(
+    id_version_producto SERIAL NOT NULL,
+    id_producto int,
+    "createdAt" timestamp,
+    precio DECIMAL(8,2),
+    CONSTRAINT "PK31" PRIMARY KEY (id_version_producto)
 )
 ;
 
@@ -210,13 +204,14 @@ CREATE TABLE stock(
 -- 
 -- TABLE: venta 
 --
-CREATE TABLE venta(
+CREATE TABLE ventas(
     id_venta           BIGSERIAL             NOT NULL,
     observacion        varchar(200),
     total              decimal(6, 2)    NOT NULL,
     estado          estado_venta       NOT NULL,
-    id_parte_diario    int4             NOT NULL,
+    id_operador    int4             NOT NULL,
     id_cliente         int4             NOT NULL,
+    "createdAt" timestamp,
     CONSTRAINT "PK5" PRIMARY KEY (id_venta)
 )
 ;
@@ -226,7 +221,7 @@ CREATE TABLE venta(
 --
 ALTER TABLE consumos ADD CONSTRAINT "Refproducto22" 
     FOREIGN KEY (id_producto)
-    REFERENCES producto(id_producto)
+    REFERENCES productos(id_producto)
 ;
 
 ALTER TABLE consumos ADD CONSTRAINT "Refinsumos23" 
@@ -250,23 +245,23 @@ ALTER TABLE detalle_compras ADD CONSTRAINT "Refinsumos14"
 -- 
 -- TABLE: detalle_ventas 
 --
-ALTER TABLE detalle_ventas ADD CONSTRAINT "Refproducto1" 
-    FOREIGN KEY (id_producto)
-    REFERENCES producto(id_producto)
+ALTER TABLE detalle_ventas ADD CONSTRAINT "Refversion_producto1" 
+    FOREIGN KEY (id_version_producto)
+    REFERENCES versiones_productos(id_version_producto)
 ;
 
 ALTER TABLE detalle_ventas ADD CONSTRAINT "Refventa2" 
     FOREIGN KEY (id_venta)
-    REFERENCES venta(id_venta)
+    REFERENCES ventas(id_venta)
 ;
 
 
 -- 
 -- TABLE: novedades 
 --
-ALTER TABLE novedades ADD CONSTRAINT "Refparte_diario11" 
-    FOREIGN KEY (id_parte_diario)
-    REFERENCES parte_diario(id_parte_diario)
+ALTER TABLE novedades ADD CONSTRAINT "Refoperadores11" 
+    FOREIGN KEY (id_operador)
+    REFERENCES operadores(id_operador)
 ;
 
 ALTER TABLE novedades ADD CONSTRAINT "Refequipos17" 
@@ -280,16 +275,7 @@ ALTER TABLE novedades ADD CONSTRAINT "Refequipos17"
 --
 ALTER TABLE pagos ADD CONSTRAINT "Refoperador15" 
     FOREIGN KEY (id_operador)
-    REFERENCES operador(id_operador)
-;
-
-
--- 
--- TABLE: parte_diario 
---
-ALTER TABLE parte_diario ADD CONSTRAINT "Refoperador6" 
-    FOREIGN KEY (id_operador)
-    REFERENCES operador(id_operador)
+    REFERENCES operadores(id_operador)
 ;
 
 
@@ -303,14 +289,14 @@ ALTER TABLE stock ADD CONSTRAINT "Refinsumos12"
 
 
 -- 
--- TABLE: venta 
+-- TABLE: ventas
 --
-ALTER TABLE venta ADD CONSTRAINT "Refparte_diario19" 
-    FOREIGN KEY (id_parte_diario)
-    REFERENCES parte_diario(id_parte_diario)
+ALTER TABLE ventas ADD CONSTRAINT "Refoperadores19" 
+    FOREIGN KEY (id_operador)
+    REFERENCES operadores(id_operador)
 ;
 
-ALTER TABLE venta ADD CONSTRAINT "Refclientes20" 
+ALTER TABLE ventas ADD CONSTRAINT "Refclientes20" 
     FOREIGN KEY (id_cliente)
     REFERENCES clientes(id_cliente)
 ;
@@ -319,19 +305,19 @@ ALTER TABLE venta ADD CONSTRAINT "Refclientes20"
 -------------------------------------------------
 --                                      FUNCIONES
 -------------------------------------------------
-
+/*
 -- MUESTRA EL MONTO PARCIAL DE la recaudacion del dia (para cada vez que se ingresa una venta);
 CREATE OR REPLACE FUNCTION recaudacion_parte_diario() RETURNS decimal 
 AS $$
 DECLARE 
 v_total_temporal decimal;
 BEGIN
-	v_total_temporal := (SELECT SUM(total) FROM venta 
+	v_total_temporal := (SELECT SUM(total) FROM ventas 
 						GROUP BY id_parte_diario ORDER BY id_parte_diario DESC LIMIT 1);
 	return v_total_temporal;
 END;
 $$ LANGUAGE 'plpgsql';
-
+*/
 
 ------------------------------------------------
 --                                      TRIGGERS
@@ -343,7 +329,7 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION actualiza_venta()RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
-	UPDATE venta SET total = (total + new.total) WHERE id_venta=new.id_venta;
+	UPDATE ventas SET total = (total + new.total) WHERE id_venta=new.id_venta;
 	RETURN new;
 END;
 $$ language 'plpgsql';
@@ -380,7 +366,7 @@ $$ LANGUAGE 'plpgsql';
 
 
 CREATE TRIGGER borrar_venta
-BEFORE DELETE ON venta
+BEFORE DELETE ON ventas
 FOR EACH ROW EXECUTE PROCEDURE borrar_detalles();
 
 -----------------------------------------------
@@ -412,7 +398,7 @@ $$ LANGUAGE 'plpgsql';
 
 
 CREATE TRIGGER borrar_producto
-BEFORE DELETE ON producto
+BEFORE DELETE ON productos
 FOR EACH ROW EXECUTE PROCEDURE borrar_consumos();
 
 ------------------------------------
@@ -531,7 +517,7 @@ $$ LANGUAGE 'plpgsql';
 
 --triggers
 CREATE TRIGGER audita_ventas
-BEFORE DELETE ON venta
+BEFORE DELETE ON ventas
 FOR EACH ROW EXECUTE PROCEDURE ingreso_auditoria();
 
 CREATE TRIGGER audita_pagos

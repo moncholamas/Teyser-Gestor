@@ -15,7 +15,7 @@ export {logger};
 
 export async function handlerException(error){
     const errorText = JSON.stringify(error);
-    
+
     if(process.env.ENV==='DEV'){
         logger.error(errorText);
         
@@ -33,7 +33,8 @@ export async function handlerException(error){
               });
               logger.info('Error notificado al correo: ', process.env.MAIL);
         } catch (error) {
-            logger.fatal(error)
+            logger.error('No se puede notificar al administrador del error, contactar manualmente.')
+            logger.fatal(error);
         }
         
     }

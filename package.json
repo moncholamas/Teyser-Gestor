@@ -2,14 +2,16 @@
   "name": "gestorbase",
   "version": "1.0.0",
   "description": "prueba de la estructura de express",
+  "engines": {"node": "14.16.1"},
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
     "build": "babel src --out-dir dist",
     "start": "node dist/index.js"
   },
-  "author": "",
+  "author": "Manuel Lamas",
   "license": "ISC",
+  "keywords": ["manager","printing"],
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.14.8",
