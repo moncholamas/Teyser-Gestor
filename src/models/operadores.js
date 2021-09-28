@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class operador extends Model {
+export default class operadores extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     id_operador: {
@@ -33,10 +33,14 @@ export default class operador extends Model {
     tipo_operador: {
       type: DataTypes.ENUM("operario","admin","tecnico"),
       allowNull: true
+    },
+    udatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'operador',
+    tableName: 'operadores',
     schema: 'public',
     timestamps: true,
     indexes: [
@@ -49,6 +53,6 @@ export default class operador extends Model {
       },
     ]
   });
-  return operador;
+  return operadores;
   }
 }

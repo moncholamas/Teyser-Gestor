@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class producto extends Model {
+export default class productos extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     id_producto: {
@@ -18,17 +18,17 @@ export default class producto extends Model {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    precio: {
-      type: DataTypes.DECIMAL,
-      allowNull: false
-    },
     categoria: {
       type: DataTypes.ENUM("impresion","fotocopia","articulo de libreria","servicio","servicio digital","otro"),
+      allowNull: true
+    },
+    estado: {
+      type: DataTypes.ENUM("activo","inactivo"),
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'producto',
+    tableName: 'productos',
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
@@ -42,6 +42,6 @@ export default class producto extends Model {
       },
     ]
   });
-  return producto;
+  return productos;
   }
 }

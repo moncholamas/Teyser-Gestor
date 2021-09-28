@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class venta extends Model {
+export default class ventas extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     id_venta: {
@@ -22,12 +22,12 @@ export default class venta extends Model {
       type: DataTypes.ENUM("pendiente","cancelado"),
       allowNull: false
     },
-    id_parte_diario: {
+    id_operador: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'parte_diario',
-        key: 'id_parte_diario'
+        model: 'operadores',
+        key: 'id_operador'
       }
     },
     id_cliente: {
@@ -40,10 +40,10 @@ export default class venta extends Model {
     }
   }, {
     sequelize,
-    tableName: 'venta',
+    tableName: 'ventas',
     schema: 'public',
     hasTrigger: true,
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK5",
@@ -54,6 +54,6 @@ export default class venta extends Model {
       },
     ]
   });
-  return venta;
+  return ventas;
   }
 }

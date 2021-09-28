@@ -9,7 +9,7 @@ export default class consumos extends Model {
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'producto',
+        model: 'productos',
         key: 'id_producto'
       }
     },

@@ -1,47 +1,38 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class insumos extends Model {
+export default class versiones_productos extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_insumo: {
+    id_version_producto: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    unidades: {
+    id_producto: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    precio: {
       type: DataTypes.DECIMAL,
-      allowNull: true
-    },
-    nombre: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    presentacion: {
-      type: DataTypes.STRING(100),
-      allowNull: true
-    },
-    udatedAt: {
-      type: DataTypes.DATE,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'insumos',
+    tableName: 'versiones_productos',
     schema: 'public',
-    hasTrigger: true,
     timestamps: true,
     indexes: [
       {
-        name: "PK9",
+        name: "PK31",
         unique: true,
         fields: [
-          { name: "id_insumo" },
+          { name: "id_version_producto" },
         ]
       },
     ]
   });
-  return insumos;
+  return versiones_productos;
   }
 }

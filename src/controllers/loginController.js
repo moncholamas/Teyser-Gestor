@@ -1,4 +1,4 @@
-import  operador from '../models/operador';
+import  operadores from '../models/operadores';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import {encriptar,compararEncryp} from '../helpers/encrypt'; 
@@ -17,7 +17,7 @@ export async function login(req,res){
         if(!idEncontrado){return res.json({msg: "No existe una cuenta con el correo ingresado"})}
         
         //trae el usuario de la DB
-        const usuarioEncontrado = await operador.findByPk(idEncontrado);
+        const usuarioEncontrado = await operadores.findByPk(idEncontrado);
         //compara las clave encriptada
         const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
         //si no son iguales corta la consulta
@@ -54,7 +54,7 @@ export async function logup(req,res){
         //verifico si el correo ya existe, si existe termino la consulta
         if(idEncontrado){return res.json({msg: "el correo ya existe"});}
 
-        const operadorNuevo = await operador.create({
+        const operadorNuevo = await operadores.create({
             //por defecto todo operador es operario e inactivo
             tipo_operador: 'operario', 
             activo: false,

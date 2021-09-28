@@ -1,4 +1,4 @@
-import  operador from '../models/operador';
+import  operadores from '../models/operadores';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { Op } from 'sequelize';
@@ -10,7 +10,7 @@ export async function getOperadores(req,res){
     try {
         //traigo todos los operadores menos el que hizo el request
         const idOperadorRequest = req.operadorEncontrado.dataValues.id_operador;
-        const list_operador = await operador.findAll({
+        const list_operador = await operadores.findAll({
                 attributes: ['id_operador','activo','nombre','apellido'],
                 where:{
                     id_operador:{
@@ -37,7 +37,7 @@ export async function getOperadorById(req,res){
     const id= req.params.id;
     try {
         //traigo todos los datos del operador menos la clave
-        const operadorSeleccionado = await operador.findByPk(id,{
+        const operadorSeleccionado = await operadores.findByPk(id,{
             attributes:{
                 exclude: ['clave']
             }
@@ -64,7 +64,7 @@ export async function deleteOperador(req,res){
     initModels(sequelize);
     const id = req.params.id  
     try {
-        const cantidadBorrada = await operador.destroy({where:{id_operador:id}});
+        const cantidadBorrada = await operadores.destroy({where:{id_operador:id}});
         return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
@@ -90,7 +90,7 @@ export async function updateOperador(req,res){
     const id = req.params.id;
     const {activo,tipo_operador}  = req.body
     try {
-        const operadoresActualizado = await operador.update({
+        const operadoresActualizado = await operadores.update({
             activo,
             tipo_operador
         },{

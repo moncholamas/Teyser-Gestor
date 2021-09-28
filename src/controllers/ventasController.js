@@ -1,6 +1,6 @@
-import  venta from '../models/venta';
+import  ventas from '../models/ventas';
 import detalle_ventas from '../models/detalle_ventas'
-import producto from '../models/producto'
+import productos from '../models/productos'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
@@ -9,7 +9,7 @@ import { handlerException } from '../helpers/handlerExceptions';
 export async function getVentas(req,res){
     initModels(sequelize);
     try {
-        const list_venta = await venta.findAll({
+        const list_venta = await ventas.findAll({
             attributes: ['id_venta','observacion','total','estado','id_parte_diario','id_cliente']
         });
         return res.send({
@@ -28,7 +28,7 @@ export async function getVentaById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const ventaSeleccionada = await venta.findByPk(id);
+        const ventaSeleccionada = await ventas.findByPk(id);
         return ventaSeleccionada === null?
             res.json({
                 msj: "no se encontró una venta con la clave proporcionada"
@@ -54,7 +54,7 @@ export async function nuevaVenta(req,res ){
         const resultado = await sequelize.transaction(async (t)=>{
             //genero la compra con el total en 0 por seguridad
             //calculo el total en funcion de la DB
-            const ventaNueva = await venta.create({
+            const ventaNueva = await ventas.create({
                 observacion,
                 total:0,
                 estado,
@@ -67,7 +67,7 @@ export async function nuevaVenta(req,res ){
             //itero sobre la lista de los detalles para generar los detalles
             for (const detalle of detalles_venta){
                 //busco el producto
-                    const productoNuevo = await producto.findByPk(detalle.id_producto);
+                    const productoNuevo = await productos.findByPk(detalle.id_producto);
                         //calculo el subtotal
                         const subtotal = productoNuevo.dataValues.precio * detalle.cantidad;
                         
@@ -84,7 +84,7 @@ export async function nuevaVenta(req,res ){
             }
             // llamar al commit -> actualizar recaudacion del parte diario
             t.afterCommit(async ()=>{
-                const ventaConfirmada = venta.findByPk(ventaNueva.id_venta);
+                const ventaConfirmada = ventas.findByPk(ventaNueva.id_venta);
                 return res.json({
                     msj: "nueva venta ingresada correctamente",
                     data: {
@@ -108,7 +108,7 @@ export async function deleteVenta(req,res){
     initModels(sequelize);
     const id = req.params.id  
     try {
-        const cantidadBorrada = await venta.destroy({where:{id_venta:id}});
+        const cantidadBorrada = await ventas.destroy({where:{id_venta:id}});
         return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",

@@ -4,13 +4,13 @@ const { Model, Sequelize } = _sequelize;
 export default class detalle_ventas extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_producto: {
-      type: DataTypes.SMALLINT,
+    id_version_producto: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'producto',
-        key: 'id_producto'
+        model: 'versiones_productos',
+        key: 'id_version_producto'
       }
     },
     id_venta: {
@@ -18,7 +18,7 @@ export default class detalle_ventas extends Model {
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'venta',
+        model: 'ventas',
         key: 'id_venta'
       }
     },
@@ -41,7 +41,7 @@ export default class detalle_ventas extends Model {
         name: "PK13",
         unique: true,
         fields: [
-          { name: "id_producto" },
+          { name: "id_version_producto" },
           { name: "id_venta" },
         ]
       },

@@ -1,4 +1,4 @@
-import  producto from '../models/producto';
+import  productos from '../models/productos';
 import  insumos from '../models/insumos';
 import  consumos from '../models/consumos';
 import initModels from '../models/init-models';
@@ -9,7 +9,7 @@ import { handlerException } from '../helpers/handlerExceptions';
 export async function getProductos(req,res){
     initModels(sequelize);
     try {
-        const list_productos = await producto.findAll({
+        const list_productos = await productos.findAll({
             attributes: ['id_producto','nombre','descripcion','precio','categoria']
         });
         return res.send({
@@ -28,7 +28,7 @@ export async function getProductoById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const productoEncontrado = await producto.findByPk(id);
+        const productoEncontrado = await productos.findByPk(id);
         return productoEncontrado == null?
             res.json({
                 msj: "no se encontró un producto con la clave proporcionada"
@@ -53,7 +53,7 @@ export async function nuevoProducto(req,res ){
         //todo se tiene que cargar completamente -> transaction
         const resul = sequelize.transaction(async (t)=>{
             //recibe un arreglo con los insumos y la cantidad que consume de c/u
-            const productoNuevo = await producto.create(
+            const productoNuevo = await productos.create(
                 {nombre,
                 descripcion,
                 precio,
@@ -98,7 +98,7 @@ export async function deleteProducto(req,res){
     initModels(sequelize);
     const id = req.params.id  
     try {
-        const cantidadBorrada = await producto.destroy({where:{id_producto:id}});
+        const cantidadBorrada = await productos.destroy({where:{id_producto:id}});
         return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
@@ -124,7 +124,7 @@ export async function updateProducto(req,res){
     const id = req.params.id;
     const {nombre,descripcion,precio,categoria}  = req.body
     try {
-        const productosActualizado = await producto.update({
+        const productosActualizado = await productos.update({
             nombre,
             descripcion,
             precio,

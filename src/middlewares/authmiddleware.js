@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {SECRET} from '../config'
 import { sequelize } from '../db/db';
 import initModels from '../models/init-models';
-import operador from '../models/operador';
+import operadores from '../models/operadores';
 
 export async function verifyToken(req,res,next){
     const token = req.headers["x-token"];
@@ -10,7 +10,7 @@ export async function verifyToken(req,res,next){
     //si es un token valido sigue
     try {
         req.decoded = jwt.verify(token,SECRET);
-        req.operadorEncontrado = await operador.findByPk( req.decoded.id );
+        req.operadorEncontrado = await operadores.findByPk( req.decoded.id );
         next();
     } catch (error) {
         console.error(error);

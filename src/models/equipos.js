@@ -25,6 +25,10 @@ export default class equipos extends Model {
     categoria: {
       type: DataTypes.ENUM("impresora","fotocopiadora","libreria","red","otro"),
       allowNull: true
+    },
+    udatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     sequelize,

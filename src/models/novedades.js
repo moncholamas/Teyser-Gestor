@@ -30,12 +30,12 @@ export default class novedades extends Model {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    id_parte_diario: {
+    id_operador: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'parte_diario',
-        key: 'id_parte_diario'
+        model: 'operadores',
+        key: 'id_operador'
       }
     },
     id_equipo: {

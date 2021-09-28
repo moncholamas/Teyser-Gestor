@@ -30,7 +30,7 @@ export default class pagos extends Model {
       type: DataTypes.SMALLINT,
       allowNull: false,
       references: {
-        model: 'operador',
+        model: 'operadores',
         key: 'id_operador'
       }
     }

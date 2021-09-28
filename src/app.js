@@ -7,7 +7,6 @@ import ventasRouter from './routes/ventas.router';
 import insumosRouter from './routes/insumos.router';
 import novedadesRouter from './routes/novedades.router';
 import operadorRouter from './routes/operador.router';
-import parteDiarioRouter from './routes/parteDiario.router';
 import productosRouter from './routes/productos.router';
 import pagosRouter from './routes/pagos.router';
 import loginRouter from './routes/login.router';
@@ -43,7 +42,6 @@ app.use('/productos', verifyToken ,productosRouter);
 app.use('/pagos', verifyToken ,pagosRouter);
 app.use('/novedades', verifyToken ,novedadesRouter);
 app.use('/operador', verifyToken ,operadorRouter);
-app.use('/parte_diario', verifyToken, parteDiarioRouter);
 
 //resolver logica de estadisticas
 
