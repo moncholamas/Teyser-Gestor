@@ -122,13 +122,14 @@ CREATE TABLE insumos(
 --
 CREATE TABLE novedades(
     id_novedad             SERIAL           NOT NULL,
-    fecha_actualizacion    date,
     categoria              categoria_novedades,
     estado                 estado_novedades,
     novedad                varchar(150)    NOT NULL,
     observacion            text,
     id_operador        int4           NOT NULL,
     id_equipo              int2,
+    "createdAt" timestamp,
+    "udatedAt" timestamp,
     CONSTRAINT "PK15" PRIMARY KEY (id_novedad)
 )
 ;
@@ -156,9 +157,9 @@ CREATE TABLE operadores(
 CREATE TABLE pagos(
     id_compra      SERIAL             NOT NULL,
     tipo           tipo_pago,
-    fecha          date             NOT NULL,
     observacion    varchar(200),
     total          decimal(6, 2),
+    "createdAt" timestamp,
     id_operador    int2             NOT NULL,
     CONSTRAINT "PK18" PRIMARY KEY (id_compra)
 )

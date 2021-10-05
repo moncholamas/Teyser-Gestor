@@ -22,6 +22,8 @@ export default class versiones_productos extends Model {
     sequelize,
     tableName: 'versiones_productos',
     schema: 'public',
+    createdAt: Sequelize.Date,
+    updatedAt: false,
     timestamps: true,
     indexes: [
       {

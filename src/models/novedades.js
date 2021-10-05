@@ -10,10 +10,6 @@ export default class novedades extends Model {
       allowNull: false,
       primaryKey: true
     },
-    fecha_actualizacion: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
     categoria: {
       type: DataTypes.ENUM("emergencia","mantenimiento","informativa"),
       allowNull: true
@@ -50,7 +46,7 @@ export default class novedades extends Model {
     sequelize,
     tableName: 'novedades',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK15",

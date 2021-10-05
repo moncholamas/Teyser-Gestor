@@ -31,6 +31,8 @@ export default class productos extends Model {
     tableName: 'productos',
     schema: 'public',
     hasTrigger: true,
+    createdAt: Sequelize.Date,
+    updatedAt: false,
     timestamps: true,
     indexes: [
       {

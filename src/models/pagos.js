@@ -39,7 +39,9 @@ export default class pagos extends Model {
     tableName: 'pagos',
     schema: 'public',
     hasTrigger: true,
-    timestamps: false,
+    createdAt: Sequelize.Date,
+    updatedAt: false,
+    timestamps: true,
     indexes: [
       {
         name: "PK18",

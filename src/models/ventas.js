@@ -44,6 +44,8 @@ export default class ventas extends Model {
     schema: 'public',
     hasTrigger: true,
     timestamps: true,
+    createdAt: Sequelize.Date,
+    updatedAt: false,
     indexes: [
       {
         name: "PK5",
