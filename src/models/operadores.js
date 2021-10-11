@@ -34,7 +34,11 @@ export default class operadores extends Model {
       type: DataTypes.ENUM("operario","admin","tecnico"),
       allowNull: true
     },
-    udatedAt: {
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true
     }

@@ -33,7 +33,6 @@ app.use(cors(configCors));
 app.use('/ingresar', loginRouter)
 
 //necesitan una cuenta verificada
-//app.use();
 app.use('/equipos', verifyToken, equiposRouter);
 app.use('/clientes', verifyToken , clientesRouter);
 app.use('/ventas', verifyToken, ventasRouter);
