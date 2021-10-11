@@ -69,29 +69,8 @@ export async function nuevoInsumo(req,res ){
     
 }
 
-//borra un equipo por Id
-export async function deleteInsumo(req,res){
-    initModels(sequelize);
-    const id = req.params.id  
-    try {
-        const cantidadBorrada = await insumos.destroy({where:{id_sumo:id}});
-        return cantidadBorrada >0?
-        res.json({
-            msj:"se borró exitosamente",
-            data: cantidadBorrada
-        })
-        :
-        res.json({
-            msj:"no se encontraron coincidencias",
-        })
-        ;
-    } catch (error) {
-        handlerException(error);
-        return res.send({
-            msj: "error al eliminar el insumo"
-        });
-    }
-}
+//LOS INSUMOS NO SE BORRAN SOLO SE CREAN NUEVOS
+
 
 
 //actualiza un equipo

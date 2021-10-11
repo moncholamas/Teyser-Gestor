@@ -3,7 +3,6 @@ import {
     getInsumos,
     getInsumoById,
     nuevoInsumo,
-    deleteInsumo,
     updateInsumo
 } from '../controllers/insumosController'
 import {
@@ -23,9 +22,6 @@ router.get('/:id',
 
 router.post('/nuevo',
                 isAdmin,nuevoInsumo);
-
-router.delete('/eliminar/:id',
-                isAdmin,deleteInsumo);
 
 router.put('/actualizar/:id',
                 isAdmin,updateInsumo);

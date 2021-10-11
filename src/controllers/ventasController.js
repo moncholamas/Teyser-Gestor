@@ -51,7 +51,7 @@ export async function nuevaVenta(req,res ){
     const {observacion,estado,id_operador,id_cliente,detalles_venta} = req.body;
     try {
         //todos los ingresos se tienen que dar correctamente -> transaction
-        const resultado = await sequelize.transaction(async (t)=>{
+        await sequelize.transaction(async (t)=>{
             //genero la compra con el total en 0 por seguridad
             //calculo el total en funcion de la DB
             const ventaNueva = await ventas.create({
