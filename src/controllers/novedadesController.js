@@ -10,12 +10,11 @@ export async function getNovedades(req,res){
         const list_novedades = await novedades.findAll({
             attributes: [
             'id_novedad',    
-            'fecha_actualizacion',
             'categoria',
             'estado',
             'novedad'
             ,'observacion',
-            'id_parte_diario',
+            'id_operador',
             'id_equipo']
         });
         return res.send({
@@ -54,21 +53,21 @@ export async function getNovedadById(req,res){
 //ingresa un nuevo equipo
 export async function nuevaNovedad(req,res ){
     initModels(sequelize);
-    const {fecha_actualizacion,
+    const {
             categoria,
             estado,
             novedad,
             observacion,
-            id_parte_diario,
+            id_operador,
             id_equipo} = req.body;
     try {
         const novedadNuevo = await novedades.create(
-            {fecha_actualizacion,
+            {
             categoria,
             estado,
             novedad,
             observacion,
-            id_parte_diario,
+            id_operador,
             id_equipo
         },{
     
