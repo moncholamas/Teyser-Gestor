@@ -378,6 +378,7 @@ AS $$
 DECLARE
 BEGIN
 	DELETE FROM detalle_compras WHERE id_compra = OLD.id_compra;
+    RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 
@@ -443,7 +444,7 @@ ELSE
 	ELSE
 	-- solo hay dos operaciones que disparan el trigger, aqui seria un delete
 		--busco la cantidad total de unidades nuevas de insumo
-		v_cantidad := (SELECT cantidad FROM insumos WHERE id_insumo = NEW.id_insumo)*NEW.cantidad;
+		v_cantidad := (SELECT unidades FROM insumos WHERE id_insumo = NEW.id_insumo)*NEW.cantidad;
 		--seteo el stock
 		---> ingreso el stock por primera vez cuando ingreso un producto (el producto tiene que existir)
                 --> funcion de trigger SETEAR_STOCK
@@ -499,7 +500,7 @@ FOR EACH ROW EXECUTE PROCEDURE setear_stock();
 -- Auditoria ventas borradas
 -- Auditoria pagos borrados
 -- 
-
+/*
 --tabla
 CREATE TABLE auditorias_compras_ventas(
 id_auditoria SERIAL,
@@ -556,3 +557,5 @@ BEGIN
 	END IF;
 END;
 $$ LANGUAGE 'plpgsql';
+
+*/

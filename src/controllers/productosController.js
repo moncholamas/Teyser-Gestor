@@ -45,7 +45,7 @@ export async function getProductoById(req,res){
     }
 }
 
-//ingresa un nuevo equipo
+//ingresa un nuevo producto
 export async function nuevoProducto(req,res ){
     initModels(sequelize);
     const {nombre,descripcion,precio,categoria,detalle_insumos} = req.body;
@@ -94,6 +94,7 @@ export async function nuevoProducto(req,res ){
 }
 
 //borra un producto por Id
+//Un producto solo se puede borrar SI NO ESTA EN NINGUNA VENTA
 export async function deleteProducto(req,res){
     initModels(sequelize);
     const id = parseInt(req.params.id);

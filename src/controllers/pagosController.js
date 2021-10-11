@@ -115,7 +115,7 @@ export async function deletePago(req,res){
     initModels(sequelize);
     const id = req.params.id  
     try {
-        const cantidadBorrada = await pagos.destroy({where:{id_pago:id}});
+        const cantidadBorrada = await pagos.destroy({where:{id_compra:id}});
         return cantidadBorrada >0?
         res.json({
             msj:"se borró exitosamente",
@@ -127,7 +127,7 @@ export async function deletePago(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
+       console.log(error);
         return res.send({
             msj: "error al eliminar el pago o compra"
         });
