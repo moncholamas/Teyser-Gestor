@@ -21,10 +21,6 @@ export default class insumos extends Model {
     presentacion: {
       type: DataTypes.STRING(100),
       allowNull: true
-    },
-    udatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
