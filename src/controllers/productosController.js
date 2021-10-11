@@ -5,16 +5,19 @@ import  consumos from '../models/consumos';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
+import ventas from '../models/ventas';
 
+//trae todas las versiones ->encontrar forma de filtrar la ultima
 //trae todos los productos (activos y ultima version, precio actualizado)
 export async function getProductos(req,res){
     initModels(sequelize);
     try {
         const list_productos = await productos.findAll({
-            attributes: ['id_producto','nombre','descripcion','categoria']
+            attributes: ['id_producto','nombre','descripcion','categoria'],
+            include:[{model:versiones_productos,as:"versiones_productos"}]
         });
         //TRAER ASOCIADAS LAS ULTIMAS VERSIONES DE CADA PRODUCTO
-            //FUNCION DE LA BD
+            //FUNCION DE LA BD?
 
         return res.send({
             data: list_productos
@@ -27,7 +30,7 @@ export async function getProductos(req,res){
     }
 }
 
-//trae un equipo por ID
+//trae un producto y todas sus versiones
 export async function getProductoById(req,res){
     initModels(sequelize);
     const id= req.params.id;
@@ -109,11 +112,25 @@ export async function nuevoProducto(req,res ){
 }
 
 //borra un producto por Id
-//Un producto solo se puede borrar SI NO ESTA EN NINGUNA VENTA
+//Un producto solo se puede borrar SI NINGUNA VERSION DEL MISMO ESTA YA EN UNA VENTA
 export async function deleteProducto(req,res){
     initModels(sequelize);
     const id = parseInt(req.params.id);
     try {
+
+        //trae la cantidad de ventas donde apareció el producto
+        const versionesEnVentas = await versiones_productos.findAll({
+            where:{id_producto:id},
+            include:[{model:ventas,as:"id_venta_venta",required:true}]
+        });
+
+        if(!versionesEnVentas){
+            console.log(versionesEnVentas);
+            return res.json({
+                msj: "El producto ya se ingresó a una venta, no es posible eliminarlo"
+            })
+        }
+
         const cantidadBorrada = await productos.destroy({where:{id_producto:id}});
         return cantidadBorrada >0?
         res.json({
@@ -127,7 +144,7 @@ export async function deleteProducto(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
+        console.log(error);
         return res.send({
             msj: "error al borrar el producto"
         });
@@ -139,20 +156,25 @@ export async function deleteProducto(req,res){
 export async function updateProducto(req,res){
     initModels(sequelize);
     const id = req.params.id;
-    const {nombre,descripcion,precio,categoria}  = req.body
+    const {descripcion,precio,categoria}  = req.body
     try {
+        
         const productosActualizado = await productos.update({
-            nombre,
             descripcion,
-            precio,
             categoria
         },{
             where: {id_producto:id}
         });
+        //creo una nueva version del producto
+        const nuevaVersion = await versiones_productos.create({
+                                                                id_producto:id,precio
+                                                                });
+
         return productosActualizado > 0?
             res.json({
                 msj: "se ha actualizado correctamente",
-                data: productosActualizado
+                data: productosActualizado,
+                version: nuevaVersion
             })
             :
             res.json({

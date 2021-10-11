@@ -413,6 +413,26 @@ CREATE TRIGGER borrar_producto
 BEFORE DELETE ON productos
 FOR EACH ROW EXECUTE PROCEDURE borrar_consumos();
 
+------------------------------------------------------
+--Borra las versiones de un producto antes que el mismo
+------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION borrar_versiones()RETURNS TRIGGER
+AS $$
+DECLARE
+BEGIN
+	DELETE FROM versiones_productos WHERE id_producto = OLD.id_producto;
+    RETURN OLD;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+CREATE TRIGGER borrar_versiones_producto
+BEFORE DELETE ON productos
+FOR EACH ROW EXECUTE PROCEDURE borrar_versiones();
+
+
+
 ------------------------------------
 -- Aactualiza el monto de cada stock
 ------------------------------------
