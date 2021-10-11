@@ -33,14 +33,14 @@ app.use(cors(configCors));
 app.use('/ingresar', loginRouter)
 
 //necesitan una cuenta verificada
-app.use('/equipos', verifyToken, equiposRouter);
+app.use('/equipos', verifyToken, equiposRouter); //
 app.use('/clientes', verifyToken , clientesRouter);
 app.use('/ventas', verifyToken, ventasRouter);
 app.use('/insumos', verifyToken ,insumosRouter);
 app.use('/productos', verifyToken ,productosRouter);
 app.use('/pagos', verifyToken ,pagosRouter);
 app.use('/novedades', verifyToken ,novedadesRouter);
-app.use('/operador', verifyToken ,operadorRouter);
+app.use('/operadores', verifyToken ,operadorRouter);
 
 //resolver logica de estadisticas
 
