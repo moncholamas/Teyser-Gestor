@@ -14,10 +14,6 @@ export default class pagos extends Model {
       type: DataTypes.ENUM("compra de insumo","luz","internet","rentas","afip","municipio","otro"),
       allowNull: true
     },
-    fecha: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
     observacion: {
       type: DataTypes.STRING(200),
       allowNull: true

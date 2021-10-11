@@ -10,7 +10,7 @@ export async function getPagos(req,res){
     initModels(sequelize);
     try {
         const list_pagos = await pagos.findAll({
-            attributes: ['id_compra','tipo','fecha','observacion','total','id_operador']
+            attributes: ['id_compra','tipo','observacion','total','id_operador']
         });
         return res.send({
             data: list_pagos
@@ -50,7 +50,6 @@ export async function nuevoPago(req,res ){
     initModels(sequelize);
     const {
             tipo,
-            fecha,
             observacion,
             id_operador,
             detalles_pago
@@ -60,7 +59,6 @@ export async function nuevoPago(req,res ){
         sequelize.transaction(async(t)=>{
             const pagoNuevo = await pagos.create({
                 tipo,
-                fecha,
                 observacion,
                 total:0,
                 id_operador,
