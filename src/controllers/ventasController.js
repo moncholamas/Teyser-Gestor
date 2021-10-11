@@ -48,7 +48,7 @@ export async function getVentaById(req,res){
 //ingresa ua nueva venta
 export async function nuevaVenta(req,res ){
     initModels(sequelize);
-    const {observacion,estado,id_parte_diario,id_cliente,detalles_venta} = req.body;
+    const {observacion,estado,id_operador,id_cliente,detalles_venta} = req.body;
     try {
         //todos los ingresos se tienen que dar correctamente -> transaction
         const resultado = await sequelize.transaction(async (t)=>{
@@ -58,7 +58,7 @@ export async function nuevaVenta(req,res ){
                 observacion,
                 total:0,
                 estado,
-                id_parte_diario,
+                id_operador,
                 id_cliente
             },{transaction:t});
 

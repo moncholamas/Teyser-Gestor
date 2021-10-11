@@ -5,12 +5,12 @@ import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
 
-//trae todos los equipos
+//trae todos los productos (activos y ultima version, precio actualizado)
 export async function getProductos(req,res){
     initModels(sequelize);
     try {
         const list_productos = await productos.findAll({
-            attributes: ['id_producto','nombre','descripcion','precio','categoria']
+            attributes: ['id_producto','nombre','descripcion','categoria']
         });
         return res.send({
             data: list_productos
@@ -93,10 +93,10 @@ export async function nuevoProducto(req,res ){
     }
 }
 
-//borra un equipo por Id
+//borra un producto por Id
 export async function deleteProducto(req,res){
     initModels(sequelize);
-    const id = req.params.id  
+    const id = parseInt(req.params.id);
     try {
         const cantidadBorrada = await productos.destroy({where:{id_producto:id}});
         return cantidadBorrada >0?
@@ -107,6 +107,7 @@ export async function deleteProducto(req,res){
         :
         res.json({
             msj:"no se encontraron coincidencias",
+            id: id
         })
         ;
     } catch (error) {
@@ -134,7 +135,7 @@ export async function updateProducto(req,res){
         });
         return productosActualizado > 0?
             res.json({
-                msj: "no se actualizado correctamente",
+                msj: "se ha actualizado correctamente",
                 data: productosActualizado
             })
             :

@@ -389,11 +389,13 @@ FOR EACH ROW EXECUTE PROCEDURE borrar_detalles_compra();
 ------------------------------------------------------
 --Borra los consumos de un producto antes que el mismo
 ------------------------------------------------------
+
 CREATE OR REPLACE FUNCTION borrar_consumos()RETURNS TRIGGER
 AS $$
 DECLARE
 BEGIN
 	DELETE FROM consumos WHERE id_producto = OLD.id_producto;
+    RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 
