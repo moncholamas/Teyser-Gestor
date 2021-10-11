@@ -55,6 +55,8 @@ export default function initModels(sequelize) {
   pagos.hasMany(detalle_compras, { as: "detalle_compras", foreignKey: "id_compra"});
   consumos.belongsTo(productos, { as: "id_producto_producto", foreignKey: "id_producto"});
   productos.hasMany(consumos, { as: "consumos", foreignKey: "id_producto"});
+  versiones_productos.belongsTo(productos, { as: "id_producto_producto", foreignKey: "id_producto"});
+  productos.hasMany(versiones_productos, { as: "versiones_productos", foreignKey: "id_producto"});
   detalle_ventas.belongsTo(ventas, { as: "id_venta_venta", foreignKey: "id_venta"});
   ventas.hasMany(detalle_ventas, { as: "detalle_venta", foreignKey: "id_venta"});
   detalle_ventas.belongsTo(versiones_productos, { as: "id_version_producto_versiones_producto", foreignKey: "id_version_producto"});

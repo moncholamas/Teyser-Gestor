@@ -12,8 +12,13 @@ import { isAdmin, isAdminOrOperator } from '../middlewares/authmiddleware';
 const router = Router();
 
 //rutas
+
+//obtiene todos los productos en sus ultimas versiones
 router.get('/',
                 isAdminOrOperator,getProductos);
+
+//trae todas las versiones de un solo producto
+
 
 router.get('/:id',
                 isAdminOrOperator,getProductoById);

@@ -1,4 +1,5 @@
 import  productos from '../models/productos';
+import versiones_productos from '../models/versiones_productos';
 import  insumos from '../models/insumos';
 import  consumos from '../models/consumos';
 import initModels from '../models/init-models';
@@ -12,6 +13,9 @@ export async function getProductos(req,res){
         const list_productos = await productos.findAll({
             attributes: ['id_producto','nombre','descripcion','categoria']
         });
+        //TRAER ASOCIADAS LAS ULTIMAS VERSIONES DE CADA PRODUCTO
+            //FUNCION DE LA BD
+
         return res.send({
             data: list_productos
         });
@@ -28,17 +32,17 @@ export async function getProductoById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const productoEncontrado = await productos.findByPk(id);
+        const productoEncontrado = await productos.findByPk(id,{include:[{model:versiones_productos,as:"versiones_productos"}]});
         return productoEncontrado == null?
             res.json({
                 msj: "no se encontró un producto con la clave proporcionada"
             })
             :
             res.json({
-                data: productoEncontrado
+                data: productoEncontrado,
             });
     } catch (error) {
-        handlerException(error);
+        console.log(error);
         return res.send({
             msj: "error al buscar el producto"
         });
@@ -56,11 +60,11 @@ export async function nuevoProducto(req,res ){
             const productoNuevo = await productos.create(
                 {nombre,
                 descripcion,
-                precio,
                 categoria},
                 {transaction:t}
             );
-
+            
+            //por cada insumo actualiza la tabla consumos para este producto
             for(const insumo of detalle_insumos){
                 const nuevoInsumo = await insumos.findByPk(insumo.id_insumo);
                 if(nuevoInsumo == null){
@@ -76,11 +80,22 @@ export async function nuevoProducto(req,res ){
                         },{transaction:t});  
                 }
             }
+
+            //Instancio la primera versión del producto con el precio base
+            const version = await versiones_productos.create({
+                precio,
+                id_producto: productoNuevo.id_producto
+            },{transaction:t});
+
             t.afterCommit(()=>{
                 //terminada la transaccion confirma el ingreso
                 return res.json({
                     msj: "nuevo producto ingresado correctamente",
-                    data: productoNuevo
+                    data: {
+                        producto:productoNuevo,
+                        version
+                    }
+
                 });
             });
         });

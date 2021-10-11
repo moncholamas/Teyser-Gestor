@@ -256,6 +256,14 @@ ALTER TABLE detalle_ventas ADD CONSTRAINT "Refventa2"
     REFERENCES ventas(id_venta)
 ;
 
+-- 
+-- TABLE: versiones_producto 
+--
+ALTER TABLE versiones_productos ADD CONSTRAINT "Refversion_versiones_prod" 
+    FOREIGN KEY (id_producto)
+    REFERENCES productos(id_producto)
+;
+
 
 -- 
 -- TABLE: novedades 
