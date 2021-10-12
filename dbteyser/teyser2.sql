@@ -554,12 +554,12 @@ FOR EACH ROW EXECUTE PROCEDURE setear_stock();
 -- Auditoria ventas borradas
 -- Auditoria pagos borrados
 -- 
-/*
+
 --tabla
 CREATE TABLE auditorias_compras_ventas(
 id_auditoria SERIAL,
 fecha TIMESTAMP WITHOUT TIME ZONE,
-operador VARCHAR,
+operador int,
 tabla VARCHAR,
 operacion VARCHAR,
 monto DECIMAL
@@ -569,7 +569,8 @@ monto DECIMAL
 CREATE OR REPLACE FUNCTION ingreso_auditoria() RETURNS TRIGGER AS $$
 DECLARE
 BEGIN
-	INSERT INTO auditorias_compras_ventas VALUES(default,CURRENT_TIMESTAMP,'',TG_TABLE_NAME,TG_OP,OLD.total);
+	INSERT INTO auditorias_compras_ventas VALUES(default,CURRENT_TIMESTAMP,OLD.id_operador,TG_TABLE_NAME,TG_OP,OLD.total);
+	RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 
@@ -581,35 +582,3 @@ FOR EACH ROW EXECUTE PROCEDURE ingreso_auditoria();
 CREATE TRIGGER audita_pagos
 BEFORE DELETE ON pagos
 FOR EACH ROW EXECUTE PROCEDURE ingreso_auditoria();
-
-
---
--- Actualiza la auditoria con los datos del usuario
---
-
---funcion para llamas en la misma transaccion del DELETE UPDATE (destroy y update en Sequelize)
-CREATE OR REPLACE FUNCTION actualiza_auditoria(usuario varchar, auditoria varchar) RETURNS boolean AS $$
-DECLARE
-nombre_tabla_auditoria text := quote_ident('auditoria');
-ultima_aud record;
-BEGIN
--- segun que tabla se modifique actualizo alguna de las 2 tablas de auditoria
-        --traigo la ultima auditoria hecha en cualquiera de las 2 tablas
-        EXECUTE 'SELECT * FROM ' || nombre_tabla_auditoria || ' ORDER BY id_auditoria DESC LIMIT 1' INTO ultima_aud;
-		IF NOT FOUND THEN
-			RAISE EXCEPTION 'No existe la auditoria';
-		ELSE
-			EXECUTE 'UPDATE ' || nombre_tabla_auditoria || ' set operador = $1 where id_auditoria =$2'
-            USING usuario, ultima_aud.id_auditoria;
-			
-            -- si la operacion es UPDATE tambien actualizo el campo usuario de la fila anterior
-			IF ultima_aud.operacion = 'UPDATE' THEN
-                EXECUTE 'UPDATE ' || nombre_tabla_auditoria || ' set operador = $1 where id_auditoria =$2'
-                USING usuario, ultima_aud.id_auditoria -1 ;
-		    END IF;
-		RETURN true;
-	END IF;
-END;
-$$ LANGUAGE 'plpgsql';
-
-*/
