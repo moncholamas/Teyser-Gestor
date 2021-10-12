@@ -1,6 +1,5 @@
 import  ventas from '../models/ventas';
-import detalle_ventas from '../models/detalle_ventas'
-import productos from '../models/productos'
+import detalle_ventas from '../models/detalle_ventas';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
@@ -11,7 +10,7 @@ export async function getVentas(req,res){
     initModels(sequelize);
     try {
         const list_venta = await ventas.findAll({
-            attributes: ['id_venta','observacion','total','estado','id_parte_diario','id_cliente']
+            attributes: ['id_venta','observacion','total','estado','id_cliente']
         });
         return res.send({
             data: list_venta
@@ -29,7 +28,7 @@ export async function getVentaById(req,res){
     initModels(sequelize);
     const id= req.params.id;
     try {
-        const ventaSeleccionada = await ventas.findByPk(id);
+        const ventaSeleccionada = await ventas.findOne({where:{id_venta: id},include:[{model:detalle_ventas,as:"detalle_venta"}]});
         return ventaSeleccionada === null?
             res.json({
                 msj: "no se encontró una venta con la clave proporcionada"
