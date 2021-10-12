@@ -314,6 +314,27 @@ ALTER TABLE ventas ADD CONSTRAINT "Refclientes20"
 -------------------------------------------------
 --                                      FUNCIONES
 -------------------------------------------------
+
+
+-------------------------------------------------
+-- Retorna TRUE si un version de un producto ya se vendió
+-------------------------------------------------
+
+CREATE OR REPLACE FUNCTION producto_vendido(integer) RETURNS boolean
+AS $$
+DECLARE
+productos_encontrados RECORD;
+BEGIN
+	select * into productos_encontrados from  detalle_ventas inner join versiones_productos 
+			using (id_version_producto) where id_producto = $1;
+	IF FOUND THEN
+		RETURN true;
+	END IF;
+	RETURN false;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 /*
 -- MUESTRA EL MONTO PARCIAL DE la recaudacion del dia (para cada vez que se ingresa una venta);
 CREATE OR REPLACE FUNCTION recaudacion_parte_diario() RETURNS decimal 
@@ -370,6 +391,7 @@ AS $$
 DECLARE
 BEGIN
 	DELETE FROM detalle_ventas WHERE id_venta = OLD.id_venta;
+    RETURN OLD;
 END;
 $$ LANGUAGE 'plpgsql';
 
@@ -449,16 +471,20 @@ IF TG_TABLE_NAME = 'detalle_ventas' THEN
 		--Resto al stock actual la cantidad de insumos de la tabla consumos
 		--recorro la tabla de consumos
 		FOR consumo IN SELECT * FROM consumos 
-		WHERE id_producto = NEW.id_producto LOOP
+		WHERE id_producto IN (select id_producto from versiones_productos inner join detalle_ventas 
+		using(id_version_producto)
+		where id_version_producto = NEW.id_version_producto) LOOP
 			-- modifico en la tabla stock por cada producto encontrado en la tabla consumos
-			UPDATE stock SET cantidad = cantidad - consumo.cantidad WHERE id_insumo = consumo.id_insumo;
+			UPDATE stock SET cantidad = cantidad - (consumo.cantidad * NEW.cantidad) WHERE id_insumo = consumo.id_insumo ;
 		END LOOP;
 	ELSE
 	-- solo hay dos operaciones que disparan el trigger, aqui seria un delete
 		FOR consumo IN SELECT * FROM consumos 
-		WHERE id_producto = OLD.id_producto LOOP
+		WHERE id_producto IN (select id_producto from versiones_productos inner join detalle_ventas 
+		using(id_version_producto)
+		where id_version_producto = OLD.id_version_producto) LOOP
 			-- modifico en la tabla stock por cada producto encontrado en la tabla consumos
-			UPDATE stock SET cantidad = cantidad + consumo.cantidad WHERE id_insumo = consumo.id_insumo;
+			UPDATE stock SET cantidad = cantidad + (consumo.cantidad * OLD.cantidad) WHERE id_insumo = consumo.id_insumo;
 		END LOOP;
 	END IF;
 ELSE
@@ -471,12 +497,12 @@ ELSE
 		UPDATE stock SET cantidad = cantidad + v_cantidad WHERE id_insumo = NEW.id_insumo;
 	ELSE
 	-- solo hay dos operaciones que disparan el trigger, aqui seria un delete
-		--busco la cantidad total de unidades nuevas de insumo
-		v_cantidad := (SELECT unidades FROM insumos WHERE id_insumo = NEW.id_insumo)*NEW.cantidad;
+		--busco la cantidad total de unidades de insumo
+		v_cantidad := (SELECT unidades FROM insumos WHERE id_insumo = OLD.id_insumo)*OLD.cantidad;
 		--seteo el stock
 		---> ingreso el stock por primera vez cuando ingreso un producto (el producto tiene que existir)
                 --> funcion de trigger SETEAR_STOCK
-		UPDATE stock SET cantidad = cantidad - v_cantidad WHERE id_insumo = NEW.id_insumo;
+		UPDATE stock SET cantidad = cantidad - v_cantidad WHERE id_insumo = OLD.id_insumo;
 	END IF;
 END IF;
 RETURN coalesce(NEW, OLD);
@@ -494,14 +520,14 @@ AFTER INSERT OR DELETE ON detalle_compras
 FOR EACH ROW EXECUTE PROCEDURE actualizar_stock();
 
 -----------------------------------------------------------------------------------------
--- Inicia el stock de un producto nuevo en 0 y borra el stock cuando se elimina un insumo
+-- Inicia el stock de un insumo nuevo en 0 y borra el stock cuando se elimina un insumo
 -----------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION setear_stock() RETURNS TRIGGER
 AS $$
 DECLARE 
 BEGIN
 	IF TG_OP = 'INSERT' AND TG_WHEN = 'AFTER' THEN
-		INSERT INTO stock VALUES (NEW.id_insumo,0);
+		INSERT INTO stock VALUES (OLD.id_insumo,0);
 	END IF;
 	IF TG_OP = 'DELETE' AND TG_WHEN = 'BEFORE' THEN
 		DELETE FROM stock WHERE id_insumo = OLD.id_insumo;

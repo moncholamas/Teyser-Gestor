@@ -5,7 +5,7 @@ import  consumos from '../models/consumos';
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
-import ventas from '../models/ventas';
+
 
 //trae todas las versiones ->encontrar forma de filtrar la ultima
 //trae todos los productos (activos y ultima version, precio actualizado)
@@ -118,14 +118,13 @@ export async function deleteProducto(req,res){
     const id = parseInt(req.params.id);
     try {
 
-        //trae la cantidad de ventas donde apareció el producto
-        const versionesEnVentas = await versiones_productos.findAll({
-            where:{id_producto:id},
-            include:[{model:ventas,as:"id_venta_venta",required:true}]
-        });
+        //Verifico si alguna version del producto ya se vendió (funcion en POSTGRES)
+        //llamo a la funcion con Sequelize
+        const vendido = await sequelize.query('SELECT producto_vendido(:id)',{replacements:{id}})
+        const [[{producto_vendido}]] = vendido;
 
-        if(!versionesEnVentas){
-            console.log(versionesEnVentas);
+        if(producto_vendido){
+            console.log(producto_vendido);
             return res.json({
                 msj: "El producto ya se ingresó a una venta, no es posible eliminarlo"
             })

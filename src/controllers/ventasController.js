@@ -4,6 +4,7 @@ import productos from '../models/productos'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
+import versiones_productos from '../models/versiones_productos';
 
 //trae todas las ventas
 export async function getVentas(req,res){
@@ -67,12 +68,13 @@ export async function nuevaVenta(req,res ){
             //itero sobre la lista de los detalles para generar los detalles
             for (const detalle of detalles_venta){
                 //busco el producto
-                    const productoNuevo = await productos.findByPk(detalle.id_producto);
+                    const productoNuevo = await versiones_productos.findByPk(detalle.id_version_producto);
+                    console.log(productoNuevo);
                         //calculo el subtotal
-                        const subtotal = productoNuevo.dataValues.precio * detalle.cantidad;
+                        const subtotal = productoNuevo.precio * detalle.cantidad;
                         
                         const detalleNuevo = await detalle_ventas.create({
-                                id_producto: detalle.id_producto,
+                                id_version_producto: detalle.id_version_producto,
                                 id_venta: ventaNueva.id_venta,
                                 cantidad:detalle.cantidad,
                                 total: subtotal
@@ -80,7 +82,6 @@ export async function nuevaVenta(req,res ){
 
                         //actualizo el monto de la venta en cada insert (desde trigger)
                         detalleFinal.push(detalleNuevo);
-                        
             }
             // llamar al commit -> actualizar recaudacion del parte diario
             t.afterCommit(async ()=>{
@@ -96,7 +97,7 @@ export async function nuevaVenta(req,res ){
            
             });
     } catch (error) {
-        handlerException(error);
+        console.log(error);
         return res.send({
             msj: "error al ingresar la nueva venta"
         });
@@ -120,7 +121,7 @@ export async function deleteVenta(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
+        console.log(error);
         return res.send({
             msj: "error al eliminar la venta"
         });
