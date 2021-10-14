@@ -544,6 +544,27 @@ CREATE TRIGGER borrar_insumo
 BEFORE DELETE ON insumos
 FOR EACH ROW EXECUTE PROCEDURE setear_stock();
 
+-----------------------------------------------
+--Si es el primer operador se convierte en admin
+-----------------------------------------------
+CREATE OR REPLACE FUNCTION hacer_admin()RETURNS TRIGGER
+AS $$
+DECLARE
+BEGIN
+	IF NEW.id_operador = 1 THEN
+	UPDATE operadores SET activo = true, tipo_operador='admin' WHERE id_operador = 1;
+	END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+CREATE TRIGGER primer_operador
+AFTER INSERT ON operadores
+FOR EACH ROW EXECUTE PROCEDURE hacer_admin();
+
+
+
 
 ------------------------------------------------------------------
 -----------------                 ||| AUDITORIAS |||

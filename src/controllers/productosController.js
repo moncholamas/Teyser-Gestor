@@ -23,7 +23,7 @@ export async function getProductos(req,res){
             data: list_productos
         });
     } catch (error) {
-        handlerException(error);
+        console.log(error);
         return res.send({
             msj: "error al buscar los productos"
         });

@@ -8,8 +8,6 @@ import {
 } from '../controllers/clientesController';
 import {
     isAdminOrOperator, 
-    isActive,
-    isOperator
 } from '../middlewares/authmiddleware';
 
 //inicilizacion

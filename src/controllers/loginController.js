@@ -36,6 +36,7 @@ export async function login(req,res){
                 msg: "Sesion iniciada",
                 data: token
                 });
+
     } catch (error) {
         handlerException(error);
         return res.json({
@@ -54,6 +55,7 @@ export async function logup(req,res){
         //verifico si el correo ya existe, si existe termino la consulta
         if(idEncontrado){return res.json({msg: "el correo ya existe"});}
 
+        //verifico si es el primer usuario en registrar -> es admin
         const operadorNuevo = await operadores.create({
             //por defecto todo operador es operario e inactivo
             tipo_operador: 'operario', 
