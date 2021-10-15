@@ -1,6 +1,11 @@
 import Sequelize from 'sequelize';
 import { dataBase } from '../config'
 
+const {userName, DB ,password,puertoDb,host} = dataBase;
+
+const sequelize = new Sequelize(`postgres://${userName}:${password}@${host}:${puertoDb}/${DB}`);
+
+/*
  const sequelize = new Sequelize(
     dataBase.dataBase, //db
     dataBase.userName, //username
@@ -17,5 +22,6 @@ import { dataBase } from '../config'
         logging: false
     }
 )
+*/
 
 export { sequelize };

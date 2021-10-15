@@ -1,10 +1,11 @@
 require('dotenv').config();
 
 export const dataBase ={
-    dataBase: process.env.DATA_BASE,
+    DB: process.env.DATA_BASE,
     userName: process.env.USER_NAME,
     password: process.env.PASSWORD,
-    host: process.env.HOST
+    host: process.env.HOST,
+    puertoDb: process.env.PUERTODB
 };
 
 export const SECRET = process.env.SECRET;
