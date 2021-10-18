@@ -1,0 +1,1072 @@
+{
+	"info": {
+		"_postman_id": "0c723186-8983-4b65-8c41-7b1159170971",
+		"name": "Teyser Heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ventas",
+			"item": [
+				{
+					"name": "localhost:3000/ventas/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_cliente\":2,\n    \"observacion\":\"venta con confirmacion y recuento stock\",\n    \"total\": 0,\n    \"estado\": \"cancelado\",\n    \"id_operador\": 1,\n    \"detalles_venta\":[\n        {\n            \"id_version_producto\": 7,\n            \"cantidad\": 68\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/ventas/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ventas",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/ventas/eliminar/14",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ventas",
+								"eliminar",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/ventas/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ventas",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pagos",
+			"item": [
+				{
+					"name": "localhost:3000/pagos/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipo\": \"compra de insumo\",\n    \"observacion\": \"una compra para probar triggers\",\n    \"total\": \"2255\",\n    \"id_operador\": 1,\n    \"detalles_pago\":[\n        {\n            \"id_insumo\":2,\n            \"cantidad\": 10,\n            \"precio\": 400.0\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/pagos/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"pagos",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/pagos/",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/pagos/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"pagos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/pagos/eliminar/6",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pagos",
+								"eliminar",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "clientes",
+			"item": [
+				{
+					"name": "localhost:3009/clientes/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\":\"Franco\",\n    \"apellido\": \"De La Rosa\",\n    \"telefono\": \"66666666\",\n    \"correo\": \"ejemlo@c.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/clientes/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"clientes",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/clientes/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"clientes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"telefono\": \"66666666  \",\n        \"correo\": \"correo@actualizado.com\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/clientes/actualizar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"clientes",
+								"actualizar",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/clientes/eliminar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"clientes",
+								"eliminar",
+								"1"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "equipos",
+			"item": [
+				{
+					"name": "localhost:3000/equipos/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token3}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre_tecnico\":\"hp 8600\",\n    \"nombre_fantasia\": \"impresora Historica\",\n    \"categoria\":\"impresora\",\n    \"estado\": \"operativo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/equipos/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"equipos",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "selectTodos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token3}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/equipos/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"equipos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"id_equipo\": 1,\n        \"nombre_fantasia\": \"La mejor maquina del mundo\"\n\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/equipos/actualizar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"equipos",
+								"actualizar",
+								"1"
+							],
+							"query": [
+								{
+									"key": "x-token",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/equipos/eliminar/1",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0.hCUlQy3U6W9dMTQOldfpOdlkHcf5G61wj4QykUjrElQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/equipos/eliminar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"equipos",
+								"eliminar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "insumos",
+			"item": [
+				{
+					"name": "localhost:3000/insumos/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"unidades\": 100,\n    \"nombre\": \"hoja A3 120gr\",\n    \"presentacion\" : \"resma marca patito\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/insumos/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"insumos",
+								"nuevo"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/insumos/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"insumos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"presentacion\": \"resma marca patito RELOADED\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/insumos/actualizar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"insumos",
+								"actualizar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/insumos/eliminar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"insumos",
+								"eliminar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "productos",
+			"item": [
+				{
+					"name": "localhost:3000/productos/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"impresion fotográfica papel mate\",\n    \"descripcion\": \"impresion en color en formato A3\",\n    \"precio\": 150.00,\n    \"categoria\": \"impresion\",\n    \"detalle_insumos\":[\n        {\n            \"id_insumo\": 2,\n            \"cantidad\": 1\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/productos/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"productos",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/productos/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"productos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"precio\": 250,\n        \"descripcion\":\"nuevo precio 3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/productos/actualizar/5",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"productos",
+								"actualizar",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token2}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/productos/eliminar/8",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"productos",
+								"eliminar",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "operadores",
+			"item": [
+				{
+					"name": "localhost:3000/operador/nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiYWRtaW4iLCJhY3Rpdm8iOnRydWUsImlhdCI6MTYyOTg5NjIyNiwiZXhwIjoxNjI5OTgyNjI2fQ.Lp9ICEe6RuqYXa7cdscx7XSUObRqk2PQUX-yyg-imOY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cuenta\":\"activo\",\n    \"nombre\":\"manu\",\n    \"apellido\":\"lamas\",\n    \"correo\": \"manu@manu.manu\",\n    \"clave\": \"manu\",\n    \"tipo_operador\":\"operario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/ingresar/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ingresar",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"correo\": \"admin@admin.admin\",\n    \"clave\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/ingresar/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ingresar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token3}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/operadores/3",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"operadores",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"id_operador\": 2,\n        \"activo\": true\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/operadores/actualizar/2",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"operadores",
+								"actualizar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/operadores/eliminar/2",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"operadores",
+								"eliminar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Novedades",
+			"item": [
+				{
+					"name": "Nueva",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_operador\": 1,\n    \"categoria\":\"mantenimiento\",\n    \"estado\":\"nuevo\",\n    \"novedad\": \"Cambio de cabezal de impresora\",\n    \"observacion\":\"Cambio por mal impresion de toner\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/novedades/nuevo",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"novedades",
+								"nuevo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/novedades/",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"novedades",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"estado\": \"arreglado\",\n        \"novedad\": \"Cambio de cabezal de impresora\",\n        \"observacion\": \"Cambio por mal impresion de toner por uno mas piola\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/novedades/actualizar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"novedades",
+								"actualizar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://infinite-shelf-47181.herokuapp.com/novedades/eliminar/1",
+							"protocol": "https",
+							"host": [
+								"infinite-shelf-47181",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"novedades",
+								"eliminar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoib3BlcmFyaW8iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzM5NTE3NDgsImV4cCI6MTYzNDAzODE0OH0...."
+		},
+		{
+			"key": "token2",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiYWRtaW4iLCJhY3Rpdm8iOmZhbHNlLCJpYXQiOjE2MzQwNDE1MjksImV4cCI6MTYzNDEyNzkyOX0.-bFE..."
+		},
+		{
+			"key": "token3",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoiYWRtaW4iLCJhY3Rpdm8iOnRydWUsImlhdCI6MTYzNDMwMTg3NSwiZXhwIjoxNjM0Mzg4Mjc1fQ.OcqlIymHJq5l_Vf9vLqUgtZ92IeaaGkSdTozWDavWRU"
+		}
+	]
+}
