@@ -12,10 +12,7 @@ export async function getNovedades(req,res){
             'id_novedad',    
             'categoria',
             'estado',
-            'novedad'
-            ,'observacion',
-            'id_operador',
-            'id_equipo']
+            'novedad',]
         });
         return res.send({
             data: list_novedades
@@ -36,7 +33,7 @@ export async function getNovedadById(req,res){
         const novedad = await novedades.findByPk(id);
         return novedad === null?
             res.json({
-                msj: "no se encontró una novedad con la clave proporcionada"
+                msj: `no se encontró una novedad con el id ${id}`
             })
             :
             res.json({
@@ -58,7 +55,6 @@ export async function nuevaNovedad(req,res ){
             estado,
             novedad,
             observacion,
-            id_operador,
             id_equipo} = req.body;
     try {
         const novedadNuevo = await novedades.create(
@@ -67,11 +63,9 @@ export async function nuevaNovedad(req,res ){
             estado,
             novedad,
             observacion,
-            id_operador,
+            id_operador: req.decoded.id, // el id del operador de la sesion actual
             id_equipo
-        },{
-    
-            }
+        },{}
         );
         return res.json({
             msj: "nueva novedad ingresada correctamente",
@@ -79,6 +73,16 @@ export async function nuevaNovedad(req,res ){
         });
     } catch (error) {
         handlerException(error);
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
         return res.send({
             msj: "error al ingresar la novedad"
         });
@@ -99,7 +103,7 @@ export async function deleteNovedad(req,res){
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msj:`no se encontraron coincidencias con el id ${id}`,
         })
         ;
     } catch (error) {
@@ -116,22 +120,19 @@ export async function updateNovedad(req,res){
     initModels(sequelize);
     const id = req.params.id;
     const {
-            fecha_actualizacion,
             categoria,
             estado,
             novedad,
             observacion,
-            id_parte_diario,
             id_equipo
     }  = req.body
     try {
         const novedadesActualizado = await novedades.update({
-            fecha_actualizacion,
             categoria,
             estado,
             novedad,
             observacion,
-            id_parte_diario,
+            id_operador: req.decoded.id, // el id del operador de la sesion actual
             id_equipo
         },{
             where: {id_novedad:id}
@@ -143,7 +144,7 @@ export async function updateNovedad(req,res){
             })
             :
             res.json({
-                msj: "no se actualizó ninguna novedad"
+                msj: `no se encontraron coincidencias con el id: ${id}`
             });
     } catch (error) {
         handlerException(error);

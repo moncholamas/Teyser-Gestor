@@ -12,15 +12,41 @@ export default class novedades extends Model {
     },
     categoria: {
       type: DataTypes.ENUM("emergencia","mantenimiento","informativa"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "la categoria es un campo requerido"
+        },
+        isIn:{
+          args: [["emergencia","mantenimiento","informativa"]],
+          msg: "ingrese una categoria válida"
+        }
+      }
     },
     estado: {
       type: DataTypes.ENUM("nuevo","arreglado","trabajando"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el estado de la novedad es un campo requerido"
+        },
+        isIn:{
+          args: [["nuevo","arreglado","trabajando"]],
+          msg: "ingrese un estado válido"
+        }
+      }
     },
     novedad: {
       type: DataTypes.STRING(150),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg : "la titulo de la novedad es un campo requerido"
+        }
+      }
     },
     observacion: {
       type: DataTypes.TEXT,
