@@ -12,7 +12,13 @@ export default class productos extends Model {
     },
     nombre: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el nombre es un campo requerido"
+        }
+      }
     },
     descripcion: {
       type: DataTypes.STRING(100),
@@ -20,11 +26,31 @@ export default class productos extends Model {
     },
     categoria: {
       type: DataTypes.ENUM("impresion","fotocopia","articulo de libreria","servicio","servicio digital","otro"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "la categoria es un campo requerido"
+        },
+        isIn:{
+          args: [["impresion","fotocopia","articulo de libreria","servicio","servicio digital","otro"]],
+          msg: "ingrese una categoria válida"
+        }
+      }
     },
     estado: {
       type: DataTypes.ENUM("activo","inactivo"),
-      allowNull: true
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el estado es un campo requerido"
+        },
+        isIn:{
+          args: [["activo","inactivo"]],
+          msg: "ingrese un estado válido"
+        }
+      }
     }
   }, {
     sequelize,

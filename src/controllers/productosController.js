@@ -25,7 +25,7 @@ export async function getProductos(req,res){
     } catch (error) {
         console.log(error);
         return res.send({
-            msj: "error al buscar los productos"
+            msg: "error al buscar los productos"
         });
     }
 }
@@ -38,7 +38,7 @@ export async function getProductoById(req,res){
         const productoEncontrado = await productos.findByPk(id,{include:[{model:versiones_productos,as:"versiones_productos"}]});
         return productoEncontrado == null?
             res.json({
-                msj: "no se encontró un producto con la clave proporcionada"
+                msg: `no se encontró un producto con el id ${id}`
             })
             :
             res.json({
@@ -47,7 +47,7 @@ export async function getProductoById(req,res){
     } catch (error) {
         console.log(error);
         return res.send({
-            msj: "error al buscar el producto"
+            msg: "error al buscar el producto"
         });
     }
 }
@@ -55,15 +55,18 @@ export async function getProductoById(req,res){
 //ingresa un nuevo producto
 export async function nuevoProducto(req,res ){
     initModels(sequelize);
-    const {nombre,descripcion,precio,categoria,detalle_insumos} = req.body;
+    const {nombre,descripcion,precio,categoria,detalle_insumos,estado} = req.body;
+    console.log("elestado actual es: ",estado)
     try {
         //todo se tiene que cargar completamente -> transaction
-        const resul = sequelize.transaction(async (t)=>{
+        await sequelize.transaction(async (t)=>{
             //recibe un arreglo con los insumos y la cantidad que consume de c/u
             const productoNuevo = await productos.create(
                 {nombre,
                 descripcion,
-                categoria},
+                categoria,
+                estado
+                },
                 {transaction:t}
             );
             
@@ -71,9 +74,7 @@ export async function nuevoProducto(req,res ){
             for(const insumo of detalle_insumos){
                 const nuevoInsumo = await insumos.findByPk(insumo.id_insumo);
                 if(nuevoInsumo == null){
-                    return res.json({
-                        msj:"no se encontró ningun insumo con la clave ingresada, carga de producto terminada"
-                    });
+                    throw new Error(`no se encontró insumo con el id ${insumo.id_insumo}, carga de producto terminada`)
                 }else{
                     //actualiza la tabla consumos
                         await consumos.create({
@@ -93,7 +94,7 @@ export async function nuevoProducto(req,res ){
             t.afterCommit(()=>{
                 //terminada la transaccion confirma el ingreso
                 return res.json({
-                    msj: "nuevo producto ingresado correctamente",
+                    msg: "nuevo producto ingresado correctamente",
                     data: {
                         producto:productoNuevo,
                         version
@@ -105,8 +106,18 @@ export async function nuevoProducto(req,res ){
         
     } catch (error) {
         handlerException(error);
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
         return res.send({
-            msj: "error al ingresar el nuevo producto"
+            msg: "error al ingresar el nuevo producto"
         });
     }
 }
@@ -124,28 +135,24 @@ export async function deleteProducto(req,res){
         const [[{producto_vendido}]] = vendido;
 
         if(producto_vendido){
-            console.log(producto_vendido);
-            return res.json({
-                msj: "El producto ya se ingresó a una venta, no es posible eliminarlo"
-            })
+            throw new Error("El producto ya se ingresó a una venta, no es posible eliminarlo")
         }
 
         const cantidadBorrada = await productos.destroy({where:{id_producto:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borró exitosamente",
+            msg:"se borró exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
-            id: id
+            msg: `no se encontraron coincidencias con el id ${id}`
         })
         ;
     } catch (error) {
         console.log(error);
         return res.send({
-            msj: "error al borrar el producto"
+            msg: "error al borrar el producto"
         });
     }
 }
@@ -171,18 +178,18 @@ export async function updateProducto(req,res){
 
         return productosActualizado > 0?
             res.json({
-                msj: "se ha actualizado correctamente",
+                msg: "se ha actualizado correctamente",
                 data: productosActualizado,
                 version: nuevaVersion
             })
             :
             res.json({
-                msj: "no se actualizó ningún producto"
+                msg: `no se encontraron coincidencias id: ${id}`
             });
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al actualizar el producto"
+            msg: "error al actualizar el producto"
         });
     }   
 }
