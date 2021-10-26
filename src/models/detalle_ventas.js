@@ -24,7 +24,13 @@ export default class detalle_ventas extends Model {
     },
     cantidad: {
       type: DataTypes.SMALLINT,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "la cantidad de productos vendidos es un campo requerido"
+        }
+      }
     },
     total: {
       type: DataTypes.DECIMAL,

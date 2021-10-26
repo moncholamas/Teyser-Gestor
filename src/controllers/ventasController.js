@@ -10,7 +10,7 @@ export async function getVentas(req,res){
     initModels(sequelize);
     try {
         const list_venta = await ventas.findAll({
-            attributes: ['id_venta','observacion','total','estado','id_cliente']
+            attributes: ['id_venta','total','estado']
         });
         return res.send({
             data: list_venta
@@ -18,7 +18,7 @@ export async function getVentas(req,res){
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al buscar las ventas"
+            msg: "error al buscar las ventas"
         });
     }   
 }
@@ -31,7 +31,7 @@ export async function getVentaById(req,res){
         const ventaSeleccionada = await ventas.findOne({where:{id_venta: id},include:[{model:detalle_ventas,as:"detalle_venta"}]});
         return ventaSeleccionada === null?
             res.json({
-                msj: "no se encontró una venta con la clave proporcionada"
+                msg: `no se encontró una venta con id: ${id}`
             })
             :
             res.json({
@@ -40,7 +40,7 @@ export async function getVentaById(req,res){
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al buscar la venta"
+            msg: "error al buscar la venta"
         });
     }
 }
@@ -48,7 +48,7 @@ export async function getVentaById(req,res){
 //ingresa ua nueva venta
 export async function nuevaVenta(req,res ){
     initModels(sequelize);
-    const {observacion,estado,id_operador,id_cliente,detalles_venta} = req.body;
+    const {observacion,estado,id_cliente,detalles_venta} = req.body;
     try {
         //todos los ingresos se tienen que dar correctamente -> transaction
         await sequelize.transaction(async (t)=>{
@@ -58,7 +58,7 @@ export async function nuevaVenta(req,res ){
                 observacion,
                 total:0,
                 estado,
-                id_operador,
+                id_operador: req.decoded.id, // el id del operador de la sesion actual
                 id_cliente
             },{transaction:t});
 
@@ -68,7 +68,7 @@ export async function nuevaVenta(req,res ){
             for (const detalle of detalles_venta){
                 //busco el producto
                     const productoNuevo = await versiones_productos.findByPk(detalle.id_version_producto);
-                    console.log(productoNuevo);
+                    if(!productoNuevo){throw new Error(`el producto con el id ${detalle.id_version_producto} no existe`)}
                         //calculo el subtotal
                         const subtotal = productoNuevo.precio * detalle.cantidad;
                         
@@ -86,7 +86,7 @@ export async function nuevaVenta(req,res ){
             t.afterCommit(async ()=>{
                 const ventaConfirmada = ventas.findByPk(ventaNueva.id_venta);
                 return res.json({
-                    msj: "nueva venta ingresada correctamente",
+                    msg: "nueva venta ingresada correctamente",
                     data: {
                         operacion: ventaConfirmada,
                         detalle: detalleFinal
@@ -96,9 +96,19 @@ export async function nuevaVenta(req,res ){
            
             });
     } catch (error) {
-        console.log(error);
+        handlerException(error);
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
         return res.send({
-            msj: "error al ingresar la nueva venta"
+            msg: "error al ingresar la nueva venta"
         });
     }
 }
@@ -111,18 +121,18 @@ export async function deleteVenta(req,res){
         const cantidadBorrada = await ventas.destroy({where:{id_venta:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borró exitosamente",
+            msg:"se borró exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msg:"no se encontraron coincidencias",
         })
         ;
     } catch (error) {
         console.log(error);
         return res.send({
-            msj: "error al eliminar la venta"
+            msg: "error al eliminar la venta"
         });
     }
 }

@@ -20,7 +20,17 @@ export default class ventas extends Model {
     },
     estado: {
       type: DataTypes.ENUM("pendiente","cancelado"),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el estado es un campo requerido"
+        },
+        isIn:{
+          args:[["pendiente","cancelado"]],
+          msg: "ingrese un estado válido"
+        }
+      }
     },
     id_operador: {
       type: DataTypes.INTEGER,
