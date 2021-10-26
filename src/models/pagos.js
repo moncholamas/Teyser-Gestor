@@ -12,7 +12,17 @@ export default class pagos extends Model {
     },
     tipo: {
       type: DataTypes.ENUM("compra de insumo","luz","internet","rentas","afip","municipio","otro"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el tipo de pago es un campo requerido"
+        },
+        isIn:{
+          args: [["compra de insumo","luz","internet","rentas","afip","municipio","otro"]],
+          msg: "ingrese un tipo de pago válido"
+        }
+      }
     },
     observacion: {
       type: DataTypes.STRING(200),

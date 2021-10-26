@@ -10,15 +10,15 @@ export async function getPagos(req,res){
     initModels(sequelize);
     try {
         const list_pagos = await pagos.findAll({
-            attributes: ['id_compra','tipo','observacion','total','id_operador']
+            attributes: ['id_compra','tipo','total']
         });
         return res.send({
             data: list_pagos
         });
     } catch (error) {
-        console.error(error);
+        handlerException(error);
         return res.send({
-            msj: "error al buscar los pagos"
+            msg: "error al buscar los pagos"
         });
     }
 }
@@ -31,16 +31,16 @@ export async function getPagoById(req,res){
         const pagoSeleccionada = await pagos.findByPk(id);
         return pagoSeleccionada === null?
             res.json({
-                msj: "no se encontró un pago con la clave proporcionada"
+                msg: `no se encontró un pago con el id ${id}`
             })
             :
             res.json({
-                data: pagoSeleccionada
+                data: pagoSeleccionada //mostrar los detalles asociados
             });
     } catch (error) {
         console.error(error);
         return res.send({
-            msj: "error al buscar el pago o compra"
+            msg: "error al buscar el pago o compra"
         });
     }
 }
@@ -51,30 +51,28 @@ export async function nuevoPago(req,res ){
     const {
             tipo,
             observacion,
-            id_operador,
             detalles_pago
     } = req.body;
     try {
         //los pagos traen una lista de detalles_pago
-        sequelize.transaction(async(t)=>{
-            const pagoNuevo = await pagos.create({
-                tipo,
-                observacion,
-                total:0,
-                id_operador,
-            },{transaction:t});
-            
+        await sequelize.transaction(async(t)=>{
+            let pagoNuevo;
+            pagoNuevo = await pagos.create({
+                    tipo,
+                    observacion,
+                    total:0, //inicializo en 0 un trigger pone el precio real
+                    id_operador: req.decoded.id // el id del operador de la sesion actual
+                },{transaction:t});
+
             //una nueva lista de los detalles ingresados en la DB
             const detalleFinal=[];
             for(const detalle of detalles_pago) {
             //itero sobre la lista de los detalles para generar los nuevo detalle_compra
                 //busco los productos
                     const insumoNuevo = await insumos.findByPk(detalle.id_insumo);
-                    if (insumoNuevo == null){
-                        console.error("no puede ingresar este insumo");
-                        return res.send({
-                            msj: "error al ingresar un insumo, compra cancelada"
-                        });
+                    if (insumoNuevo === null){
+                        //en caso de que un insumo no exista termino la transaccion
+                        throw new Error(`error, no existe un insumo con el id: ${detalle.id_insumo}, compra cancelada`);
                     }
                     else{
                             const detalleNuevo = await detalle_compras.create({
@@ -91,7 +89,7 @@ export async function nuevoPago(req,res ){
             t.afterCommit(async ()=>{
                 const pagoConfirmado = await pagos.findByPk(pagoNuevo.id_compra);
                 return res.json({
-                    msj: "nuevo pago ingresado correctamente",
+                    msg: "nuevo pago ingresado correctamente",
                     data: {
                         operacion:pagoConfirmado,
                         detalle: detalleFinal
@@ -103,10 +101,19 @@ export async function nuevoPago(req,res ){
         
     } catch (error) {
         handlerException(error);
-        return res.send({
-            msj: "error al ingresar el nuevo pago"
-        });
-        
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
+        return res.json({
+            msg: "error al ingresa un nuevo pago"
+        })
     }
 }
 
@@ -118,18 +125,18 @@ export async function deletePago(req,res){
         const cantidadBorrada = await pagos.destroy({where:{id_compra:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borró exitosamente",
+            msg:"se borró exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msg: `no se encontraron coincidencias para borrar con el id: ${id}`,
         })
         ;
     } catch (error) {
        console.log(error);
         return res.send({
-            msj: "error al eliminar el pago o compra"
+            msg: "error al eliminar el pago o compra"
         });
     }
 }

@@ -12,11 +12,23 @@ export default class insumos extends Model {
     },
     unidades: {
       type: DataTypes.DECIMAL,
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "unidades es un campo requerido"
+        }
+      }
     },
     nombre: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el nombre es un campo requerido"
+        }
+      }
     },
     presentacion: {
       type: DataTypes.STRING(100),

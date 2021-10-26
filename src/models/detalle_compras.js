@@ -24,11 +24,23 @@ export default class detalle_compras extends Model {
     },
     precio: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el precio del insumo es un campo requerido"
+        }
+      }
     },
     cantidad: {
       type: DataTypes.SMALLINT,
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "la cantidad de insumos es un campo requerido"
+        }
+      },
     }
   }, {
     sequelize,
