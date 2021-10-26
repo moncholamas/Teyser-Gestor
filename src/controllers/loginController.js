@@ -14,14 +14,14 @@ export async function login(req,res){
         const idEncontrado = await correoExistente(correo);
 
         //verifica si la cuenta de correo existe, caso negativo termina la consulta
-        if(!idEncontrado){return res.json({msg: "No existe una cuenta con el correo ingresado"})}
+        if(!idEncontrado){throw new Error("No existe una cuenta con el correo ingresado")}
         
         //trae el usuario de la DB
         const usuarioEncontrado = await operadores.findByPk(idEncontrado);
         //compara las clave encriptada
         const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
         //si no son iguales corta la consulta
-        if(!validacion){return res.json({msg: "Contraseña incorrecta"}) }
+        if(!validacion){throw new Error("Contraseña incorrecta") }
 
         //envío el token con los datos del usuario
         const token = jsonwebtoken.sign({
@@ -39,6 +39,16 @@ export async function login(req,res){
 
     } catch (error) {
         handlerException(error);
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
         return res.json({
             msg: "error al iniciar sesión"
         });
@@ -53,7 +63,9 @@ export async function logup(req,res){
         const idEncontrado = await correoExistente(correo);
         
         //verifico si el correo ya existe, si existe termino la consulta
-        if(idEncontrado){return res.json({msg: "el correo ya existe"});}
+        if(idEncontrado){throw new Error("el correo ya existe")}
+        //verifico manualmente que la clave no este vacia
+        if(clave===''){throw new Error("ingrese una clave válida")}
 
         //verifico si es el primer usuario en registrar -> es admin
         const operadorNuevo = await operadores.create({
@@ -78,6 +90,16 @@ export async function logup(req,res){
         });
     } catch (error) {
         handlerException(error);
+        if(error.errors !== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
+        if(error.message!== undefined){
+            return res.send({
+                msg: error.message
+            });
+        }
         return res.json({
             msg: "error al iniciar sesión"
         });

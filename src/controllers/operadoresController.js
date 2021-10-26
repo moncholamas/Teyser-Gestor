@@ -25,7 +25,7 @@ export async function getOperadores(req,res){
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al buscar los operadores"
+            msg: "error al buscar los operadores"
         });
     }
     
@@ -44,7 +44,7 @@ export async function getOperadorById(req,res){
         });
         return operadorSeleccionado === null?
             res.json({
-                msj: "no se encontró un operador con la clave proporcionada"
+                msg: `no se encontró un operador con el id ${id}`
             })
             :
             res.json({
@@ -53,7 +53,7 @@ export async function getOperadorById(req,res){
     } catch (error) {
         handlerException(error);
         res.send({
-            msj: "error al buscar el operador"
+            msg: "error al buscar el operador"
         });
     }
 }
@@ -67,18 +67,18 @@ export async function deleteOperador(req,res){
         const cantidadBorrada = await operadores.destroy({where:{id_operador:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borró exitosamente",
+            msg:"se borró exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msg: `no se encontraron coincidencias con el id ${id}`,
         })
         ;
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al eliminar el operador"
+            msg: "error al eliminar el operador"
         });
     }
 }
@@ -90,6 +90,7 @@ export async function updateOperador(req,res){
     const id = req.params.id;
     const {activo,tipo_operador}  = req.body
     try {
+        //solo permite actualizar el tipo de operador y el estado
         const operadoresActualizado = await operadores.update({
             activo,
             tipo_operador
@@ -98,17 +99,17 @@ export async function updateOperador(req,res){
         });
         return operadoresActualizado > 0?
             res.json({
-                msj: "operador actualizado correctamente",
+                msg: "operador actualizado correctamente",
                 data: operadoresActualizado
             })
             :
             res.json({
-                msj: "no se actualizó ningún operador"
+                msg: `no se encontraron coincidencias con el id ${id}`
             });
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al actualizar el operador"
+            msg: "error al actualizar el operador"
         });
     }   
 }

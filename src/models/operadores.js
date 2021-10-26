@@ -16,15 +16,37 @@ export default class operadores extends Model {
     },
     nombre: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty: {
+          args: true,
+          msg: "el nombre es un campo requerido"
+        }
+      }
     },
     apellido: {
       type: DataTypes.CHAR(10),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty: {
+          args: true,
+          msg: "el apellido es un campo requerido"
+        }
+      }
     },
     correo: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        isEmail:{
+          args: true,
+          msg: "ingrese un correo con un formato válido"
+        },
+        notEmpty:{
+          args: true,
+          msg: "el correo es un campo requerido"
+        }
+      }
     },
     clave: {
       type: DataTypes.TEXT,
@@ -32,7 +54,13 @@ export default class operadores extends Model {
     },
     tipo_operador: {
       type: DataTypes.ENUM("operario","admin","tecnico"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        isIn:{
+          args: [["operario","admin","tecnico"]],
+          msg: "ingrese un tipo de operador válido"
+        }
+      }
     },
     updatedAt: {
       type: DataTypes.DATE,
