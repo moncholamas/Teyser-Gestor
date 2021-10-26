@@ -12,11 +12,23 @@ export default class equipos extends Model {
     },
     estado: {
       type: DataTypes.ENUM("operativo","en mantenimiento","inoperable"),
-      allowNull: true
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el estado del equipo es un campo requerido"
+        }
+      },
     },
     nombre_tecnico: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el nombre técnico es un campo requerido"
+        }
+      },
     },
     nombre_fantasia: {
       type: DataTypes.STRING(50),
@@ -24,7 +36,13 @@ export default class equipos extends Model {
     },
     categoria: {
       type: DataTypes.ENUM("impresora","fotocopiadora","libreria","red","otro"),
-      allowNull: true
+      allowNull: true,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "la categoria del equipo es un campo requerido"
+        }
+      }
     }
   }, {
     sequelize,

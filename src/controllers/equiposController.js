@@ -15,8 +15,13 @@ export async function getEquipos(req,res){
         });
     } catch (error) {
         handlerException(error);
+        if(error.errors[0]!== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
         return res.send({
-            msj: "error al buscar los equipos"
+            msg: "error al obtener los equipos"
         });
     }
     
@@ -30,7 +35,7 @@ export async function getEquipoById(req,res){
         const equipo = await equipos.findByPk(id);
         return equipo === null?
             res.json({
-                msj: "no se encontró un equipo con la clave proporcionada"
+                msg: `no se encontró un equipo con el id: ${id}`
             })
             :
             res.json({
@@ -39,7 +44,7 @@ export async function getEquipoById(req,res){
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al buscar el equipo"
+            msg: "error al buscar el equipo"
         });
     }
 }
@@ -53,18 +58,21 @@ export async function nuevoEquipo(req,res ){
             {estado,
             nombre_tecnico,
             nombre_fantasia,
-            categoria},{
-    
-            }
+            categoria},{}
         );
         return res.json({
-            msj: "nuevo equipo ingresado correctamente",
+            msg: "nuevo equipo ingresado correctamente",
             data: equipoNuevo
         });
     } catch (error) {
         handlerException(error);
+        if(error.errors[0]!== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
         return res.send({
-            msj: "error al ingresar el nuevo equipo"
+            msg: "error al ingresar el nuevo equipo"
         });
     }
     
@@ -78,18 +86,18 @@ export async function deleteEquipo(req,res){
         const cantidadBorrada = await equipos.destroy({where:{id_equipo:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borro exitosamente",
+            msg:"se borro exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msg:"no se encontraron coincidencias",
         })
         ;
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al borrar el equipo"
+            msg: "error al borrar el equipo"
         });
     }
 }
@@ -111,17 +119,17 @@ export async function updateEquipo(req,res){
         });
         return equiposActualizado > 0?
             res.json({
-                msj: "equipo actualizado correctamente",
+                msg: "equipo actualizado correctamente",
                 data: equiposActualizado
             })
             :
             res.json({
-                msj: "no se actualizó ningun equipo"
+                msg: `no se encontraron coincidencias para actualizar con el id: ${id}`
             });
     } catch (error) {
         handlerException(error);
         return res.send({
-            msj: "error al actualizar el equipo"
+            msg: "error al actualizar el equipo"
         });
     }   
 }
