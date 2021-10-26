@@ -8,7 +8,7 @@ export async function getClientes(req,res){
     initModels(sequelize);
     try {
         const list_clientes = await clientes.findAll({
-            attributes: ['id_cliente','nombre','apellido','telefono','correo']
+            attributes: ['id_cliente','nombre','apellido','correo']
         });
         return res.json({
             data: list_clientes
@@ -16,7 +16,7 @@ export async function getClientes(req,res){
     } catch (error) {
         handlerException(error);
         return res.json({
-            msj: "error al obtener los clientes"
+            msg: "error al obtener los clientes"
         });
     }
     
@@ -30,7 +30,7 @@ export async function getClienteById(req,res){
         const cliente = await clientes.findByPk(id); 
         return cliente === null?
              res.json({
-                msj: "no se encontró cliente con la clave proporcionada"
+                msg: `no se encontró cliente con el id: ${id}`
             })
             :
             res.json({
@@ -39,7 +39,7 @@ export async function getClienteById(req,res){
     } catch (error) {
         handlerException(error);
         return res.json({
-            msj: "error al intentar buscar el cliente"
+            msg: "error al intentar buscar el cliente"
         });
     }
 }
@@ -57,13 +57,18 @@ export async function nuevoCliente(req,res ){
             {} //no necesita modificadores
         );
         return res.json({
-            msj: "nuevo cliente ingresado correctamente",
+            msg: "nuevo cliente ingresado correctamente",
             data: clienteNuevo
         });
     } catch (error) {
         handlerException(error);
+        if(error.errors[0]!== undefined){
+            return res.send({
+                msg: error.errors[0].message
+            });
+        }
         return res.json({
-            msj: "no se pudo ingresar el nuevo cliente"
+            msg: "error ingresar el nuevo cliente"
         });
     }
     
@@ -77,18 +82,23 @@ export async function deleteCliente(req,res){
         const cantidadBorrada = await clientes.destroy({where:{id_cliente:id}});
         return cantidadBorrada >0?
         res.json({
-            msj:"se borró exitosamente",
+            msg:"se borró exitosamente",
             data: cantidadBorrada
         })
         :
         res.json({
-            msj:"no se encontraron coincidencias",
+            msg: `no se encontraron coincidencias para borrar con el id: ${id}`,
         })
         ;
     } catch (error) {
         handlerException(error);
+        if (error.name === 'SequelizeForeignKeyConstraintError'){
+            return res.json({
+                msg: "error, el cliente se encuentra asociado a ventas realizadas"
+            });
+        }
         return res.json({
-            msj:"error al borrar el cliente",
+            msg: "error al intentar borrar un cliente"
         });
     }
 }
@@ -110,17 +120,17 @@ export async function updateCliente(req,res){
         });
         return clientesActualizado > 0?
             res.json({
-                msj: "cliente actualizado correctamente",
+                msg: "cliente actualizado correctamente",
                 data: clientesActualizado
             })
             :
             res.json({
-                msj: "no se actualizó ningun cliente"
+                msg: `no se encontraron coincidencias para actualizar con el id: ${id}`
             });
     } catch (error) {
         handlerException(error);
         return res.json({
-            msj: "error al actualizar el cliente"
+            msg: "error al actualizar el cliente"
         });
     }   
 }

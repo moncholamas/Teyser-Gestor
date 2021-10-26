@@ -12,11 +12,23 @@ export default class clientes extends Model {
     },
     nombre: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el nombre es un campo requerido"
+        }
+      }
     },
     apellido: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args: true,
+          msg: "el apellido es un campo requerido"
+        }
+      }
     },
     telefono: {
       type: DataTypes.CHAR(10),
