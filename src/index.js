@@ -5,7 +5,7 @@ import {logger} from './helpers/handlerExceptions'
 
 async function main(){
      try {
-        const port = process.env.PORT || 3000;
+        const port = process.env.PORT || 3001;
         app.listen(port);
         await sequelize.authenticate();
         logger.info(`servidor corriendo en el puerto: ${port}`);

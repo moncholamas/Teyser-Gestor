@@ -38,18 +38,19 @@ export async function login(req,res){
                 });
 
     } catch (error) {
-        handlerException(error);
         if(error.errors !== undefined){
-            return res.send({
+            return res.status(400).send({
                 msg: error.errors[0].message
             });
         }
-        if(error.message!== undefined){
+        if(error.status(400).message!== undefined){
             return res.send({
                 msg: error.message
             });
         }
-        return res.json({
+
+        handlerException(error);
+        return res.status(400).json({
             msg: "error al iniciar sesión"
         });
     }
@@ -89,7 +90,6 @@ export async function logup(req,res){
             data: token
         });
     } catch (error) {
-        handlerException(error);
         if(error.errors !== undefined){
             return res.send({
                 msg: error.errors[0].message
@@ -100,6 +100,9 @@ export async function logup(req,res){
                 msg: error.message
             });
         }
+
+
+        handlerException(error);
         return res.json({
             msg: "error al iniciar sesión"
         });
