@@ -14,13 +14,15 @@ export async function getEquipos(req,res){
             data: list_equipos
         });
     } catch (error) {
-        handlerException(error);
-        if(error.errors[0]!== undefined){
-            return res.send({
+        if(error.errors !== undefined){
+            return res.status(400).send({
                 msg: error.errors[0].message
             });
         }
-        return res.send({
+        
+
+        handlerException(error);
+        return res.status(400).send({
             msg: "error al obtener los equipos"
         });
     }
@@ -43,7 +45,7 @@ export async function getEquipoById(req,res){
             });
     } catch (error) {
         handlerException(error);
-        return res.send({
+        return res.status(400).send({
             msg: "error al buscar el equipo"
         });
     }
@@ -64,14 +66,15 @@ export async function nuevoEquipo(req,res ){
             msg: "nuevo equipo ingresado correctamente",
             data: equipoNuevo
         });
-    } catch (error) {
-        handlerException(error);
-        if(error.errors[0]!== undefined){
-            return res.send({
+    } catch (error) {  
+        if(error.errors!== undefined){
+            return res.status(400).send({
                 msg: error.errors[0].message
             });
         }
-        return res.send({
+
+        handlerException(error);
+        return res.status(400).send({
             msg: "error al ingresar el nuevo equipo"
         });
     }
@@ -96,7 +99,7 @@ export async function deleteEquipo(req,res){
         ;
     } catch (error) {
         handlerException(error);
-        return res.send({
+        return res.status(400).send({
             msg: "error al borrar el equipo"
         });
     }
