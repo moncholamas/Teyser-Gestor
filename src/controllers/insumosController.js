@@ -15,7 +15,7 @@ export async function getInsumos(req,res){
         });
     } catch (error) {
         handlerException(error);
-        return res.send({
+        return res.status(400).send({
             msj: "error al buscar los insumos"
         });
     }
@@ -37,7 +37,7 @@ export async function getInsumoById(req,res){
             });
     } catch (error) {
         handlerException(error);
-        return res.send({
+        return res.status(400).send({
             msj: "error al buscar el insumo"
         });
     }
@@ -61,8 +61,15 @@ export async function nuevoInsumo(req,res ){
             data: insumoNuevo
         });
     } catch (error) {
+        if(error.errors!== undefined){
+            return res.status(400).send({
+                msg: error.errors[0].message
+            });
+        }
+
+
         handlerException(error);
-        return res.send({
+        return res.status(400).send({
             msj: "error al ingresar nuevo insumo"
         });
     }
@@ -97,7 +104,7 @@ export async function updateInsumo(req,res){
             });
     } catch (error) {
         handlerException(error);
-        res.send({
+        return res.status(400).send({
             msj: "error al actualizar el insumo"
         });
     }   
