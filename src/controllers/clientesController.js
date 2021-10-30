@@ -15,7 +15,7 @@ export async function getClientes(req,res){
         });
     } catch (error) {
         handlerException(error);
-        return res.json({
+        return res.status(400).json({
             msg: "error al obtener los clientes"
         });
     }
@@ -38,7 +38,7 @@ export async function getClienteById(req,res){
             });
     } catch (error) {
         handlerException(error);
-        return res.json({
+        return res.status(400).json({
             msg: "error al intentar buscar el cliente"
         });
     }
@@ -61,12 +61,13 @@ export async function nuevoCliente(req,res ){
             data: clienteNuevo
         });
     } catch (error) {
-        handlerException(error);
-        if(error.errors[0]!== undefined){
+        if(error.errors!== undefined){
             return res.send({
                 msg: error.errors[0].message
             });
         }
+
+        handlerException(error);
         return res.json({
             msg: "error ingresar el nuevo cliente"
         });
@@ -91,12 +92,13 @@ export async function deleteCliente(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
         if (error.name === 'SequelizeForeignKeyConstraintError'){
             return res.json({
                 msg: "error, el cliente se encuentra asociado a ventas realizadas"
             });
         }
+
+        handlerException(error);
         return res.json({
             msg: "error al intentar borrar un cliente"
         });
@@ -129,7 +131,7 @@ export async function updateCliente(req,res){
             });
     } catch (error) {
         handlerException(error);
-        return res.json({
+        return res.status(400).json({
             msg: "error al actualizar el cliente"
         });
     }   
