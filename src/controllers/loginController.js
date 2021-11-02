@@ -9,19 +9,26 @@ import { handlerException } from '../helpers/handlerExceptions';
 
 //
 export async function login(req,res){
+    let errorGeneral = {};
     try {
         const {correo,clave} = req.body;
         const idEncontrado = await correoExistente(correo);
 
         //verifica si la cuenta de correo existe, caso negativo termina la consulta
-        if(!idEncontrado){throw new Error("No existe una cuenta con el correo ingresado")}
+        if(!idEncontrado){
+            errorGeneral.field = 'correo';
+            throw new Error("No existe una cuenta con el correo ingresado")
+        }
         
         //trae el usuario de la DB
         const usuarioEncontrado = await operadores.findByPk(idEncontrado);
         //compara las clave encriptada
         const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
         //si no son iguales corta la consulta
-        if(!validacion){throw new Error("Contraseña incorrecta") }
+        if(!validacion){
+            errorGeneral.field = 'clave'
+            throw new Error("Contraseña incorrecta") 
+        }
 
         //envío el token con los datos del usuario
         const token = jsonwebtoken.sign({
@@ -40,12 +47,14 @@ export async function login(req,res){
     } catch (error) {
         if(error.errors !== undefined){
             return res.status(400).send({
-                msg: error.errors[0].message
+                msg: error.errors[0].message,
+                field: error.errors[0].path
             });
         }
         if(error.message!== undefined){
             return res.status(400).send({
-                msg: error.message
+                msg: error.message,
+                field: errorGeneral.field
             });
         }
 
@@ -58,15 +67,22 @@ export async function login(req,res){
 }
 
 export async function logup(req,res){
+    let errorGeneral = {};
     try {
         const {nombre,apellido,correo,clave} = req.body;
         initModels(sequelize);
         const idEncontrado = await correoExistente(correo);
         
         //verifico si el correo ya existe, si existe termino la consulta
-        if(idEncontrado){throw new Error("el correo ya existe")}
+        if(idEncontrado){
+            errorGeneral.field = 'correo';
+            throw new Error("el correo ya existe");
+        }
         //verifico manualmente que la clave no este vacia
-        if(clave===''){throw new Error("ingrese una clave válida")}
+        if(clave===''){
+            errorGeneral.field = 'clave'
+            throw new Error("ingrese una clave válida")
+        }
 
         //verifico si es el primer usuario en registrar -> es admin
         const operadorNuevo = await operadores.create({
@@ -92,12 +108,14 @@ export async function logup(req,res){
     } catch (error) {
         if(error.errors !== undefined){
             return res.status(400).send({
-                msg: error.errors[0].message
+                msg: error.errors[0].message,
+                field: error.errors[0].path
             });
         }
         if(error.message!== undefined){
             return res.status(400).send({
-                msg: error.message
+                msg: error.message,
+                field: errorGeneral.field
             });
         }
 
