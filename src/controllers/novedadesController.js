@@ -4,7 +4,7 @@ import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
-export async function getNovedades(req,res){
+export async function getNovedades(req,res,next){
     initModels(sequelize);
     try {
         const list_novedades = await novedades.findAll({
@@ -18,15 +18,12 @@ export async function getNovedades(req,res){
             data: list_novedades
         });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msj: "error al buscar las novedades"
-        });
+        next(error)
     }
 }
 
 //trae un equipo por ID
-export async function getNovedadById(req,res){
+export async function getNovedadById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -40,15 +37,12 @@ export async function getNovedadById(req,res){
                 data: novedad
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msj: "error al buscar la novedad"
-        });
+        next(error);
     }
 }
 
 //ingresa un nuevo equipo
-export async function nuevaNovedad(req,res ){
+export async function nuevaNovedad(req,res,next){
     initModels(sequelize);
     const {
             categoria,
@@ -72,26 +66,13 @@ export async function nuevaNovedad(req,res ){
             data: novedadNuevo
         });
     } catch (error) {
-        handlerException(error);
-        if(error.errors !== undefined){
-            return res.send({
-                msg: error.errors[0].message
-            });
-        }
-        if(error.message!== undefined){
-            return res.send({
-                msg: error.message
-            });
-        }
-        return res.send({
-            msj: "error al ingresar la novedad"
-        });
+        next(error);
     }
     
 }
 
 //borra un equipo por Id
-export async function deleteNovedad(req,res){
+export async function deleteNovedad(req,res,next){
     initModels(sequelize);
     const id = req.params.id  
     try {
@@ -107,16 +88,13 @@ export async function deleteNovedad(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msj: "error al eliminar la novedad"
-        });
+        next(error);
     }
 }
 
 
 //actualiza un equipo
-export async function updateNovedad(req,res){
+export async function updateNovedad(req,res,next){
     initModels(sequelize);
     const id = req.params.id;
     const {
@@ -147,9 +125,6 @@ export async function updateNovedad(req,res){
                 msj: `no se encontraron coincidencias con el id: ${id}`
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msj: "error al actualizar la novedad"
-        });
+        next(error);
     }   
 }
