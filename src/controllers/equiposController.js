@@ -4,7 +4,7 @@ import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
-export async function getEquipos(req,res){
+export async function getEquipos(req,res,next){
     initModels(sequelize);
     try {
         const list_equipos = await equipos.findAll({
@@ -14,23 +14,13 @@ export async function getEquipos(req,res){
             data: list_equipos
         });
     } catch (error) {
-        if(error.errors !== undefined){
-            return res.status(400).send({
-                msg: error.errors[0].message
-            });
-        }
-        
-
-        handlerException(error);
-        return res.status(400).send({
-            msg: "error al obtener los equipos"
-        });
+        next(error);
     }
     
 }
 
 //trae un equipo por ID
-export async function getEquipoById(req,res){
+export async function getEquipoById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -44,15 +34,12 @@ export async function getEquipoById(req,res){
                 data: equipo
             });
     } catch (error) {
-        handlerException(error);
-        return res.status(400).send({
-            msg: "error al buscar el equipo"
-        });
+        next(error);
     }
 }
 
 //ingresa un nuevo equipo
-export async function nuevoEquipo(req,res ){
+export async function nuevoEquipo(req,res,next){
     initModels(sequelize);
     const {estado,nombre_tecnico,nombre_fantasia,categoria} = req.body;
     try {
@@ -67,22 +54,13 @@ export async function nuevoEquipo(req,res ){
             data: equipoNuevo
         });
     } catch (error) {  
-        if(error.errors!== undefined){
-            return res.status(400).send({
-                msg: error.errors[0].message
-            });
-        }
-
-        handlerException(error);
-        return res.status(400).send({
-            msg: "error al ingresar el nuevo equipo"
-        });
+        next(error);
     }
     
 }
 
 //borra un equipo por Id
-export async function deleteEquipo(req,res){
+export async function deleteEquipo(req,res,next){
     initModels(sequelize);
     const id = req.params.id  
     try {
@@ -98,16 +76,13 @@ export async function deleteEquipo(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
-        return res.status(400).send({
-            msg: "error al borrar el equipo"
-        });
+        next(error);
     }
 }
 
 
 //actualiza un equipo
-export async function updateEquipo(req,res){
+export async function updateEquipo(req,res,next){
     initModels(sequelize);
     const id = req.params.id;
     const {estado,nombre_fantasia,nombre_tecnico,categoria} = req.body
@@ -130,9 +105,6 @@ export async function updateEquipo(req,res){
                 msg: `no se encontraron coincidencias para actualizar con el id: ${id}`
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al actualizar el equipo"
-        });
+        next(error);
     }   
 }
