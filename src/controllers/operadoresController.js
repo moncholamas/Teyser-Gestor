@@ -5,7 +5,7 @@ import { Op } from 'sequelize';
 import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
-export async function getOperadores(req,res){
+export async function getOperadores(req,res,next){
     initModels(sequelize);
     try {
         //traigo todos los operadores menos el que hizo el request
@@ -23,16 +23,13 @@ export async function getOperadores(req,res){
             data: list_operador
         });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al buscar los operadores"
-        });
+        next(error);
     }
     
 }
 
 //trae un equipo por ID
-export async function getOperadorById(req,res){
+export async function getOperadorById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -51,16 +48,13 @@ export async function getOperadorById(req,res){
                 data: operadorSeleccionado
             });
     } catch (error) {
-        handlerException(error);
-        res.send({
-            msg: "error al buscar el operador"
-        });
+        next(error);
     }
 }
 
 
 //borra un operador por Id
-export async function deleteOperador(req,res){
+export async function deleteOperador(req,res,next){
     initModels(sequelize);
     const id = req.params.id  
     try {
@@ -76,16 +70,13 @@ export async function deleteOperador(req,res){
         })
         ;
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al eliminar el operador"
-        });
+        next(error);
     }
 }
 
 
 //actualiza un operador
-export async function updateOperador(req,res){
+export async function updateOperador(req,res,next){
     initModels(sequelize);
     const id = req.params.id;
     const {activo,tipo_operador}  = req.body
@@ -107,9 +98,6 @@ export async function updateOperador(req,res){
                 msg: `no se encontraron coincidencias con el id ${id}`
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al actualizar el operador"
-        });
+        next(error);
     }   
 }
