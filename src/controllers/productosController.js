@@ -9,7 +9,7 @@ import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todas las versiones ->encontrar forma de filtrar la ultima
 //trae todos los productos (activos y ultima version, precio actualizado)
-export async function getProductos(req,res){
+export async function getProductos(req,res,next){
     initModels(sequelize);
     try {
         const list_productos = await productos.findAll({
@@ -23,15 +23,12 @@ export async function getProductos(req,res){
             data: list_productos
         });
     } catch (error) {
-        console.log(error);
-        return res.send({
-            msg: "error al buscar los productos"
-        });
+        next(error)
     }
 }
 
 //trae un producto y todas sus versiones
-export async function getProductoById(req,res){
+export async function getProductoById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -45,15 +42,12 @@ export async function getProductoById(req,res){
                 data: productoEncontrado,
             });
     } catch (error) {
-        console.log(error);
-        return res.send({
-            msg: "error al buscar el producto"
-        });
+        next(error);
     }
 }
 
 //ingresa un nuevo producto
-export async function nuevoProducto(req,res ){
+export async function nuevoProducto(req,res,next){
     initModels(sequelize);
     const {nombre,descripcion,precio,categoria,detalle_insumos,estado} = req.body;
     console.log("elestado actual es: ",estado)
@@ -105,26 +99,13 @@ export async function nuevoProducto(req,res ){
         });
         
     } catch (error) {
-        handlerException(error);
-        if(error.errors !== undefined){
-            return res.send({
-                msg: error.errors[0].message
-            });
-        }
-        if(error.message!== undefined){
-            return res.send({
-                msg: error.message
-            });
-        }
-        return res.send({
-            msg: "error al ingresar el nuevo producto"
-        });
+        next(error);
     }
 }
 
 //borra un producto por Id
 //Un producto solo se puede borrar SI NINGUNA VERSION DEL MISMO ESTA YA EN UNA VENTA
-export async function deleteProducto(req,res){
+export async function deleteProducto(req,res,next){
     initModels(sequelize);
     const id = parseInt(req.params.id);
     try {
@@ -150,16 +131,13 @@ export async function deleteProducto(req,res){
         })
         ;
     } catch (error) {
-        console.log(error);
-        return res.send({
-            msg: "error al borrar el producto"
-        });
+        next(error);
     }
 }
 
 //AUDITAR LOS CAMBIOS DE PRODUCTO
 //actualiza un producto -> si un producto tiene que cambiar sus insumos se debe eliminar
-export async function updateProducto(req,res){
+export async function updateProducto(req,res,next){
     initModels(sequelize);
     const id = req.params.id;
     const {descripcion,precio,categoria}  = req.body
@@ -187,9 +165,6 @@ export async function updateProducto(req,res){
                 msg: `no se encontraron coincidencias id: ${id}`
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al actualizar el producto"
-        });
+        next(error);
     }   
 }
