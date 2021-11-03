@@ -6,7 +6,7 @@ import { handlerException } from '../helpers/handlerExceptions';
 import versiones_productos from '../models/versiones_productos';
 
 //trae todas las ventas
-export async function getVentas(req,res){
+export async function getVentas(req,res,next){
     initModels(sequelize);
     try {
         const list_venta = await ventas.findAll({
@@ -16,15 +16,12 @@ export async function getVentas(req,res){
             data: list_venta
         });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al buscar las ventas"
-        });
+        next(error);
     }   
 }
 
 //trae una venta por ID
-export async function getVentaById(req,res){
+export async function getVentaById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -38,15 +35,12 @@ export async function getVentaById(req,res){
                 data: ventaSeleccionada
             });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al buscar la venta"
-        });
+        next(error);
     }
 }
 
 //ingresa ua nueva venta
-export async function nuevaVenta(req,res ){
+export async function nuevaVenta(req,res,next){
     initModels(sequelize);
     const {observacion,estado,id_cliente,detalles_venta} = req.body;
     try {
@@ -96,25 +90,12 @@ export async function nuevaVenta(req,res ){
            
             });
     } catch (error) {
-        handlerException(error);
-        if(error.errors !== undefined){
-            return res.send({
-                msg: error.errors[0].message
-            });
-        }
-        if(error.message!== undefined){
-            return res.send({
-                msg: error.message
-            });
-        }
-        return res.send({
-            msg: "error al ingresar la nueva venta"
-        });
+        next(error);
     }
 }
 
 //borra una venta por Id
-export async function deleteVenta(req,res){
+export async function deleteVenta(req,res,next){
     initModels(sequelize);
     const id = req.params.id  
     try {
@@ -130,10 +111,7 @@ export async function deleteVenta(req,res){
         })
         ;
     } catch (error) {
-        console.log(error);
-        return res.send({
-            msg: "error al eliminar la venta"
-        });
+        next(error);
     }
 }
 
