@@ -3,10 +3,9 @@ import detalle_compras from '../models/detalle_compras'
 import insumos from '../models/insumos'
 import initModels from '../models/init-models';
 import {sequelize} from '../db/db';
-import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos las ventas
-export async function getPagos(req,res){
+export async function getPagos(req,res,next){
     initModels(sequelize);
     try {
         const list_pagos = await pagos.findAll({
@@ -16,15 +15,12 @@ export async function getPagos(req,res){
             data: list_pagos
         });
     } catch (error) {
-        handlerException(error);
-        return res.send({
-            msg: "error al buscar los pagos"
-        });
+        next(error)
     }
 }
 
 //trae una venta por ID
-export async function getPagoById(req,res){
+export async function getPagoById(req,res,next){
     initModels(sequelize);
     const id= req.params.id;
     try {
@@ -38,15 +34,12 @@ export async function getPagoById(req,res){
                 data: pagoSeleccionada //mostrar los detalles asociados
             });
     } catch (error) {
-        console.error(error);
-        return res.send({
-            msg: "error al buscar el pago o compra"
-        });
+        next(error);
     }
 }
 
 //ingresa ua nueva venta
-export async function nuevoPago(req,res ){
+export async function nuevoPago(req,res,next){
     initModels(sequelize);
     const {
             tipo,
@@ -100,25 +93,12 @@ export async function nuevoPago(req,res ){
         //genero el pago con el total en 0
         
     } catch (error) {
-        handlerException(error);
-        if(error.errors !== undefined){
-            return res.send({
-                msg: error.errors[0].message
-            });
-        }
-        if(error.message!== undefined){
-            return res.send({
-                msg: error.message
-            });
-        }
-        return res.json({
-            msg: "error al ingresa un nuevo pago"
-        })
+        next(error);
     }
 }
 
 //borra una venta por Id
-export async function deletePago(req,res){
+export async function deletePago(req,res,next){
     initModels(sequelize);
     const id = req.params.id  
     try {
@@ -134,10 +114,7 @@ export async function deletePago(req,res){
         })
         ;
     } catch (error) {
-       console.log(error);
-        return res.send({
-            msg: "error al eliminar el pago o compra"
-        });
+       next(error);
     }
 }
 
