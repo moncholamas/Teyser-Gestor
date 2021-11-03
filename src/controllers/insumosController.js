@@ -4,7 +4,7 @@ import {sequelize} from '../db/db';
 import { handlerException } from '../helpers/handlerExceptions';
 
 //trae todos los equipos
-export async function getInsumos(req,res){
+export async function getInsumos(req,res,next){
     initModels(sequelize);
     try {
         const list_insumos = await insumos.findAll({
@@ -36,15 +36,12 @@ export async function getInsumoById(req,res){
                 data: insumo
             });
     } catch (error) {
-        handlerException(error);
-        return res.status(400).send({
-            msj: "error al buscar el insumo"
-        });
+        next(error)
     }
 }
 
 //ingresa un nuevo equipo
-export async function nuevoInsumo(req,res ){
+export async function nuevoInsumo(req,res,next){
     initModels(sequelize);
     const {nombre,unidades,presentacion} = req.body;
     try {
@@ -61,17 +58,7 @@ export async function nuevoInsumo(req,res ){
             data: insumoNuevo
         });
     } catch (error) {
-        if(error.errors!== undefined){
-            return res.status(400).send({
-                msg: error.errors[0].message
-            });
-        }
-
-
-        handlerException(error);
-        return res.status(400).send({
-            msj: "error al ingresar nuevo insumo"
-        });
+        next(error);
     }
     
 }
@@ -81,7 +68,7 @@ export async function nuevoInsumo(req,res ){
 
 
 //actualiza un equipo
-export async function updateInsumo(req,res){
+export async function updateInsumo(req,res,next){
     initModels(sequelize);
     const id = req.params.id;
     const {nombre,unidades, presentacion}  = req.body
@@ -103,9 +90,6 @@ export async function updateInsumo(req,res){
                 msj: "no se actualizó ningún insumo"
             });
     } catch (error) {
-        handlerException(error);
-        return res.status(400).send({
-            msj: "error al actualizar el insumo"
-        });
+        next(error);
     }   
 }
