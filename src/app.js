@@ -17,6 +17,7 @@ import {verifyToken} from './middlewares/authmiddleware'
 
 //cors
 import cors from 'cors';
+import { handlerError } from './middlewares/handlerError';
 
 //inicialización
 const app = express();
@@ -42,6 +43,7 @@ app.use('/pagos', verifyToken ,pagosRouter);
 app.use('/novedades', verifyToken ,novedadesRouter);
 app.use('/operadores', verifyToken ,operadorRouter);
 
-//resolver logica de estadisticas
+//manejo de errores
+app.use(handlerError);
 
 export default app;

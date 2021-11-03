@@ -8,16 +8,15 @@ import { correoExistente } from '../helpers/validator';
 import { handlerException } from '../helpers/handlerExceptions';
 
 //
-export async function login(req,res){
-    let errorGeneral = {};
+export async function login(req,res,next){
     try {
         const {correo,clave} = req.body;
         const idEncontrado = await correoExistente(correo);
 
         //verifica si la cuenta de correo existe, caso negativo termina la consulta
         if(!idEncontrado){
-            errorGeneral.field = 'correo';
-            throw new Error("No existe una cuenta con el correo ingresado")
+            req.field = 'correo'; //envio al error el campo que falló
+            throw new Error("No existe una cuenta con el correo ingresado");
         }
         
         //trae el usuario de la DB
@@ -26,7 +25,7 @@ export async function login(req,res){
         const validacion = await compararEncryp(clave, usuarioEncontrado.clave);
         //si no son iguales corta la consulta
         if(!validacion){
-            errorGeneral.field = 'clave'
+            req.field = 'clave' //envio al error el campo que falló
             throw new Error("Contraseña incorrecta") 
         }
 
@@ -45,29 +44,13 @@ export async function login(req,res){
                 });
 
     } catch (error) {
-        if(error.errors !== undefined){
-            return res.status(400).send({
-                msg: error.errors[0].message,
-                field: error.errors[0].path
-            });
-        }
-        if(error.message!== undefined){
-            return res.status(400).send({
-                msg: error.message,
-                field: errorGeneral.field
-            });
-        }
-
-        handlerException(error);
-        return res.status(400).json({
-            msg: "error al iniciar sesión"
-        });
+        next(error);
     }
-    
 }
 
-export async function logup(req,res){
-    let errorGeneral = {};
+
+
+export async function logup(req,res,next){
     try {
         const {nombre,apellido,correo,clave} = req.body;
         initModels(sequelize);
@@ -75,12 +58,12 @@ export async function logup(req,res){
         
         //verifico si el correo ya existe, si existe termino la consulta
         if(idEncontrado){
-            errorGeneral.field = 'correo';
+            req.field  = 'correo';
             throw new Error("el correo ya existe");
         }
         //verifico manualmente que la clave no este vacia
         if(clave===''){
-            errorGeneral.field = 'clave'
+            req.field  = 'clave'
             throw new Error("ingrese una clave válida")
         }
 
@@ -106,24 +89,7 @@ export async function logup(req,res){
             data: token
         });
     } catch (error) {
-        if(error.errors !== undefined){
-            return res.status(400).send({
-                msg: error.errors[0].message,
-                field: error.errors[0].path
-            });
-        }
-        if(error.message!== undefined){
-            return res.status(400).send({
-                msg: error.message,
-                field: errorGeneral.field
-            });
-        }
-
-
-        handlerException(error);
-        return res.status(400).json({
-            msg: "error al iniciar sesión"
-        });
+        next(error);
     }
 
 }
