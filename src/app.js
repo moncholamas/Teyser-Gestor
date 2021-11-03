@@ -13,11 +13,12 @@ import loginRouter from './routes/login.router';
 
 //middlewares
 //// solo algunas rutas necesitan verificar que sea una usuario registrado
-import {verifyToken} from './middlewares/authmiddleware'
+import {verifyToken} from './middlewares/authmiddleware';
+import { handlerError } from './middlewares/handlerError';
 
 //cors
 import cors from 'cors';
-import { handlerError } from './middlewares/handlerError';
+
 
 //inicialización
 const app = express();
