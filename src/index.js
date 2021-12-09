@@ -1,16 +1,14 @@
-import app from './app.js';
-import { sequelize } from './db/db.js';
-import { handlerException } from './helpers/handlerExceptions';
-import {logger} from './helpers/handlerExceptions'
+const app = require('./app.js');
+const db = require('./database/models/index')
 
 async function main(){
      try {
         const port = process.env.PORT || 3001;
         app.listen(port);
-        await sequelize.authenticate();
-        logger.info(`servidor corriendo en el puerto: ${port}`);
+         db.sequelize.authenticate();
+        console.log(`servidor corriendo en el puerto: ${port}`);
      }catch(e){
-         await handlerException(e);
+        console.log(e);
      }
 }
 

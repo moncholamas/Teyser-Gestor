@@ -1,6 +1,6 @@
 //maneja las excepciones segun el entorno (desarrollo o producción)
 // desarrollo -> excepciones por consol.log
-import { transporter } from '../helpers/mailer'
+const { transporter } = require('../helpers/mailer') 
 // produccion -> por correo electronico
 require('dotenv').config();
 const log4js = require("log4js");
@@ -10,10 +10,7 @@ const logger = log4js.getLogger();
 
 logger.level = "debug";
 
-export {logger};
-
-
-export async function handlerException(error){
+async function handlerException(error){
     const errorText = JSON.stringify(error);
 
     if(process.env.ENV==='DEV'){
@@ -38,4 +35,9 @@ export async function handlerException(error){
         }
         
     }
+}
+
+module.exports = {
+    handlerException,
+    logger
 }

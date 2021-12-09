@@ -1,23 +1,21 @@
-import express, {json, urlencoded} from 'express';
-import {configCors} from './config'
+const express = require('express');
+const {json, urlencoded} = require('express');
+const {configCors} = require('./config/config');
 //routers
-import equiposRouter from './routes/equipos.router';
-import clientesRouter from './routes/clientes.router';
-import ventasRouter from './routes/ventas.router';
-import insumosRouter from './routes/insumos.router';
-import novedadesRouter from './routes/novedades.router';
-import operadorRouter from './routes/operador.router';
-import productosRouter from './routes/productos.router';
-import pagosRouter from './routes/pagos.router';
-import loginRouter from './routes/login.router';
+const equiposRouter = require('./routes/equipments-router') ;
+// const clientesRouter = require('./routes/costumers-router') ;
+// const ventasRouter = require('./routes/sales-router') ;
+// const insumosRouter = require('./routes/supplies-router') ;
+// const novedadesRouter = require('./routes/news-router') ;
+// const operadorRouter = require('./routes/users-router') ;
+// const productosRouter = require('./routes/products-router') ;
+// const pagosRouter = require('./routes/payments-router') ;
+const loginRouter = require('./routes/login-router') ;
 
 //middlewares
-//// solo algunas rutas necesitan verificar que sea una usuario registrado
-import {verifyToken} from './middlewares/authmiddleware';
-import { handlerError } from './middlewares/handlerError';
 
 //cors
-import cors from 'cors';
+const cors = require('cors') ;
 
 
 //inicialización
@@ -35,16 +33,10 @@ app.use(cors(configCors));
 app.use('/ingresar', loginRouter)
 
 //necesitan una cuenta verificada
-app.use('/equipos', verifyToken, equiposRouter); //
-app.use('/clientes', verifyToken , clientesRouter);
-app.use('/ventas', verifyToken, ventasRouter);
-app.use('/insumos', verifyToken ,insumosRouter);
-app.use('/productos', verifyToken ,productosRouter);
-app.use('/pagos', verifyToken ,pagosRouter);
-app.use('/novedades', verifyToken ,novedadesRouter);
-app.use('/operadores', verifyToken ,operadorRouter);
+app.use('/equipos', equiposRouter); //
+
 
 //manejo de errores
-app.use(handlerError);
-
-export default app;
+// app.use(handlerError);
+//
+module.exports = app;

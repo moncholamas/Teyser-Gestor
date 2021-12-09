@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
-import {SECRET} from '../config'
-import { sequelize } from '../db/db';
-import initModels from '../models/init-models';
-import operadores from '../models/operadores';
+const jwt = require('jsonwebtoken') ;
+const {SECRET} = require('../config/config') 
+const { sequelize } = require('../db/db');
+const initModels = require('../models/init-models') ;
+const operadores = require('../models/operadores') ;
 
 export async function verifyToken(req,res,next){
     const token = req.headers["x-token"];

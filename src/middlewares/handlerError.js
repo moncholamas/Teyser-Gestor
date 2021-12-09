@@ -1,5 +1,5 @@
-export function handlerError(err,req,res,next){
-    console.log(err)
+module.exports = function handlerError(err,req,res,next){
+    
     if(err.errors !== undefined){
         return res.status(400).send({
             msg: err.errors[0].message,
@@ -13,7 +13,7 @@ export function handlerError(err,req,res,next){
         });
     }
 
-    
+
     handlerException(err);
     return res.status(400).json({
         msg: "ocurrió un error en la consulta"
