@@ -1,6 +1,6 @@
 import {BaseServices} from './base-services'
 
-class OperatorService extends BaseServices{
+class UserService extends BaseServices{
     constructor({OperatorRepository}){
         super(OperatorRepository);
         this._operatorRepository = OperatorRepository;
@@ -9,5 +9,5 @@ class OperatorService extends BaseServices{
 }
 
 export {
-    OperatorService
+    UserService
 }
