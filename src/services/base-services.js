@@ -14,6 +14,4 @@ class BaseServices{
     }
 }
 
-export {
-    BaseServices
-}
+module.exports = BaseServices;

@@ -1,12 +1,13 @@
-const app = require('./app.js');
-const db = require('./database/models/index')
+const container = require('./startup/container');
+const server = container.resolve('app');
+const db = require('./database/models/index');
+
 
 async function main(){
      try {
-        const port = process.env.PORT || 3001;
-        app.listen(port);
-         db.sequelize.authenticate();
-        console.log(`servidor corriendo en el puerto: ${port}`);
+      server.start()
+      db.sequelize.authenticate();
+
      }catch(e){
         console.log(e);
      }

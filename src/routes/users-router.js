@@ -1,25 +1,25 @@
 const  {Router} = require('express') ;
-const  {
-    getUsers,
-    getUserById,
-    deleteUser,
-    updateUser
-} = require('../controllers/users-controller') ;
+// const  {} = require('../controllers/users-controller') ;
 
-//inicilizacion
-const router = Router();
+module.exports = ({UserService}) =>{
+    //inicilizacion
+    const router = Router();
 
-//rutas
-router.get('/',
-                getUsers);
+    //rutas
+    router.get('/', async(req,res,next) =>{
+        const users = await UserService.getAll();
+        res.json({ms: users})
+    });
 
-router.get('/:id',
-                getUserById);
-                
-router.delete('/eliminar/:id',
-                deleteUser);
+    // router.get('/:id',
+    //                 getUserById);
+                    
+    // router.delete('/eliminar/:id',
+    //                 deleteUser);
 
-router.put('/actualizar/:id',
-                updateUser);
+    // router.put('/actualizar/:id',
+    //                 updateUser);
+}
 
-module.exports = router;
+
+

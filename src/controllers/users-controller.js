@@ -1,7 +1,10 @@
+const {UserService} = require('../services/user-service')
 
 //trae todos los equipos
 async function getUsers(req,res,next){
-    res.json({msg:'fn'})
+    const allUsers = await UserService.getAll();
+
+    res.json({msg:allUsers});
 }
 
 //trae un equipo por ID

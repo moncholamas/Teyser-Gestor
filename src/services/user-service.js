@@ -1,13 +1,11 @@
-import {BaseServices} from './base-services'
+const  BaseServices = require('./base-services') 
 
 class UserService extends BaseServices{
-    constructor({OperatorRepository}){
-        super(OperatorRepository);
-        this._operatorRepository = OperatorRepository;
+    constructor({UserRepository}){
+        super(UserRepository);
+        this._userRepository = UserRepository;
     }
     
 }
 
-export {
-    UserService
-}
+module.exports = UserService;
