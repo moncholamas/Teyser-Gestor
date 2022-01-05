@@ -1,7 +1,7 @@
 const  {Router} = require('express') ;
 // const  {} = require('../controllers/users-controller') ;
 
-module.exports = ({UserService}) =>{
+module.exports = ({UserService}) => {
     //inicilizacion
     const router = Router();
 
@@ -19,6 +19,8 @@ module.exports = ({UserService}) =>{
 
     // router.put('/actualizar/:id',
     //                 updateUser);
+
+    return router;
 }
 
 

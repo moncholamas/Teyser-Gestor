@@ -1,5 +1,5 @@
 const container = require('./startup/container');
-const server = container.resolve('app');
+const server = container.resolve('Server');
 const db = require('./database/models/index');
 
 

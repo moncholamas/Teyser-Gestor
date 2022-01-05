@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "prueba de la estructura de express",
   "engines": {
-    "node": "14.16.1"
+    "node": "16.13.1"
   },
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon --use_strict src/index.js",
     "start": "node src/index.js"
   },
   "author": "Manuel Lamas",

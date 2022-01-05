@@ -1,3 +1,4 @@
+"use strict"; 
 const  BaseServices = require('./base-services') 
 
 class UserService extends BaseServices{

@@ -15,9 +15,13 @@ const configCors = {
     origin: 'http://localhost:3000',
     optionSuccessStatus: 200
 }
+const PORT = process.env.PORT || 3001;
+const APPLICATION_NAME = process.env.NAME_APP || 'probando';
 
 module.exports={
+    APPLICATION_NAME,
+    PORT,
     dataBase,
     SECRET,
-    configCors
+    configCors,
 }
