@@ -1,15 +1,12 @@
 const  {Router} = require('express') ;
 // const  {} = require('../controllers/users-controller') ;
 
-module.exports = ({UserService}) => {
+module.exports = ({UserController}) => {
     //inicilizacion
-    const router = Router();
+    const router = Router(); 
 
     //rutas
-    router.get('/', async(req,res,next) =>{
-        const users = await UserService.getAll();
-        res.json({ms: users})
-    });
+    router.get('/', (... args)=> UserController.getAllUsers(...args) );
 
     // router.get('/:id',
     //                 getUserById);

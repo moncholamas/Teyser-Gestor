@@ -1,7 +1,7 @@
 
 class BaseRepository {
-    constructor(model){
-        this.model = model;
+    constructor(Model){
+        this.model = Model;
     }
 
     async getById(id){

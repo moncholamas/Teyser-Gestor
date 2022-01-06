@@ -1,32 +1,17 @@
-const {UserService} = require('../services/user-service')
+const  {BaseController}  = require('./')
 
-//trae todos los equipos
-async function getUsers(req,res,next){
-    const allUsers = await UserService.getAll();
+class UserController extends BaseController{
+    constructor({UserService}){
+        super(UserService);
+        this.userService = UserService;
+        
+    }
 
-    res.json({msg:allUsers});
+    async getAllUsers(req, res){
+        console.log(this.userService);
+        const result = await this.userService.getAll();
+        res.json({msg: result, body: 'desde controller'}) ;
+    }
 }
 
-//trae un equipo por ID
-async function getUserById(req,res,next){
-    res.json({msg:'fn'})
-}
-
-
-//borra un User por Id
-async function deleteUser(req,res,next){
-    res.json({msg:'fn'})
-}
-
-
-//actualiza un User
-async function updateUser(req,res,next){
-    res.json({msg:'fn'}) 
-}
-
-module.exports = {
-    getUserById,
-    getUsers,
-    deleteUser,
-    updateUser
-}
+module.exports = UserController;
