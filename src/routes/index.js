@@ -1,6 +1,6 @@
 const { Router,json,urlencoded } = require('express');
 const cors = require('cors');
-
+const morgan = require('morgan')
 
 
 module.exports = ({UserRoutes})=>{
@@ -10,6 +10,7 @@ module.exports = ({UserRoutes})=>{
     apiRoutes
         .use(json())
         .use(cors())
+        .use(morgan('combined'))
         .use(urlencoded({extended:false}))
 
     apiRoutes.use('/users', UserRoutes)

@@ -1,12 +1,10 @@
-const  {Router} = require('express') ;
-// const  {} = require('../controllers/users-controller') ;
+const  {Router} = require('express');
 
 module.exports = ({UserController}) => {
     //inicilizacion
     const router = Router(); 
-
     //rutas
-    router.get('/', (... args)=> UserController.getAllUsers(...args) );
+    router.get('/', UserController.getAllUsers);
 
     // router.get('/:id',
     //                 getUserById);

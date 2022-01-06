@@ -27,7 +27,7 @@ container
     })
     .register({UserService:asClass(UserService).singleton()})
     .register({UserRoutes:asFunction(UserRoutes).singleton()})
-    .register({UserController:asClass(UserController).singleton()})
+    .register({UserController:asClass(UserController)})
     .register({User: asValue(User)})
     .register({UserRepository:asClass(UserRepository).singleton()})
 
