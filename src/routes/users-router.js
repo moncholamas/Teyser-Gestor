@@ -7,14 +7,12 @@ module.exports = ({UserController}) => {
     router.get('/', UserController.getAllUsers);
 
     router.get('/:id', UserController.getUser);
-    // router.get('/:id',
-    //                 getUserById);
-                    
-    // router.delete('/eliminar/:id',
-    //                 deleteUser);
 
-    // router.put('/actualizar/:id',
-    //                 updateUser);
+    router.post('/', UserController.createUser);
+
+    router.delete('/:id', UserController.deleteUser);
+
+    router.put('/:id', UserController.updateUser);
 
     return router;
 }

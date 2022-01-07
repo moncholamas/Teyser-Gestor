@@ -11,6 +11,19 @@ class BaseRepository {
     async getAll(){
         return await this.model.findAll();
     }
+
+    async create(body){
+        return await this.model.create(body);
+    }
+    
+    async update({params, options}){
+        console.log(params, options)
+        return await this.model.update(params,options);
+    }
+
+    async destroy({options}){
+        return await this.model.destroy(options);
+    }
 }
 
 module.exports =  BaseRepository;
