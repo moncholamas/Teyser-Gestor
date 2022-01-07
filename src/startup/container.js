@@ -2,8 +2,10 @@ const {createContainer, asClass,asValue,asFunction} = require('awilix');
 
 const config = require('../config/config');
 const Server = require('./');
+
+
 //controllers 
-const UserController  = require('../controllers/users-controller')
+const UserController  = require('../controllers/users-controller');
 
 //services
 const {UserService} = require('../services/');

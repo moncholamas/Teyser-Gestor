@@ -1,8 +1,10 @@
+const catchAsync = require('../utils/catchAsync');
+
 class BaseController {
-    constructor(Service){
-        this.service = Service;
-        console.log('en el super', this.service)
+    constructor(){
+        this.catchAsync = catchAsync;
     }
+    
 }
 
 module.exports = BaseController;

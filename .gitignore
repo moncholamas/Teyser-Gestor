@@ -1,4 +1,5 @@
+.gitignore
 /node_modules
 /dist
-.gitignore
 .env
+package-look.json

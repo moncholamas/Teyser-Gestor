@@ -5,6 +5,8 @@ class BaseServices{
 
     async getById(id){
         const entity = await this.repository.getById(id);
+        if(!entity) throw new Error('New error, dont found')
+
         return entity;
     }
 

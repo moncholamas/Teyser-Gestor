@@ -6,6 +6,7 @@ module.exports = ({UserController}) => {
     //rutas
     router.get('/', UserController.getAllUsers);
 
+    router.get('/:id', UserController.getUser);
     // router.get('/:id',
     //                 getUserById);
                     
