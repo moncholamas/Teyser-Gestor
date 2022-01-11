@@ -1,4 +1,4 @@
-const  {BaseController}  = require('./');
+const  BaseController  = require('./controller-base');
 
 
 class UserController extends BaseController{

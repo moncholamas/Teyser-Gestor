@@ -1,11 +1,12 @@
 const { Router} = require('express');
 
-module.exports = ({UserRoutes})=>{
+module.exports = ({UserRoutes, AuthRoutes})=>{
     const router = Router();
     const apiRoutes = Router();
 
     //routes
     apiRoutes.use('/users', UserRoutes);
+    apiRoutes.use('/auth', AuthRoutes);
     
     //handlerError
     apiRoutes.use((err,req,res,next)=>{
