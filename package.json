@@ -7,7 +7,7 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --use_strict src/index.js",
+    "dev": "nodemon src/bin/www",
     "start": "node src/index.js"
   },
   "author": "Manuel Lamas",

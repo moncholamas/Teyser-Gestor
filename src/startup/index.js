@@ -11,9 +11,11 @@ class Server{
 
     start(){
         return new Promise((resolve,reject)=>{
-            this._server.listen(this._config.PORT,()=>{
-                console.log([`${this._config.APPLICATION_NAME} is running in port ${this._config.PORT}`]);
-            })
+            resolve(
+                this._server.listen(this._config.PORT,()=>{
+                    console.log([`${this._config.APPLICATION_NAME} is running in port ${this._config.PORT}`]);
+                })
+            )
         })
     }
 }

@@ -1,25 +1,18 @@
-const { Router,json,urlencoded } = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-
+const { Router} = require('express');
 
 module.exports = ({UserRoutes})=>{
     const router = Router();
     const apiRoutes = Router();
 
-    apiRoutes
-        .use(json())
-        .use(cors())
-        .use(morgan('combined'))
-        .use(urlencoded({extended:false}))
-
+    //routes
     apiRoutes.use('/users', UserRoutes);
     
     //handlerError
     apiRoutes.use((err,req,res,next)=>{
-        return res.json({msg:err.message})
+        if(err) res.json({msg:err.message})
     })
 
+    //general router
     router.use('/api/v1', apiRoutes);
     return router;
 }

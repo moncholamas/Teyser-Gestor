@@ -1,16 +1,23 @@
 const container = require('./startup/container');
-const server = container.resolve('Server');
+const { json,urlencoded } = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const router = container.resolve('router');
 const db = require('./database/models/index');
+const Express = require('express');
+
+const app = Express();
+
+//connection DB
+db.sequelize.authenticate();
+
+//middlewares and general router
+app
+   .use(json())
+   .use(cors())
+   .use(morgan('combined'))
+   .use(urlencoded({extended:false}))
+   .use(router);
 
 
-async function main(){
-     try {
-      server.start()
-      db.sequelize.authenticate();
-
-     }catch(e){
-        console.log(e);
-     }
-}
-
-main();
+module.exports = app;
