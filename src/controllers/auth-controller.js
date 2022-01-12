@@ -1,4 +1,6 @@
 const  BaseController = require('./controller-base');
+const status = require('../config/constants/status');
+const message = require('../config/constants/message');
 
 
 class AuthController extends BaseController{
@@ -11,9 +13,10 @@ class AuthController extends BaseController{
             const {mail,pass} = req.body
             //verifiry pass and email
             const result = await this.service.getByMail(mail);
-            res.json({status: 200, body: result});
+            res.status(status.OK).json({message: message.OK, body: result});
         }
     ) 
+    
     setAuth = this.catchAsync(
         async (req, res, next) =>{
             // create a new user

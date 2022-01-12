@@ -19,7 +19,5 @@ app
    .use(urlencoded({extended:false}))
    .use(router);
 
-console.log(router)
-
 
 module.exports = app;

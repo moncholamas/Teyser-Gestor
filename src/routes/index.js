@@ -10,6 +10,7 @@ module.exports = ({UserRoutes, AuthRoutes})=>{
     
     //handlerError
     apiRoutes.use((err,req,res,next)=>{
+        console.error(err)
         if(err) res.json({msg:err.message})
     })
 

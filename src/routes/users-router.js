@@ -4,15 +4,15 @@ module.exports = ({UserController}) => {
     //inicilizacion
     const router = Router(); 
     //rutas
-    router.get('/', UserController.getAllUsers);
+    router.get('/', UserController.getAll);
 
-    router.get('/:id', UserController.getUser);
+    router.get('/:id', UserController.getById);
 
-    router.post('/', UserController.createUser);
+    router.post('/', UserController.create);
 
-    router.delete('/:id', UserController.deleteUser);
+    router.delete('/:id', UserController.delete);
 
-    router.put('/:id', UserController.updateUser);
+    router.put('/:id', UserController.update);
 
     return router;
 }
