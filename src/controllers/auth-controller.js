@@ -11,17 +11,18 @@ class AuthController extends BaseController{
     getAuth = this.catchAsync(
         async (req, res, next) =>{
             const {mail,pass} = req.body
-            //verifiry pass and email
-            const result = await this.service.getByMail(mail);
+            //
+            const result = await this.service.createUser(mail,pass)
             res.status(status.OK).json({message: message.OK, body: result});
         }
     ) 
     
     setAuth = this.catchAsync(
         async (req, res, next) =>{
-            // create a new user
-            // const result = await this.service.getById(id);
-            res.json({ body: req.body.pass}) ;
+            const {body} = req
+            //createUsers verify mail 
+            const result = await this.service.createAccount(body)
+            res.json({ body: result}) ;
         }
     )
 }

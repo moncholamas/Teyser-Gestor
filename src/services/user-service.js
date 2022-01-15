@@ -4,16 +4,30 @@ const  BaseServices = require('./base-services')
 class UserService extends BaseServices{
     constructor({UserRepository}){
         super(UserRepository);
-        //this._userRepository = UserRepository;
     }
+
+
 
     //verify email
     async getByMail(mail){
-        const entity = await this.repository.getByMail(mail);
-        if(!entity) throw new Error('New error, dont found');
-
-        return entity;
+        return await this.repository.getByMail(mail);
     }
+
+    //set new user
+    async createAccount(body){
+        const { mail } = body;
+        const mailFinded = await this.getByMail(mail);
+        if(mailFinded) this.throwError(
+            this.status.BAD_REQUEST,
+            this.message.MAIL_EXISTS,
+            ['mail']
+        );
+
+        //encrypt password
+        
+        return await this.create({...body})
+    }
+    
     
 }
 

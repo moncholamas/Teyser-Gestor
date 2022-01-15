@@ -1,12 +1,18 @@
+const throwError = require("../utils/throwError");
+const status = require('../config/constants/status');
+const message = require('../config/constants/message');
+
 class BaseServices{
     constructor(Repository){
         this.repository = Repository;
+        this.throwError = throwError;
+        this.status = status;
+        this.message = message;
     }
 
     async getById(id){
         const entity = await this.repository.getById(id);
-        if(!entity) throw new Error('New error, dont found');
-
+        if(!entity) this.throwError(this.status.NOT_FOUND,this.message.NOT_FOUND,this.repository);
         return entity;
     }
 
