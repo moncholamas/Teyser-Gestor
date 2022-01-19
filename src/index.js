@@ -8,10 +8,10 @@ const Express = require('express');
 
 const app = Express();
 
-//connection DB
+// connection DB
 db.sequelize.authenticate();
 
-//middlewares and general router
+// middlewares and general router
 app
    .use(json())
    .use(cors())

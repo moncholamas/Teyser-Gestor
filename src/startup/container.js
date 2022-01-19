@@ -11,8 +11,8 @@ const {UserService} = require('../services/');
 
 //routes
 const Routes = require('../routes');
-const  UserRoutes  = require('../routes/users-router');
-const  AuthRoutes  = require('../routes/auth-router');
+const UserRoutes = require('../routes/users-router');
+const AuthRoutes = require('../routes/auth-router');
 
 
 //models

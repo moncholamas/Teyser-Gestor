@@ -10,10 +10,12 @@ class AuthController extends BaseController{
 
     getAuth = this.catchAsync(
         async (req, res, next) =>{
-            const {mail,pass} = req.body
+            const {body} = req;
             //
-            const result = await this.service.createUser(mail,pass)
-            res.status(status.OK).json({message: message.OK, body: result});
+            const result = await this.service.verifyAccount(body);
+            res
+                .status(status.OK)
+                .json({message: message.OK, body: result});
         }
     ) 
     
@@ -22,7 +24,9 @@ class AuthController extends BaseController{
             const {body} = req
             //createUsers verify mail 
             const result = await this.service.createAccount(body)
-            res.json({ body: result}) ;
+            res
+                .status(status.CREATED)
+                .json({ body: result});
         }
     )
 }
