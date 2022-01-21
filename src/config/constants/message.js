@@ -4,7 +4,8 @@ const message = {
     OK: 'ok',
 
     MAIL_EXISTS: 'mail already exists',
-    MAIL_NOT_EXISTS: 'mail not exists'
+    MAIL_NOT_EXISTS: 'mail not exists',
+    INCORRECT_PASSWORD: 'incorrect password'
 }
 
 module.exports = message;

@@ -1,10 +1,11 @@
 const  {Router} = require('express');
+const validateAuth = require('../middlewares/validateAuth')
 
 module.exports = ({UserController}) => {
     //inicilizacion
     const router = Router(); 
     //rutas
-    router.get('/', UserController.getAll);
+    router.get('/', validateAuth, UserController.getAll);
 
     router.get('/:id', UserController.getById);
 

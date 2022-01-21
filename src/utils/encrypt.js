@@ -1,15 +1,15 @@
 const bcryptjs = require('bcryptjs') ;
 
-async function encriptar(pass){
+async function encrypt(pass){
     const salt = await bcryptjs.genSalt(10);
     return await bcryptjs.hash(pass,salt);
 }
 
-async function compararEncryp(pass,passRes){
-    return await bcryptjs.compare(pass,passRes);
+async function checkEncrypt(reqPass,dbPass){
+    return await bcryptjs.compare(reqPass,dbPass);
 }
 
 module.exports= {
-    encriptar,
-    compararEncryp
+    encrypt,
+    checkEncrypt
 }

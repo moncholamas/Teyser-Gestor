@@ -5,6 +5,9 @@ const morgan = require('morgan');
 const router = container.resolve('router');
 const db = require('./database/models/index');
 const Express = require('express');
+const helmet = require('helmet');
+const passport = require('passport');
+const strategyJwt = require('./config/passport-config');
 
 const app = Express();
 
@@ -12,7 +15,10 @@ const app = Express();
 db.sequelize.authenticate();
 
 // middlewares and general router
+
+passport.use(strategyJwt);
 app
+   .use(helmet())
    .use(json())
    .use(cors())
    .use(morgan('combined'))

@@ -7,17 +7,10 @@ module.exports = {
        lastName: 'Lamas',
        mail: 'ejemplo@ejemplo.com',
        rolId: 1,
+       password: 'qwe',
        createdAt: new Date(),
        updatedAt: new Date()
      },
-     {
-      name: 'Manuel',
-      lastName: 'Lamas',
-      mail: 'ejemplo2@ejemplo.com',
-      rolId: 2,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
     ], {})
   },
 
