@@ -26,7 +26,7 @@ class AuthController extends BaseController{
             const result = await this.service.createAccount(body)
             res
                 .status(status.CREATED)
-                .json({ body: result});
+                .json({message: message.CREATED, body: result});
         }
     )
 }

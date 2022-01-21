@@ -3,7 +3,6 @@ const throwError = require('../utils/throwError');
 
 const  validateAuth = (req,res,next)=>{
     passport.authenticate('jwt', {session: false}, (err, user, info)=>{
-        console.log("ejecutando *callback auth* de authenticate para estrategia jwt");
         //si hubo un error relacionado con la validez del token (error en su firma, caducado, etc)
         if(info){ return next(throwError(400,'invalid token','token')); }
 

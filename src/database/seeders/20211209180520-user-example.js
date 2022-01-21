@@ -6,7 +6,7 @@ module.exports = {
        name: 'Eloy',
        lastName: 'Lamas',
        mail: 'ejemplo@ejemplo.com',
-       rolId: 1,
+       rolId: 2,
        password: 'qwe',
        createdAt: new Date(),
        updatedAt: new Date()
@@ -15,6 +15,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-     await queryInterface.bulkDelete('People', null, {});
+     await queryInterface.bulkDelete('Users', null, {});
   }
 };

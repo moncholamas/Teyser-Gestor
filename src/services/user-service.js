@@ -18,7 +18,7 @@ class UserService extends BaseServices{
     async createAccount(body){
         const { mail, password } = body;
         const mailFinded = await this.getByMail(mail);
-        if(mailFinded) this.throwError(
+        if(mailFinded) return this.throwError(
             this.status.BAD_REQUEST,
             this.message.MAIL_EXISTS,
             ['mail']
@@ -37,7 +37,7 @@ class UserService extends BaseServices{
             rolId: response.rolId,
             mail: response.mail,
         })
-        // add token
+
         return token;
     }
     
@@ -52,14 +52,18 @@ class UserService extends BaseServices{
         
         // verify pass
         const checkedPass = await checkEncrypt(password,mailFinded.password)
-        if(!checkedPass) this.throwError(this.status.BAD_REQUEST,this.message.INCORRECT_PASSWORD,['password'])
+        if(!checkedPass) this.throwError(
+            this.status.BAD_REQUEST,
+            this.message.INCORRECT_PASSWORD,
+            ['password']
+        )
         
         const token = createToken({
             id: mailFinded.id,
             rolId: mailFinded.rolId,
             mail: mailFinded.mail,
         })
-        // add token
+
         return token;
     }
 }

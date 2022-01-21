@@ -1,4 +1,5 @@
 const { Router} = require('express');
+const handlerError = require('../utils/handlerError');
 
 module.exports = ({UserRoutes, AuthRoutes})=>{
     const router = Router();
@@ -9,10 +10,7 @@ module.exports = ({UserRoutes, AuthRoutes})=>{
     apiRoutes.use('/auth', AuthRoutes);
     
     //handlerError
-    apiRoutes.use((err,req,res,next)=>{
-        console.log(err);
-        res.status(err.status||300).json({msg:err.message,body: err.body});
-    })
+    apiRoutes.use(handlerError)
 
     //general router
     router.use('/api/v1', apiRoutes);

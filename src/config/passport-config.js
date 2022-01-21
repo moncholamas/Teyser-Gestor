@@ -10,7 +10,6 @@ const jwtOptions = {
 
 const jwtVerify = async (payload, done) => {
   try {
-    console.log(payload.id)
     const user = await container.cradle.UserService.getById(payload.id);
     if (!user) {
       return done(null, false);

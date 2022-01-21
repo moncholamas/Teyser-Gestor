@@ -14,9 +14,10 @@ const app = Express();
 // connection DB
 db.sequelize.authenticate();
 
-// middlewares and general router
-
+// jwt strategy
 passport.use(strategyJwt);
+
+// middlewares and general router
 app
    .use(helmet())
    .use(json())

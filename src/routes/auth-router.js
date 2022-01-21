@@ -1,13 +1,13 @@
 const  {Router} = require('express');
-const {validateAuth} = require('../middlewares/validations/auth-validation');
+const { authSchema, authUpSchema } = require('../middlewares/validations/auth-schema');
 
 module.exports = ({AuthController}) => {
     //inicilizacion
     const router = Router(); 
     //rutas
-    router.post('/login', validateAuth, AuthController.getAuth);
+    router.post('/login', authSchema, AuthController.getAuth);
 
-    router.post('/logup', validateAuth, AuthController.setAuth);
+    router.post('/logup', authUpSchema, AuthController.setAuth);
 
     return router;
 }
